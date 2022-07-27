@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 
+    //Firebase
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+
     //Epoxy
     id 'kotlin-kapt'
 
@@ -48,6 +52,14 @@ kapt{
 }
 
 dependencies {
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
 
     //ViewModel + Coroutines
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")

@@ -3,11 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/registrationScreen">
+    app:startDestination="@id/loginScreen">
 
     <fragment
-        android:id="@+id/registrationScreen"
-        android:name="com.patriciajavier.pattyricetrading.RegistrationScreen"
+        android:id="@+id/loginScreen"
+        android:name="com.patriciajavier.pattyricetrading.registration.LoginScreen"
         android:label="Login"
+        tools:layout="@layout/fragment_login_screen" />
+    <fragment
+        android:id="@+id/registrationScreen"
+        android:name="com.patriciajavier.pattyricetrading.registration.RegistrationScreen"
+        android:label="Register"
         tools:layout="@layout/fragment_registration_screen" />
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.patriciajavier.pattyricetrading.Home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
