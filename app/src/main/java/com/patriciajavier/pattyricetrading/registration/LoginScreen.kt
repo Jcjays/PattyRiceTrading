@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentLoginScreenBinding
 import com.patriciajavier.pattyricetrading.databinding.FragmentRegistrationScreenBinding
+import kotlinx.coroutines.launch
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -41,14 +43,40 @@ class LoginScreen : Fragment() {
 
         //observe firebase
         viewModel.userMutableLiveData.observe(viewLifecycleOwner){
+
             if(it.exception != null){
                 Toast.makeText(requireContext(),it.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                 return@observe
             }
 
             if(it.data != null){
-                Toast.makeText(requireContext(), "successfully logged in as ${it.data!!.email.toString()}", Toast.LENGTH_SHORT).show()
-                //todo navigate to home fragment
+                if(it.exception != null){
+                    Toast.makeText(requireContext(),it.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
+                    return@observe
+                }
+
+                if(it.data != null){
+
+                    //search thru firestore to determine the user access rights
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewModel.checkAccessRight(it.data!!.uid)
+                    }
+
+                    //Determine whether the user is admin or shopkeeper
+                    viewModel.checkAccessRights.observe(viewLifecycleOwner){ accessRights ->
+                        if(accessRights != null){
+                            if(accessRights){
+                                findNavController().navigate(R.id.adminScreen)
+                            }
+                            else {
+                                findNavController().navigate(R.id.shopkeeperScreen)
+                            }
+                            Toast.makeText(requireContext(), it.data!!.email.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                        Toast.makeText(requireContext(), "successfully logged in as ${it.data!!.email.toString()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
             }
         }
 

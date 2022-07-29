@@ -18,5 +18,6 @@ class SplashScreenActivity : AppCompatActivity() {
             finish()
         }, 2000)
 
+        //todo check if user is already logged in
     }
 }

@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.firestore.FirebaseFirestore
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentRegistrationScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.User
+import kotlinx.coroutines.launch
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -21,6 +24,7 @@ class RegistrationScreen : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel : RegistrationLoginViewModel by activityViewModels()
+    private val firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,16 +51,32 @@ class RegistrationScreen : Fragment() {
             }
 
             if(it.data != null){
-                Toast.makeText(requireContext(), it.data!!.email.toString(), Toast.LENGTH_SHORT).show()
-                //todo navigate to home fragment
+                //search thru firestore to determine the user access rights
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.checkAccessRight(it.data!!.uid)
+                }
+
+                //Determine whether the user is admin or shopkeeper
+                viewModel.checkAccessRights.observe(viewLifecycleOwner){ accessRights ->
+                    if(accessRights != null){
+                        if(accessRights){
+                            findNavController().navigate(R.id.adminScreen)
+                        }
+                        else {
+                            findNavController().navigate(R.id.shopkeeperScreen)
+                        }
+                        Toast.makeText(requireContext(), it.data!!.email.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
-
+        //validating input from users
         binding.createAccountButton.setOnClickListener {
             validateInput()
         }
 
+        //navigate to login screen
         binding.loginShortcutButton.setOnClickListener {
             findNavController().navigate(R.id.loginScreen)
         }
@@ -149,7 +169,7 @@ class RegistrationScreen : Fragment() {
         binding.passwordFieldContainer.error = null
         binding.passwordFieldContainer.isErrorEnabled = false
 
-        //wrap data to user obj which will be used to upload on fire store
+        //wrap the data to user obj which will be used to upload on fire store
         val user = User(
             firstName = firstName,
             lastName = lastName,

@@ -13,8 +13,8 @@ import com.patriciajavier.pattyricetrading.firestore.models.User
 class RegistrationLoginRepository {
 
     private val TAG = "RegistrationLoginRepository"
-    private var firebaseAuth : FirebaseAuth = FirebaseAuth.getInstance()
-    private var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val firebaseAuth : FirebaseAuth = FirebaseAuth.getInstance()
+    private val firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
 
     var userMutableLiveData = MutableLiveData<DataOrException<FirebaseUser, Exception?>>()
     var isLoggedOutMutableLiveData = MutableLiveData<Boolean>()
@@ -61,10 +61,11 @@ class RegistrationLoginRepository {
                         "phoneNumber" to userEntity.phoneNumber,
                         "email" to userEntity.email,
                         "password" to userEntity.password,
+                        "isAdmin" to userEntity.isAdmin
                     )
 
                     firestore.collection("users")
-                        .document(firebaseAuth.currentUser!!.uid) //setting the id as the userID
+                        .document(firebaseAuth.currentUser!!.uid)
                         .set(user)
                         .addOnSuccessListener {
                             Log.d(TAG, "DocumentSnapshot successfully written!")
@@ -78,6 +79,23 @@ class RegistrationLoginRepository {
                             FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser!!.uid)
                             FirebaseCrashlytics.getInstance().recordException(exception)
                         }
+
+                    //writing empty inventory collection new users
+                    firestore.collection("users")
+                        .document(firebaseAuth.currentUser!!.uid)
+                        .collection("inventory")
+                        .document("rice-products")
+                        .set({})
+                        .addOnSuccessListener {
+                            Log.d(TAG, "Inventory successfully written!")
+                        }.addOnFailureListener { exception ->
+                            userMutableLiveData.postValue(DataOrException(exception = exception))
+                            Log.e(TAG, "Error writing documents in users > inventory -> rice-products", exception)
+                            FirebaseCrashlytics.getInstance().log("Error writing documents in users > inventory -> rice-products")
+                            FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser!!.uid)
+                            FirebaseCrashlytics.getInstance().recordException(exception)
+                        }
+
 
                 }else{
                     userMutableLiveData.postValue(DataOrException(exception = task.exception))
