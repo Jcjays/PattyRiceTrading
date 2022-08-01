@@ -14,6 +14,7 @@ import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentRegistrationScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.User
+import com.patriciajavier.pattyricetrading.registration.arch.RegistrationLoginViewModel
 import kotlinx.coroutines.launch
 import java.util.regex.Matcher
 import java.util.regex.Pattern

@@ -1,4 +1,4 @@
-package com.patriciajavier.pattyricetrading
+package com.patriciajavier.pattyricetrading.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,18 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.patriciajavier.pattyricetrading.databinding.FragmentAdminScreenBinding
-import com.patriciajavier.pattyricetrading.databinding.FragmentRegistrationScreenBinding
+import com.patriciajavier.pattyricetrading.databinding.FragmentShopkeeperScreenBinding
 
-class AdminScreen : Fragment() {
+class ShopkeeperScreen : Fragment() {
 
-    private var _binding: FragmentAdminScreenBinding? = null
+    private var _binding: FragmentShopkeeperScreenBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAdminScreenBinding.inflate(inflater, container, false)
+        _binding = FragmentShopkeeperScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
 
