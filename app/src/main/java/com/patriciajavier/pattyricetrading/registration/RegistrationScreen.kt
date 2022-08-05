@@ -39,18 +39,17 @@ class RegistrationScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Observe loading state
-        viewModel.isLoading.observe(viewLifecycleOwner){
-            binding.loadingState.root.visibility = if(it) View.VISIBLE else View.GONE
-        }
+
 
         //observe firebase
         viewModel.userMutableLiveData.observe(viewLifecycleOwner){
+            //Observe loading state
+            binding.loadingState.root.visibility = if(it.isLoading) View.VISIBLE else View.GONE
+
             if(it.exception != null){
                 Toast.makeText(requireContext(),it.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                 return@observe
             }
-
             if(it.data != null){
                 //search thru firestore to determine the user access rights
                 viewLifecycleOwner.lifecycleScope.launch {

@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.admin.AdminScreen">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".home.admin.AccountScreen">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/oxygen_light"
+        android:text="Accounts"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="21sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -18,46 +32,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/oxygen_light"
-        android:text="Dashboard"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="21sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/epoxyRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:spanCount="2"
-        tools:itemCount="3"
-        tools:listitem="@layout/dashboard_card_button_model" />
+        tools:itemCount="4"
+        tools:listitem="@layout/account_card_button_model"
+        />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorError"
-        android:text="Sign Out"
-        android:layout_marginEnd="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="@+id/epoxyRecyclerView"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
+    <include
+        android:id="@+id/loadingState"
+        android:visibility="gone"
+        layout="@layout/loading_screen"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

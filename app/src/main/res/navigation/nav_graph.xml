@@ -20,6 +20,8 @@
             android:id="@+id/action_loginScreen_to_adminScreen"
             app:destination="@id/adminScreen" />
     </fragment>
+
+
     <fragment
         android:id="@+id/registrationScreen"
         android:name="com.patriciajavier.pattyricetrading.registration.RegistrationScreen"
@@ -35,22 +37,57 @@
             android:id="@+id/action_registrationScreen_to_shopkeeperScreen"
             app:destination="@id/shopkeeperScreen" />
     </fragment>
+
+
     <fragment
         android:id="@+id/adminScreen"
-        android:name="com.patriciajavier.pattyricetrading.home.AdminScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.AdminScreen"
         android:label="Admin"
         tools:layout="@layout/fragment_admin_screen" >
         <action
             android:id="@+id/action_adminScreen_to_loginScreen"
             app:destination="@id/loginScreen" />
+        <action
+            android:id="@+id/action_adminScreen_to_account"
+            app:destination="@id/account" />
+        <action
+            android:id="@+id/action_adminScreen_to_salesReportScreen"
+            app:destination="@id/salesReportScreen" />
+        <action
+            android:id="@+id/action_adminScreen_to_inventoryScreen"
+            app:destination="@id/inventoryScreen" />
     </fragment>
+
+
     <fragment
         android:id="@+id/shopkeeperScreen"
-        android:name="com.patriciajavier.pattyricetrading.home.ShopkeeperScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.shopkeeper.ShopkeeperScreen"
         android:label="Shopkeeper"
         tools:layout="@layout/fragment_shopkeeper_screen" >
         <action
             android:id="@+id/action_shopkeeperScreen_to_loginScreen"
             app:destination="@id/loginScreen" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/account"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.AccountScreen"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account_screen" />
+
+    <fragment
+        android:id="@+id/salesReportScreen"
+        android:name="com.patriciajavier.pattyricetrading.SalesReportScreen"
+        android:label="Sales Report"
+        tools:layout="@layout/fragment_sales_report_screen" />
+
+
+    <fragment
+        android:id="@+id/inventoryScreen"
+        android:name="com.patriciajavier.pattyricetrading.InventoryScreen"
+        android:label="Inventory"
+        tools:layout="@layout/fragment_inventory_screen" />
+
+
 </navigation>

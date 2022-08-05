@@ -18,10 +18,6 @@ class RegistrationLoginViewModel : ViewModel(){
     val userMutableLiveData: LiveData<DataOrException<FirebaseUser, Exception?>>
         get() = _userMutableLiveData
 
-    private val _isLoading = SharedRepository.isLoading
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
-
     //preventing concurrent calls
     private var service : Job? = null
     fun checkAccessRight(userId: String){
@@ -29,10 +25,12 @@ class RegistrationLoginViewModel : ViewModel(){
 
         try {
         service = viewModelScope.launch {
-            //optional can add loading state
             val checking = FirestoreService.checkIfAdmin(userId)
-            if(checking == true) _checkAccessRights.postValue(true)
-            else _checkAccessRights.postValue(false)
+            if(checking == true){
+                _checkAccessRights.postValue(true)
+            } else{
+                _checkAccessRights.postValue(false)
+            }
             }
         }catch (e : Exception){
             //optional bubble up exception
@@ -52,7 +50,6 @@ class RegistrationLoginViewModel : ViewModel(){
     fun createUserWithEmailPassword(userEntity : User){
         SharedRepository.createAccountWithEmailPassword(userEntity)
     }
-
 
 }
 

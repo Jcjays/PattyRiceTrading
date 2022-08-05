@@ -89,49 +89,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <TextView
-        android:id="@+id/Label3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Role:"
-        app:layout_constraintBottom_toBottomOf="@+id/menu"
-        app:layout_constraintStart_toStartOf="@+id/passwordFilledContainer"
-        app:layout_constraintTop_toTopOf="@+id/menu" />
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/menu"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="100dp"
-        app:layout_constraintStart_toEndOf="@+id/Label3"
-        app:layout_constraintTop_toBottomOf="@id/passwordFilledContainer"
-        app:layout_constraintEnd_toEndOf="@id/passwordFilledContainer"
-        android:hint="Select">
-
-        <AutoCompleteTextView
-            android:id="@+id/roleMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:inputType="none"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Login"
         app:cornerRadius="0dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/menu"
-        app:layout_constraintStart_toStartOf="@+id/Label3"
-        app:layout_constraintTop_toBottomOf="@+id/menu" />
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="@+id/passwordFilledContainer"
+        app:layout_constraintStart_toStartOf="@+id/passwordFilledContainer"
+        app:layout_constraintTop_toBottomOf="@+id/passwordFilledContainer" />
 
 
     <com.google.android.material.button.MaterialButton

@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.patriciajavier.pattyricetrading.firestore.models.User
+import com.patriciajavier.pattyricetrading.firestore.models.User.Companion.toListOfUsers
 import com.patriciajavier.pattyricetrading.firestore.models.User.Companion.toUser
 import kotlinx.coroutines.tasks.await
 
@@ -20,6 +21,21 @@ object FirestoreService {
             Log.e(TAG, "Error fetching user details", e)
             FirebaseCrashlytics.getInstance().log("Error getting user details")
             FirebaseCrashlytics.getInstance().setCustomKey("userId", uId)
+            FirebaseCrashlytics.getInstance().recordException(e)
+            null
+        }
+    }
+
+    suspend fun getAllUsers() : List<User>?{
+        val db = FirebaseFirestore.getInstance()
+        return try {
+            db.collection("users")
+                .get()
+                .await().toListOfUsers()
+        }catch (e: Exception){
+            Log.e(TAG, "Error fetching all the users", e)
+            FirebaseCrashlytics.getInstance().log("Error getting users")
+            FirebaseCrashlytics.getInstance().setCustomKey("ListOfUsers", "getAllUsers")
             FirebaseCrashlytics.getInstance().recordException(e)
             null
         }

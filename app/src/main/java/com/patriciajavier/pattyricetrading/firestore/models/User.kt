@@ -3,6 +3,9 @@ package com.patriciajavier.pattyricetrading.firestore.models
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
+import com.patriciajavier.pattyricetrading.firestore.models.User.Companion.toListOfUsers
 
 data class User(
     val firstName: String = "",
@@ -31,6 +34,20 @@ data class User(
                 Log.e(TAG, "Error converting user profile", e)
                 FirebaseCrashlytics.getInstance().log("Error converting user profile")
                 FirebaseCrashlytics.getInstance().setCustomKey("userId", id)
+                FirebaseCrashlytics.getInstance().recordException(e)
+                return null
+            }
+        }
+
+        fun QuerySnapshot.toListOfUsers(): List<User>?{
+            try{
+                val list : ArrayList<User> = ArrayList()
+                documents.forEach { list.add(it.toUser()!!) }
+                return list
+            }catch (e: Exception){
+                Log.e(TAG, "Error fetching all the user profile", e)
+                FirebaseCrashlytics.getInstance().log("Error fetching all the user profile")
+                FirebaseCrashlytics.getInstance().setCustomKey("ToListOfUsers", "listOfUser")
                 FirebaseCrashlytics.getInstance().recordException(e)
                 return null
             }

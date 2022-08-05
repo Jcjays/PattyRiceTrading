@@ -9,4 +9,8 @@ object Constant {
     val PHONE_NUMBER_VALIDATION : String = "((^(\\+)(\\d){12}\$)|(^\\d{11}\$))"
     val EMAIL_ADDRESS_VALIDATION : String = "^[a-z0-9][a-z0-9-_\\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\\.[a-z0-9]{2,10}(?:\\.[a-z]{2,10})?\$"
     val PASSWORD_VALIDATION : String = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?!.*\\W)(?!.* ).{8,16}\$"
+
+    val CARD_TITLE_ACCOUNT : String = "Accounts"
+    val CARD_TITLE_INVENTORY : String = "Inventory"
+    val CARD_TITLE_SALES_REPORT : String = "Sales Report"
 }

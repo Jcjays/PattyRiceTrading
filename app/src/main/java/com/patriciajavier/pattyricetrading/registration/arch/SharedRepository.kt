@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.patriciajavier.pattyricetrading.firestore.models.DataOrException
 import com.patriciajavier.pattyricetrading.firestore.models.User
 
+
 object SharedRepository{
     private val firebaseAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private val fireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -16,23 +17,22 @@ object SharedRepository{
 
     var userMutableLiveData = MutableLiveData<DataOrException<FirebaseUser, Exception?>>()
     var isLoggedOutMutableLiveData = MutableLiveData<Boolean>()
-    var isLoading = MutableLiveData<Boolean>()
 
     init {
         //initial check if theres a current user
         if(firebaseAuth.currentUser != null){
-            userMutableLiveData.postValue(DataOrException(firebaseAuth.currentUser))
+            userMutableLiveData.postValue(DataOrException(data = firebaseAuth.currentUser))
             isLoggedOutMutableLiveData.postValue(false)
         }
     }
 
         fun loginWithEmailPassword(email: String, password: String) {
-            isLoading.postValue(true)
+            userMutableLiveData.postValue(DataOrException(isLoading = true))
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         //user successfully logged in
-                        userMutableLiveData.postValue(DataOrException(firebaseAuth.currentUser))
+                        userMutableLiveData.postValue(DataOrException(data = firebaseAuth.currentUser))
                         isLoggedOutMutableLiveData.postValue(false)
                     } else {
                         userMutableLiveData.postValue(DataOrException(exception = task.exception))
@@ -40,12 +40,11 @@ object SharedRepository{
                         FirebaseCrashlytics.getInstance().setCustomKey("userEmail", email)
                         FirebaseCrashlytics.getInstance().recordException(task.exception as Exception)
                     }
-                    isLoading.postValue(false)
                 }
         }
 
         fun createAccountWithEmailPassword(userEntity: User) {
-            isLoading.postValue(true)
+            userMutableLiveData.postValue(DataOrException(isLoading = true))
             firebaseAuth.createUserWithEmailAndPassword(userEntity.email, userEntity.password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -69,7 +68,7 @@ object SharedRepository{
                             .set(user)
                             .addOnSuccessListener {
                                 Log.d(TAG, "DocumentSnapshot successfully written!")
-                                userMutableLiveData.postValue(DataOrException(currentUser))
+                                userMutableLiveData.postValue(DataOrException(data = currentUser))
                             }
                             .addOnFailureListener { exception ->
                                 userMutableLiveData.postValue(DataOrException(exception = exception))
@@ -101,13 +100,12 @@ object SharedRepository{
                         Log.e(TAG, task.exception?.message.toString())
                         FirebaseCrashlytics.getInstance().log(task.exception?.message.toString())
                     }
-                    isLoading.postValue(false)
                 }
         }
 
         fun logOut() {
             firebaseAuth.signOut()
             isLoggedOutMutableLiveData.postValue(true)
-            userMutableLiveData.postValue(DataOrException(firebaseAuth.currentUser))
+            userMutableLiveData.postValue(DataOrException(data = firebaseAuth.currentUser))
         }
     }
