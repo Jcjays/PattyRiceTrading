@@ -84,7 +84,7 @@ class RegistrationScreen : Fragment() {
     }
 
     private fun validateInput(){
-        val firstName = binding.firstNameTextField.text.toString().trim()
+        val firstName = binding.firstNameTextField.text.toString().trim().replaceFirstChar { it.uppercase() }
         if(firstName.isEmpty()){
             binding.firstNameFieldContainer.error = Constant.TEXT_FIELD_ERROR_MSG
             return
@@ -95,7 +95,7 @@ class RegistrationScreen : Fragment() {
 
         //-------------------------------------------------------------------
 
-        val lastName = binding.lastNameTextField.text.toString().trim()
+        val lastName = binding.lastNameTextField.text.toString().trim().replaceFirstChar { it.uppercase() }
         if(lastName.isEmpty()){
             binding.lastNameFieldContainer.error = Constant.TEXT_FIELD_ERROR_MSG
             return
@@ -180,5 +180,10 @@ class RegistrationScreen : Fragment() {
         )
 
         viewModel.createUserWithEmailPassword(user)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

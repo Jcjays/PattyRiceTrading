@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".home.admin.AccountScreen">
+    tools:context=".home.admin.account.AccountScreen">
 
     <TextView
         android:id="@+id/textView2"
@@ -47,10 +47,13 @@
         tools:listitem="@layout/account_card_button_model"
         />
 
-
     <include
         android:id="@+id/loadingState"
+        layout="@layout/loading_screen"
         android:visibility="gone"
-        layout="@layout/loading_screen"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

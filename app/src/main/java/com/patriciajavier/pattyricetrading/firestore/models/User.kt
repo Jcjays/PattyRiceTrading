@@ -8,6 +8,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.patriciajavier.pattyricetrading.firestore.models.User.Companion.toListOfUsers
 
 data class User(
+    val uId: String = "",
     val firstName: String = "",
     val lastName : String = "",
     val address: String = "",
@@ -21,6 +22,7 @@ data class User(
 
         fun DocumentSnapshot.toUser() : User? {
             try {
+                val uId = getString("uId")!!
                 val firstName = getString("firstName")!!
                 val lastName = getString("lastName")!!
                 val address = getString("address")!!
@@ -29,7 +31,7 @@ data class User(
                 val password = getString("password")!!
                 val isAdmin = getBoolean("isAdmin")!!
 
-                return User(firstName, lastName, address, phoneNumber, email, password, isAdmin)
+                return User(uId, firstName, lastName, address, phoneNumber, email, password, isAdmin)
             } catch (e : Exception){
                 Log.e(TAG, "Error converting user profile", e)
                 FirebaseCrashlytics.getInstance().log("Error converting user profile")

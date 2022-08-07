@@ -72,9 +72,13 @@
 
     <fragment
         android:id="@+id/account"
-        android:name="com.patriciajavier.pattyricetrading.home.admin.AccountScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.account.AccountScreen"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account_screen" />
+        tools:layout="@layout/fragment_account_screen" >
+        <action
+            android:id="@+id/action_account_to_accountProfileScreen"
+            app:destination="@id/accountProfileScreen" />
+    </fragment>
 
     <fragment
         android:id="@+id/salesReportScreen"
@@ -88,6 +92,15 @@
         android:name="com.patriciajavier.pattyricetrading.InventoryScreen"
         android:label="Inventory"
         tools:layout="@layout/fragment_inventory_screen" />
+    <fragment
+        android:id="@+id/accountProfileScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.account.profile.AccountProfileScreen"
+        android:label="fragment_account_profile_screen"
+        tools:layout="@layout/fragment_account_profile_screen" >
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.patriciajavier.pattyricetrading.home.admin.arch
+package com.patriciajavier.pattyricetrading.home.admin.account
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,17 +16,15 @@ class AccountScreenViewModel : ViewModel(){
     val listOfUser : LiveData<DataOrException<List<User>, Exception>>
         get() = _listOfUser
 
-
     private var service : Job? = null
+
     fun getAllUsers(){
         if(service != null) return
 
-            // to prevent constant calling of users.
         if(_listOfUser.value != null)
             return
 
         _listOfUser.postValue(DataOrException(isLoading = true))
-
 
         try {
             service = viewModelScope.launch {

@@ -45,12 +45,12 @@ class AdminDashboardEpoxyController(
         val clickListener: (String) -> Unit
     ) : ViewBindingKotlinModel<DashboardCardButtonModelBinding>(R.layout.dashboard_card_button_model) {
         override fun DashboardCardButtonModelBinding.bind() {
-            imageButton.setOnClickListener {
+            root.setOnClickListener {
                 clickListener(cardTitle)
             }
 
             iconTitle.text = cardTitle
-            imageButton.setImageResource(icon)
+            dashboardImageButton.setImageResource(icon)
         }
     }
 }

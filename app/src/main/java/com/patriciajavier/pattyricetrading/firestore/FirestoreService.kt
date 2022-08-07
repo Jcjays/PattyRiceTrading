@@ -41,6 +41,7 @@ object FirestoreService {
         }
     }
 
+
     suspend fun checkIfAdmin(uId: String): Boolean? {
         val db = FirebaseFirestore.getInstance()
         return try {

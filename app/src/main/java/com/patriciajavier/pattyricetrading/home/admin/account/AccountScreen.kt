@@ -1,4 +1,4 @@
-package com.patriciajavier.pattyricetrading.home.admin
+package com.patriciajavier.pattyricetrading.home.admin.account
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.patriciajavier.pattyricetrading.databinding.FragmentAccountScreenBinding
-import com.patriciajavier.pattyricetrading.databinding.FragmentAdminScreenBinding
-import com.patriciajavier.pattyricetrading.home.admin.arch.AccountScreenViewModel
 
 class AccountScreen : Fragment() {
 
@@ -18,7 +17,8 @@ class AccountScreen : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: AccountScreenViewModel by activityViewModels()
-    private val epoxyController = AccountScreenEpoxyController()
+    private val epoxyController = AccountScreenEpoxyController(::onUserAccountClick)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,5 +40,15 @@ class AccountScreen : Fragment() {
         }
 
         binding.epoxyRecyclerView.setController(epoxyController)
+    }
+
+    private fun onUserAccountClick(uId: String) {
+        val action = AccountScreenDirections.actionAccountToAccountProfileScreen(uId)
+        findNavController().navigate(action)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

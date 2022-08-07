@@ -54,6 +54,7 @@ object SharedRepository{
 
                         //ready the data to be uploaded in firestore
                         val user = hashMapOf(
+                            "uId" to currentUser!!.uid,
                             "firstName" to userEntity.firstName,
                             "lastName" to userEntity.lastName,
                             "address" to userEntity.address,
@@ -64,7 +65,7 @@ object SharedRepository{
                         )
 
                         fireStore.collection("users")
-                            .document(firebaseAuth.currentUser!!.uid)
+                            .document(currentUser.uid)
                             .set(user)
                             .addOnSuccessListener {
                                 Log.d(TAG, "DocumentSnapshot successfully written!")
@@ -74,7 +75,7 @@ object SharedRepository{
                                 userMutableLiveData.postValue(DataOrException(exception = exception))
                                 Log.e(TAG, "Error writing documents in firestore", exception)
                                 FirebaseCrashlytics.getInstance().log("Error writing documents in firestore")
-                                FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser!!.uid)
+                                FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser.uid)
                                 FirebaseCrashlytics.getInstance().recordException(exception)
                             }
 
@@ -90,7 +91,7 @@ object SharedRepository{
                                 userMutableLiveData.postValue(DataOrException(exception = exception))
                                 Log.e(TAG, "Error writing documents in users > inventory -> rice-products", exception)
                                 FirebaseCrashlytics.getInstance().log("Error writing documents in users > inventory -> rice-products")
-                                FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser!!.uid)
+                                FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser.uid)
                                 FirebaseCrashlytics.getInstance().recordException(exception)
                             }
 
