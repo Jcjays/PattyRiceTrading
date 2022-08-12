@@ -89,18 +89,51 @@
 
     <fragment
         android:id="@+id/inventoryScreen"
-        android:name="com.patriciajavier.pattyricetrading.InventoryScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.InventoryScreen"
         android:label="Inventory"
-        tools:layout="@layout/fragment_inventory_screen" />
+        tools:layout="@layout/fragment_inventory_screen" >
+        <action
+            android:id="@+id/action_inventoryScreen_to_addRiceScreen"
+            app:destination="@id/addRiceScreen" />
+        <action
+            android:id="@+id/action_inventoryScreen_to_productInfoScreen"
+            app:destination="@id/productInfoScreen" />
+    </fragment>
+
+
     <fragment
         android:id="@+id/accountProfileScreen"
         android:name="com.patriciajavier.pattyricetrading.home.admin.account.profile.AccountProfileScreen"
-        android:label="fragment_account_profile_screen"
+        android:label="Profile"
         tools:layout="@layout/fragment_account_profile_screen" >
         <argument
             android:name="userId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_accountProfileScreen_to_editProfileScreen"
+            app:destination="@id/editProfileScreen" />
     </fragment>
+
+    <fragment
+        android:id="@+id/editProfileScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.account.profile.EditProfileScreen"
+        android:label="Edit"
+        tools:layout="@layout/fragment_edit_profile_screen" >
+        <argument
+            android:name="userId"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/addRiceScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.addproduct.AddRiceScreen"
+        android:label="fragment_add_rice_screen"
+        tools:layout="@layout/fragment_add_rice_screen" />
+    <fragment
+        android:id="@+id/productInfoScreen"
+        android:name="com.patriciajavier.pattyricetrading.ProductInfoScreen"
+        android:label="fragment_product_info_screen"
+        tools:layout="@layout/fragment_product_info_screen" />
 
 
 </navigation>

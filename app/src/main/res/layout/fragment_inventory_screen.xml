@@ -4,16 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".InventoryScreen">
+    tools:context=".home.admin.inventory.InventoryScreen">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addRiceInventoryScreen"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Inventory"
+        android:text="Add Rice"
+        app:cornerRadius="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/OrdersInventoryScreen"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Orders"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/riceListEpoxyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:itemSpacing="6dp"
+        tools:listitem="@layout/inventory_card_rice_model"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addRiceInventoryScreen" />
+
+    <include
+        android:id="@+id/loadingState"
+        layout="@layout/loading_screen"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

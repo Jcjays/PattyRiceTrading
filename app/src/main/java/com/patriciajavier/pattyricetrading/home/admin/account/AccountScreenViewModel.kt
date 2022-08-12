@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.patriciajavier.pattyricetrading.firestore.FirestoreService
+import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.DataOrException
 import com.patriciajavier.pattyricetrading.firestore.models.User
 import kotlinx.coroutines.Job
@@ -28,7 +28,7 @@ class AccountScreenViewModel : ViewModel(){
 
         try {
             service = viewModelScope.launch {
-                val users = FirestoreService.getAllUsers()
+                val users = FirebaseService.getAllUsers()
                 _listOfUser.postValue(DataOrException(data = users))
             }
         }catch (e: Exception){

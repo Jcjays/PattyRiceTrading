@@ -16,6 +16,7 @@ data class User(
     val email: String = "",
     val password: String = "",
     var isAdmin: Boolean = false,
+    var isActive: Boolean = true
 ){
     companion object{
         private const val TAG = "User"
@@ -30,8 +31,9 @@ data class User(
                 val email = getString("email")!!
                 val password = getString("password")!!
                 val isAdmin = getBoolean("isAdmin")!!
+                val isActive = getBoolean("isActive")!!
 
-                return User(uId, firstName, lastName, address, phoneNumber, email, password, isAdmin)
+                return User(uId, firstName, lastName, address, phoneNumber, email, password, isAdmin, isActive)
             } catch (e : Exception){
                 Log.e(TAG, "Error converting user profile", e)
                 FirebaseCrashlytics.getInstance().log("Error converting user profile")

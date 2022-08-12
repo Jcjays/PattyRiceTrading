@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddRiceScreen">
+
+    <TextView
+        android:id="@+id/Label5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/oxygen"
+        android:text="Add Product"
+        android:layout_marginHorizontal="14dp"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/riceImageAddRiceScreen"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="30dp"
+        android:background="#D3D3D3"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Label5"/>
+
+
+    <ImageButton
+        android:id="@+id/removeImageButtonAddRiceScreen"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@color/fui_transparent"
+        android:src="@drawable/ic_cancel_24"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/riceImageAddRiceScreen"
+        app:layout_constraintTop_toTopOf="@+id/riceImageAddRiceScreen" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addProductImageButtonAddRiceScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:cornerRadius="0dp"
+        android:text="Add image"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@+id/riceImageAddRiceScreen"
+        app:layout_constraintStart_toStartOf="@+id/riceImageAddRiceScreen"
+        app:layout_constraintTop_toBottomOf="@+id/riceImageAddRiceScreen"/>
+
+    <TextView
+        android:id="@+id/label6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Product Name"
+        android:textStyle="bold"
+        android:fontFamily="@font/oxygen"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintEnd_toEndOf="@+id/Label5"
+        app:layout_constraintStart_toStartOf="@+id/Label5"
+        app:layout_constraintTop_toBottomOf="@+id/addProductImageButtonAddRiceScreen" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/productNameTextFieldAddRiceScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="(ex: Sinandomeng)"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/Label5"
+        app:layout_constraintStart_toStartOf="@+id/Label5"
+        app:layout_constraintTop_toBottomOf="@+id/label6">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productNameEditTextAddRiceScreen"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:textSize="13sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:id="@+id/label7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Stocks left"
+        android:textStyle="bold"
+        android:fontFamily="@font/oxygen"
+        android:layout_marginTop="15dp"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintStart_toStartOf="@+id/label6"
+        app:layout_constraintTop_toBottomOf="@+id/productNameTextFieldAddRiceScreen" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/productStockTextFieldAddRiceScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="(max: 50 sacks)"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/productNameTextFieldAddRiceScreen"
+        app:layout_constraintStart_toStartOf="@+id/productNameTextFieldAddRiceScreen"
+        app:layout_constraintTop_toBottomOf="@+id/label7">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productStockEditTextAddRiceScreen"
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:layout_height="55dp"
+            android:textSize="13sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:id="@+id/label8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Unit Price"
+        android:textStyle="bold"
+        android:fontFamily="@font/oxygen"
+        android:layout_marginTop="15dp"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintStart_toStartOf="@+id/label6"
+        app:layout_constraintTop_toBottomOf="@+id/productStockTextFieldAddRiceScreen" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/productPriceTextFieldAddRiceScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="(price: per sacks)"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/productStockTextFieldAddRiceScreen"
+        app:layout_constraintStart_toStartOf="@+id/productStockTextFieldAddRiceScreen"
+        app:layout_constraintTop_toBottomOf="@+id/label8">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productPriceEditTextAddRiceScreen"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:inputType="numberDecimal"
+            android:textSize="13sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancelAddRiceScreen"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Cancel"
+        android:backgroundTint="?attr/colorError"
+        app:layout_constraintStart_toStartOf="@+id/productPriceTextFieldAddRiceScreen"
+        app:layout_constraintTop_toBottomOf="@+id/productPriceTextFieldAddRiceScreen" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveAddRiceScreen"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="@+id/productPriceTextFieldAddRiceScreen"
+        app:layout_constraintTop_toBottomOf="@+id/productPriceTextFieldAddRiceScreen" />
+
+    <include
+        android:id="@+id/loadingState"
+        layout="@layout/loading_screen"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

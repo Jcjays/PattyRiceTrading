@@ -142,14 +142,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.2"
+        android:visibility="gone"
         android:padding="50dp"
         android:src="@drawable/patty_rice_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/editUserProfile"
@@ -164,12 +163,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/deleteUserProfile"
+        android:id="@+id/statusUserProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Delete"
-        android:backgroundTint="?attr/colorError"
         app:cornerRadius="0dp"
+        android:backgroundTint="?attr/colorError"
+        tools:text="Active"
         app:layout_constraintEnd_toEndOf="@+id/editUserProfile"
         app:layout_constraintStart_toStartOf="@+id/editUserProfile"
         app:layout_constraintTop_toBottomOf="@+id/editUserProfile" />

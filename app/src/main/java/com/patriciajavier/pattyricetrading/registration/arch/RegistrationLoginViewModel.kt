@@ -2,7 +2,7 @@ package com.patriciajavier.pattyricetrading.registration.arch
 
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseUser
-import com.patriciajavier.pattyricetrading.firestore.FirestoreService
+import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.DataOrException
 import com.patriciajavier.pattyricetrading.firestore.models.User
 import kotlinx.coroutines.Job
@@ -25,7 +25,7 @@ class RegistrationLoginViewModel : ViewModel(){
 
         try {
         service = viewModelScope.launch {
-            val checking = FirestoreService.checkIfAdmin(userId)
+            val checking = FirebaseService.checkIfAdmin(userId)
             if(checking == true){
                 _checkAccessRights.postValue(true)
             } else{

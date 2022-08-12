@@ -61,7 +61,8 @@ object SharedRepository{
                             "phoneNumber" to userEntity.phoneNumber,
                             "email" to userEntity.email,
                             "password" to userEntity.password,
-                            "isAdmin" to userEntity.isAdmin
+                            "isAdmin" to userEntity.isAdmin,
+                            "isActive" to userEntity.isActive
                         )
 
                         fireStore.collection("users")

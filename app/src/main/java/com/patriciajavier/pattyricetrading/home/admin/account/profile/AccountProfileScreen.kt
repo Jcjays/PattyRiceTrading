@@ -6,8 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentAccountProfileScreenBinding
 
 class AccountProfileScreen : Fragment() {
@@ -33,6 +40,7 @@ class AccountProfileScreen : Fragment() {
             viewModel.getUserInfo(it.userId)
         }
 
+
         viewModel.userInfo.observe(viewLifecycleOwner){
             binding.loadingState.root.visibility = if (it.isLoading) View.VISIBLE else View.GONE
 
@@ -42,12 +50,40 @@ class AccountProfileScreen : Fragment() {
             }
 
             if(it.data != null){
+
+                if(it.data!!.isAdmin)
+                    binding.statusUserProfile.isInvisible = true
+                else
+                    binding.statusUserProfile.isVisible = true
+
+                binding.roleAccountProfile.text = if(it.data!!.isAdmin) "Administrator" else "Shopkeeper"
+                binding.statusUserProfile.text = if(it.data!!.isActive) "Set Inactive" else "Set Active"
                 binding.nameAccountProfile.text = it.data!!.firstName + " " + it.data!!.lastName
                 binding.addressAccountProfile.text = it.data!!.address
-                binding.roleAccountProfile.text = if(it.data!!.isAdmin) "Administrator" else "Shopkeeper"
                 binding.emailAccountProfile.text = it.data!!.email
                 binding.phoneNumberAccountProfile.text = it.data!!.phoneNumber
             }
+        }
+
+        binding.editUserProfile.setOnClickListener {
+            val action = AccountProfileScreenDirections.actionAccountProfileScreenToEditProfileScreen(args.userId)
+            findNavController().navigate(action)
+        }
+
+        //setting the status of shopkeepers
+        binding.statusUserProfile.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Are you sure?")
+                .setMessage("Do you want to set this user as active/inactive?")
+                .setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Confirm") { dialog, which ->
+                    viewModel.setStatus(args.userId)
+                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
+                }
+                .show()
         }
     }
 
