@@ -10,6 +10,8 @@ data class Product(
     val pId : String = "",
     val productImage: String = "",
     val productName: String = "",
+    val productDesc: String = "",
+    val kiloPerSack: Int = 0,
     val stock: Int = 0,
     val unitPrice: Double = 0.0
 ){
@@ -20,11 +22,13 @@ data class Product(
             try {
                 val pId = getString("pId")!!
                 val productName = getString("productName")!!
+                val productDesc = getString("productDesc")!!
                 val stock = getLong("stock")!!.toInt()
+                val kiloPerSack = getLong("kiloPerSack")!!.toInt()
                 val unitPrice = getDouble("unitPrice")!!
                 val productImage = getString("productImage")!!
 
-                return Product(pId, productImage, productName, stock, unitPrice)
+                return Product(pId, productImage, productName, productDesc, kiloPerSack, stock, unitPrice)
             }catch (e :Exception){
                 Log.e(TAG, "Error converting product", e)
                 FirebaseCrashlytics.getInstance().log("Error converting product")

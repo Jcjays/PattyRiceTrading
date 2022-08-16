@@ -9,7 +9,9 @@ import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
 import com.patriciajavier.pattyricetrading.registration.arch.ViewBindingKotlinModel
 
-class InventoryScreenEpoxyController: EpoxyController() {
+class InventoryScreenEpoxyController(
+    private val onItemClick: (String) -> Unit
+): EpoxyController() {
 
     var response : List<Product>? = emptyList()
     set(value) {
@@ -22,32 +24,28 @@ class InventoryScreenEpoxyController: EpoxyController() {
 
         response?.forEach { product ->
             CardRiceModel(
-                product.productName,
-                product.productImage,
-                product.stock,
-                product.unitPrice
+                product,
+                onItemClick
             ).id(product.pId).addTo(this)
         }
     }
 
     data class CardRiceModel(
-        val title: String,
-        val image: String,
-        val stock: Int,
-        val price:  Double
+        val product: Product,
+        val onItemClick: (String) -> Unit
     ): ViewBindingKotlinModel<InventoryCardRiceModelBinding>(R.layout.inventory_card_rice_model){
         override fun InventoryCardRiceModelBinding.bind() {
             root.setOnClickListener {
-                //todo
+                onItemClick(product.pId)
             }
 
             Glide.with(MyApp.appContext)
-                .load(image)
+                .load(product.productImage)
                 .into(riceImage)
 
-            riceTitle.text = title
-            riceStockCount.text = "Stocks left: $stock"
-            riceUnitPrice.text = "Unit price: $price"
+            riceTitle.text = product.productName
+            riceStockCount.text = "Stocks left: ${product.stock}"
+            riceUnitPrice.text = "Unit price: ${product.unitPrice}"
         }
     }
 }

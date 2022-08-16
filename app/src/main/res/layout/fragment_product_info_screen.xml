@@ -1,14 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductInfoScreen">
+    tools:context=".home.admin.inventory.product.ProductInfoScreen">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/productNameProductInfoScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/oxygen_bold"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/productImageProductInfoScreen"
+        app:layout_constraintEnd_toEndOf="@+id/productImageProductInfoScreen"
+        app:layout_constraintStart_toStartOf="@+id/productImageProductInfoScreen"
+        tools:text="Sinandomeng" />
 
-</FrameLayout>
+
+    <TextView
+        android:id="@+id/productDescProductInfoScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="12sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productImageProductInfoScreen"
+        tools:text="@tools:sample/lorem[20]" />
+
+    <TextView
+        android:id="@+id/productKilosPerSackProductInfoScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/light_gray"
+        android:fontFamily="@font/oxygen"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="15sp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productDescProductInfoScreen"
+        tools:text="(Kg) per sack: \n25kg" />
+
+    <TextView
+        android:id="@+id/productStockProductInfoScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/light_gray"
+        android:fontFamily="@font/oxygen"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="@+id/productKilosPerSackProductInfoScreen"
+        app:layout_constraintStart_toStartOf="@+id/productKilosPerSackProductInfoScreen"
+        app:layout_constraintTop_toBottomOf="@+id/productKilosPerSackProductInfoScreen"
+        tools:text="Stock left: \n35 sacks" />
+
+    <TextView
+        android:id="@+id/productPriceProductInfoScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/light_gray"
+        android:fontFamily="@font/oxygen"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/productStockProductInfoScreen"
+        app:layout_constraintStart_toStartOf="@+id/productStockProductInfoScreen"
+        app:layout_constraintTop_toBottomOf="@+id/productStockProductInfoScreen"
+        tools:text="Unit Price: \n500 pesos" />
+
+    <ImageView
+        android:id="@+id/productImageProductInfoScreen"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="120dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_person"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/deleteProductInfoScreen"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorError"
+        android:text="Delete"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/productPriceProductInfoScreen"
+        app:layout_constraintTop_toBottomOf="@+id/productPriceProductInfoScreen" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/restockProductInfoScreen"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/productPriceProductInfoScreen"
+        app:layout_constraintTop_toBottomOf="@+id/productPriceProductInfoScreen" />
+
+    <include
+        android:id="@+id/loadingState"
+        layout="@layout/loading_screen"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

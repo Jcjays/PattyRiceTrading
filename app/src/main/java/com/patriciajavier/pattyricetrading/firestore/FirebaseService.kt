@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.core.net.toUri
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.patriciajavier.pattyricetrading.firestore.models.*
 import com.patriciajavier.pattyricetrading.firestore.models.Product.Companion.toListOfProduct
@@ -134,14 +135,15 @@ object FirebaseService {
     suspend fun addProductToFireStore(productInfo: Product){
         val db = FirebaseFirestore.getInstance()
 
-
         try {
-            val imageUri = addImageToFirebaseStorage(productInfo.productImage.toUri())
+            val imageUri = addImageToFirebaseStorage(productInfo.productImage.toUri(), productInfo.pId)
 
             val newProduct = hashMapOf(
                 "pId" to productInfo.pId,
                 "productImage" to imageUri,
                 "productName" to productInfo.productName,
+                "productDesc" to productInfo.productDesc,
+                "kiloPerSack" to productInfo.kiloPerSack,
                 "stock" to productInfo.stock,
                 "unitPrice" to productInfo.unitPrice
             )
@@ -158,11 +160,11 @@ object FirebaseService {
         }
     }
 
-    private suspend fun addImageToFirebaseStorage(imageUri: Uri): Uri? {
+    private suspend fun addImageToFirebaseStorage(imageUri: Uri, productId: String): Uri? {
         val storageRef = FirebaseStorage.getInstance()
         return try {
             //uploading image and getting its reference
-            storageRef.reference.child("ProductImage/${imageUri}")
+            storageRef.reference.child("ProductImage/${productId}")
                 .putFile(imageUri).await()
                 .storage.downloadUrl.await()
 
@@ -176,40 +178,61 @@ object FirebaseService {
     }
     //-----------------------------------------------------------
 
-    //-----------------------------------------------------------
-    suspend fun deleteProductToFirestore(productInfo: Product){
+    suspend fun addProductStock(productId: String, itemCount : Int){
         val db = FirebaseFirestore.getInstance()
 
         try {
-            deleteImageToFirebaseStorage(productInfo.productImage.toUri())
+            // Update one field, creating the document if it does not already exist.
+            val data = hashMapOf("stock" to itemCount)
 
-            db.collection("inventory")
-                .document(productInfo.pId)
-                .delete().await()
-        }catch (e: Exception){
-            Log.e(TAG, "Error deleting product", e)
-            FirebaseCrashlytics.getInstance().log("Error deleting product to fire store")
-            FirebaseCrashlytics.getInstance().setCustomKey("productId", productInfo.pId)
+            db.collection("inventory").document(productId)
+                .set(data, SetOptions.merge()).await()
+
+        }catch (e : Exception){
+            Log.e(TAG, "Error updating stock", e)
+            FirebaseCrashlytics.getInstance().log("Error updating product stock on fire store")
+            FirebaseCrashlytics.getInstance().setCustomKey("productId", productId)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
-    private suspend fun deleteImageToFirebaseStorage(imageUri: Uri){
+    //-----------------------------------------------------------
+    suspend fun deleteProductToFirestore(productId: String) = flow{
+        val db = FirebaseFirestore.getInstance()
+        try {
+            emit(Response.Loading)
+            deleteImageToFirebaseStorage(productId)
+
+            db.collection("inventory")
+                .document(productId)
+                .delete().await()
+
+            emit(Response.Success("Successfully deleted"))
+        }catch (e: Exception){
+            emit(Response.Failure(e))
+            Log.e(TAG, "Error deleting product", e)
+            FirebaseCrashlytics.getInstance().log("Error deleting product to fire store")
+            FirebaseCrashlytics.getInstance().setCustomKey("productId", productId)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+    }
+
+    private suspend fun deleteImageToFirebaseStorage(productImageId: String){
         val storageRef = FirebaseStorage.getInstance()
         try {
-            storageRef.reference.child("ProductImage/${imageUri}")
+            storageRef.reference.child("ProductImage/${productImageId}")
                 .delete().await()
         }catch (e: Exception){
             Log.e(TAG, "Error deleting image", e)
             FirebaseCrashlytics.getInstance().log("Error deleting image to firebase cloud storage")
-            FirebaseCrashlytics.getInstance().setCustomKey("imageUri", imageUri.toString())
+            FirebaseCrashlytics.getInstance().setCustomKey("imageUri", productImageId)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
     //-----------------------------------------------------------
 
 
-   suspend fun getProductsFromFireStore() = flow{
+   suspend fun getListOfProductFromFireStore() = flow{
         val db = FirebaseFirestore.getInstance()
         try {
             emit(Response.Loading)
@@ -219,10 +242,31 @@ object FirebaseService {
             emit(Response.Success(getListOfProduct))
         }catch (e: Exception){
             emit(Response.Failure(e))
-            Log.e(TAG, "Error uploading image", e)
-            FirebaseCrashlytics.getInstance().log("Error uploading image to firebase cloud storage")
+            Log.e(TAG, "Error getting products", e)
+            FirebaseCrashlytics.getInstance().log("Error getting products from fire store")
             FirebaseCrashlytics.getInstance().setCustomKey("GetProducts", "")
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+    }
+
+    suspend fun getProductFromFireStore(productId : String) = flow {
+        val db = FirebaseFirestore.getInstance()
+        try {
+            emit(Response.Loading)
+
+            val getProduct = db.collection("inventory")
+                .document(productId)
+                .get()
+                .await().toProduct()
+
+            emit(Response.Success(getProduct))
+        }catch (e : Exception){
+            emit(Response.Failure(e))
+            Log.e(TAG, "Error getting product info", e)
+            FirebaseCrashlytics.getInstance().log("Error getting product info from fire store")
+            FirebaseCrashlytics.getInstance().setCustomKey("GetProducts", productId)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+
     }
 }

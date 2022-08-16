@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentInventoryScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import com.patriciajavier.pattyricetrading.home.admin.account.profile.AccountProfileScreenDirections
 
 class InventoryScreen : Fragment() {
 
@@ -20,7 +21,12 @@ class InventoryScreen : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel : InventoryScreenViewModel by activityViewModels()
-    private val epoxyController = InventoryScreenEpoxyController()
+    private val epoxyController = InventoryScreenEpoxyController(::onItemClicked)
+
+    private fun onItemClicked(productId: String) {
+        val action = InventoryScreenDirections.actionInventoryScreenToProductInfoScreen(productId)
+        findNavController().navigate(action)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

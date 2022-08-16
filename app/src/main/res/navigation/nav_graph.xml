@@ -127,13 +127,25 @@
     <fragment
         android:id="@+id/addRiceScreen"
         android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.addproduct.AddRiceScreen"
-        android:label="fragment_add_rice_screen"
+        android:label=""
         tools:layout="@layout/fragment_add_rice_screen" />
     <fragment
         android:id="@+id/productInfoScreen"
-        android:name="com.patriciajavier.pattyricetrading.ProductInfoScreen"
-        android:label="fragment_product_info_screen"
-        tools:layout="@layout/fragment_product_info_screen" />
+        android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.product.ProductInfoScreen"
+        android:label="Product Information"
+        tools:layout="@layout/fragment_product_info_screen" >
+        <argument
+            android:name="productId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_productInfoScreen_to_editProductScreen"
+            app:destination="@id/editProductScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProductScreen"
+        android:name="com.patriciajavier.pattyricetrading.EditProductScreen"
+        android:label="fragment_edit_product_screen"
+        tools:layout="@layout/fragment_edit_product_screen" />
 
 
 </navigation>

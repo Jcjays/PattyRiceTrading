@@ -99,6 +99,10 @@ class AddRiceScreen : Fragment() {
 
         //-------------------------------------------------------------------
 
+        val productDescription = binding.productDescEditTextAddRiceScreen.text.toString().trim().replaceFirstChar { it.uppercase() }
+
+        //-------------------------------------------------------------------
+
         val stocks = binding.productStockEditTextAddRiceScreen.text.toString().trim()
 
         if(stocks.isEmpty()){
@@ -120,7 +124,7 @@ class AddRiceScreen : Fragment() {
         val unitPrice = binding.productPriceEditTextAddRiceScreen.text.toString().trim()
 
         if(unitPrice.isEmpty()){
-            binding.productStockTextFieldAddRiceScreen.error = Constant.TEXT_FIELD_ERROR_MSG
+            binding.productPriceTextFieldAddRiceScreen.error = Constant.TEXT_FIELD_ERROR_MSG
             return
         }
         //removing error
@@ -128,6 +132,17 @@ class AddRiceScreen : Fragment() {
         binding.productStockTextFieldAddRiceScreen.isErrorEnabled = false
         //-------------------------------------------------------------------
 
+        val checkRadioGroup = binding.radioGroup.checkedRadioButtonId
+
+        var checkKilogramsPerSack = 0
+
+        if(checkRadioGroup == binding.radioButton25kg.id)
+            checkKilogramsPerSack = 25
+
+        if (checkRadioGroup == binding.radioButton50kg.id)
+            checkKilogramsPerSack = 50
+
+        //-------------------------------------------------------------------
 
         if(uriHolder == null){
             Toast.makeText(requireContext(), "Please upload a product image", Toast.LENGTH_SHORT).show()
@@ -138,6 +153,8 @@ class AddRiceScreen : Fragment() {
             pId = UUID.randomUUID().toString(),
             productImage =  uriHolder.toString(),
             productName = productTitle,
+            productDesc = productDescription,
+            kiloPerSack = checkKilogramsPerSack,
             stock = stocks.toInt(),
             unitPrice = unitPrice.toDouble()
         )
