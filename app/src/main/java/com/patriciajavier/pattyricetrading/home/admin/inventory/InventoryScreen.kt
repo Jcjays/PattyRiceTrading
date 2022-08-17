@@ -57,9 +57,9 @@ class InventoryScreen : Fragment() {
         binding.riceListEpoxyRecyclerView.setController(epoxyController)
 
         binding.addRiceInventoryScreen.setOnClickListener {
-            findNavController().navigate(R.id.action_inventoryScreen_to_addRiceScreen)
+            val action = InventoryScreenDirections.actionInventoryScreenToAddRiceScreen(null)
+            findNavController().navigate(action)
         }
-
     }
 
     override fun onDestroyView() {

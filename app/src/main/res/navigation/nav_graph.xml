@@ -128,24 +128,35 @@
         android:id="@+id/addRiceScreen"
         android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.addproduct.AddRiceScreen"
         android:label=""
-        tools:layout="@layout/fragment_add_rice_screen" />
+        tools:layout="@layout/fragment_add_rice_screen" >
+        <argument
+            android:name="productId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+
     <fragment
         android:id="@+id/productInfoScreen"
         android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.product.ProductInfoScreen"
         android:label="Product Information"
         tools:layout="@layout/fragment_product_info_screen" >
+        <action
+            android:id="@+id/action_productInfoScreen_to_restockProductScreen"
+            app:destination="@id/restockProductScreen" />
         <argument
             android:name="productId"
             app:argType="string" />
-        <action
-            android:id="@+id/action_productInfoScreen_to_editProductScreen"
-            app:destination="@id/editProductScreen" />
     </fragment>
     <fragment
-        android:id="@+id/editProductScreen"
-        android:name="com.patriciajavier.pattyricetrading.EditProductScreen"
-        android:label="fragment_edit_product_screen"
-        tools:layout="@layout/fragment_edit_product_screen" />
+        android:id="@+id/restockProductScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.product.RestockProductScreen"
+        android:label=""
+        tools:layout="@layout/fragment_restock_product_screen" >
+        <argument
+            android:name="productId"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

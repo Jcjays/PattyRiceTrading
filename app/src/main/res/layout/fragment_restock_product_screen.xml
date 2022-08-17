@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".home.admin.inventory.product.RestockProductScreen">
+
+    <TextView
+        android:id="@+id/mainLabelRestockProductScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/oxygen"
+        android:text="Update Product"
+        android:layout_marginHorizontal="14dp"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/labelCurrentStockRestockScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        tools:text="Current stock: 32"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/mainLabelRestockProductScreen"
+        app:layout_constraintStart_toStartOf="@+id/mainLabelRestockProductScreen"
+        app:layout_constraintTop_toBottomOf="@+id/mainLabelRestockProductScreen" />
+
+    <TextView
+        android:id="@+id/labelRestockScreen1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:text="Stock"
+        android:layout_marginTop="10dp"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/mainLabelRestockProductScreen"
+        app:layout_constraintStart_toStartOf="@+id/mainLabelRestockProductScreen"
+        app:layout_constraintTop_toBottomOf="@+id/labelCurrentStockRestockScreen" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/stockUpdateProductTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:hint="Add new stock"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/mainLabelRestockProductScreen"
+        app:layout_constraintStart_toStartOf="@+id/labelRestockScreen1"
+        app:layout_constraintTop_toBottomOf="@+id/labelRestockScreen1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/updateStockEditText"
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/labelTotalStockRestockScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/stockUpdateProductTextField"
+        app:layout_constraintTop_toBottomOf="@+id/stockUpdateProductTextField"
+        tools:text="Total stock: 50" />
+
+
+    <TextView
+        android:id="@+id/labelRestockScreen2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:text="Unit Price"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/labelCurrentPriceRestockScreen"
+        app:layout_constraintStart_toStartOf="@+id/labelCurrentPriceRestockScreen"
+        app:layout_constraintTop_toBottomOf="@+id/labelCurrentPriceRestockScreen" />
+
+
+    <TextView
+        android:id="@+id/labelCurrentPriceRestockScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        tools:text="Current Price: 599 php"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/labelTotalStockRestockScreen"
+        app:layout_constraintStart_toStartOf="@+id/stockUpdateProductTextField"
+        app:layout_constraintTop_toBottomOf="@+id/labelTotalStockRestockScreen" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/unitPriceUpdateProductTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Update price"
+        app:layout_constraintEnd_toEndOf="@+id/labelRestockScreen2"
+        app:layout_constraintStart_toStartOf="@+id/labelRestockScreen2"
+        app:layout_constraintTop_toBottomOf="@+id/labelRestockScreen2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/updatePriceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/labelUpdatedPriceRestockScreen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/unitPriceUpdateProductTextField"
+        app:layout_constraintTop_toBottomOf="@+id/unitPriceUpdateProductTextField"
+        tools:text="Updated Price: 599 php" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancelUpdateProduct"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorError"
+        android:text="Cancel"
+        android:layout_marginTop="10dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintStart_toStartOf="@+id/unitPriceUpdateProductTextField"
+        app:layout_constraintTop_toBottomOf="@+id/labelUpdatedPriceRestockScreen" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveUpdateProduct"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_marginTop="10dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/labelUpdatedPriceRestockScreen"
+        app:layout_constraintTop_toBottomOf="@+id/labelUpdatedPriceRestockScreen" />
+
+    <include
+        android:id="@+id/loadingState"
+        layout="@layout/loading_screen"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

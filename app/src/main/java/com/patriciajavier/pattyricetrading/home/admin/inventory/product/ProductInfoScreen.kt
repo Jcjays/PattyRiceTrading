@@ -43,7 +43,8 @@ class ProductInfoScreen : Fragment() {
 
         var product : Product? = null
 
-        viewModel.getProduct.observe(viewLifecycleOwner){ response ->
+
+        viewModel.getProductLiveData.observe(viewLifecycleOwner){ response ->
             when(response){
                 is Response.Loading -> binding.loadingState.root.isVisible = true
                 is Response.Success -> {
@@ -65,8 +66,7 @@ class ProductInfoScreen : Fragment() {
                 is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()
             }
         }
-
-        viewModel.deleteProduct.observe(viewLifecycleOwner){ response ->
+        viewModel.deleteProductLiveData.observe(viewLifecycleOwner){ response ->
             when(response){
                 is Response.Loading -> binding.loadingState.root.isVisible = true
                 is Response.Success -> {
@@ -79,7 +79,12 @@ class ProductInfoScreen : Fragment() {
         }
 
         binding.restockProductInfoScreen.setOnClickListener {
-
+            if(product != null){
+                val action = ProductInfoScreenDirections.actionProductInfoScreenToRestockProductScreen(product!!.pId)
+                findNavController().navigate(action)
+                return@setOnClickListener
+            }
+            Toast.makeText(requireContext(), "unknown error occurred.", Toast.LENGTH_SHORT).show()
         }
 
         binding.deleteProductInfoScreen.setOnClickListener {

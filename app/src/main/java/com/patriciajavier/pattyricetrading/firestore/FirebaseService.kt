@@ -132,7 +132,7 @@ object FirebaseService {
     //upload the product info to firestore
 
     //-----------------------------------------------------------
-    suspend fun addProductToFireStore(productInfo: Product){
+    suspend fun addUpdateProductToFireStore(productInfo: Product){
         val db = FirebaseFirestore.getInstance()
 
         try {
@@ -150,11 +150,11 @@ object FirebaseService {
 
             db.collection("inventory")
                 .document(productInfo.pId)
-                .set(newProduct).await()
+                .set(newProduct, SetOptions.merge()).await()
 
         }catch (e: Exception){
-            Log.e(TAG, "Error uploading new product", e)
-            FirebaseCrashlytics.getInstance().log("Error uploading product to fire store.")
+            Log.e(TAG, "Error uploading/updating new product", e)
+            FirebaseCrashlytics.getInstance().log("Error uploading/updating product to fire store.")
             FirebaseCrashlytics.getInstance().setCustomKey("productId", productInfo.pId)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
@@ -178,12 +178,15 @@ object FirebaseService {
     }
     //-----------------------------------------------------------
 
-    suspend fun addProductStock(productId: String, itemCount : Int){
+    suspend fun updateProductFromFireStore(productId: String, unitPrice: Double, stock : Int){
         val db = FirebaseFirestore.getInstance()
 
         try {
-            // Update one field, creating the document if it does not already exist.
-            val data = hashMapOf("stock" to itemCount)
+            // Update field
+            val data = hashMapOf(
+                "unitPrice" to unitPrice,
+                "stock" to stock,
+            )
 
             db.collection("inventory").document(productId)
                 .set(data, SetOptions.merge()).await()

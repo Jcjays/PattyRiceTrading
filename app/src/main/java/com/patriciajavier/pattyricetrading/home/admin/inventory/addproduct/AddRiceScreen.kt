@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
@@ -16,13 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.databinding.FragmentAddRiceScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import kotlinx.coroutines.flow.collect
-import java.net.URI
+import com.patriciajavier.pattyricetrading.home.admin.inventory.product.ProductInfoScreenViewModel
 import java.util.*
+import java.util.function.BinaryOperator
 
 
 class AddRiceScreen : Fragment() {
@@ -65,6 +66,7 @@ class AddRiceScreen : Fragment() {
                     is Response.Success -> {
                         Toast.makeText(requireContext(), event.data.toString(), Toast.LENGTH_SHORT).show()
                         binding.loadingState.root.isGone = true
+                        findNavController().navigateUp()
                     }
                     is Response.Failure -> Toast.makeText(requireContext(), event.e.message.toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -82,7 +84,6 @@ class AddRiceScreen : Fragment() {
 
         binding.saveAddRiceScreen.setOnClickListener {
             validateInput()
-
         }
     }
 
@@ -110,11 +111,6 @@ class AddRiceScreen : Fragment() {
             return
         }
 
-        if(stocks.toInt() > 50){
-            binding.productStockTextFieldAddRiceScreen.error = "Stock cannot exceed 50"
-            return
-        }
-
         //removing error
         binding.productStockTextFieldAddRiceScreen.error = null
         binding.productStockTextFieldAddRiceScreen.isErrorEnabled = false
@@ -133,15 +129,7 @@ class AddRiceScreen : Fragment() {
         //-------------------------------------------------------------------
 
         val checkRadioGroup = binding.radioGroup.checkedRadioButtonId
-
-        var checkKilogramsPerSack = 0
-
-        if(checkRadioGroup == binding.radioButton25kg.id)
-            checkKilogramsPerSack = 25
-
-        if (checkRadioGroup == binding.radioButton50kg.id)
-            checkKilogramsPerSack = 50
-
+        val checkKilogramsPerSack = if(checkRadioGroup == binding.radioButton25kg.id) 25 else 50
         //-------------------------------------------------------------------
 
         if(uriHolder == null){
