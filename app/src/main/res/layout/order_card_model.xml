@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/riceImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/riceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="11sp"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            android:fontFamily="@font/oxygen"
+            app:layout_constraintStart_toEndOf="@+id/riceImage"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Sinandomeng" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@+id/riceVariation"
+            app:layout_constraintStart_toStartOf="@+id/riceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/riceTitle"
+            tools:text="Requested by: Shopkeeper 1" />
+
+        <TextView
+            android:id="@+id/dateOrdered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="11sp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toStartOf="@+id/description"
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            tools:text="November 21, 2022" />
+
+        <TextView
+            android:id="@+id/unitPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="@color/green"
+            android:textSize="11sp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/riceTitle"
+            tools:text="(Qty: 32) P5000" />
+
+        <TextView
+            android:id="@+id/riceVariation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toTopOf="@+id/dateOrdered"
+            app:layout_constraintEnd_toEndOf="@+id/unitPrice"
+            app:layout_constraintTop_toBottomOf="@+id/riceTitle"
+            tools:text="Variation: 25kg" />
+
+        <TextView
+            android:id="@+id/currentStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="11sp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintEnd_toEndOf="@+id/riceVariation"
+            app:layout_constraintTop_toBottomOf="@+id/riceVariation"
+            tools:text="Stock: 533" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/acceptOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deliver"
+            android:layout_marginStart="20dp"
+            app:cornerRadius="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/riceImage" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/declineOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Decline"
+            android:backgroundTint="?attr/colorError"
+            android:layout_marginEnd="20dp"
+            app:cornerRadius="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/acceptOrder" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

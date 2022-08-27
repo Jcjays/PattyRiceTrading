@@ -1,7 +1,5 @@
 package com.patriciajavier.pattyricetrading.home.admin.inventory.addproduct
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
@@ -17,14 +15,23 @@ class AddRiceViewModel : ViewModel() {
     val eventFLow = eventChannel.receiveAsFlow()
 
 
-    fun addProductToFireStore(productInfo: Product) = viewModelScope.launch{
+    fun addAdminProductToFireStore(productInfo: Product) = viewModelScope.launch{
         eventChannel.send(Response.Loading)
-
         try {
-            FirebaseService.addUpdateProductToFireStore(productInfo)
+            FirebaseService.addAdminProductToFireStore(productInfo)
             eventChannel.send(Response.Success("Upload Success"))
         }catch (e: Exception){
             eventChannel.send(Response.Failure(e))
         }
     }
+
+//    fun addShopkeeperProductToFireStore(productInfo: Product, uid: String) = viewModelScope.launch{
+//        eventChannel.send(Response.Loading)
+//        try {
+//            FirebaseService.addShopkeeperProductToFireStore(productInfo, uid)
+//            eventChannel.send(Response.Success("Upload Success"))
+//        }catch (e: Exception){
+//            eventChannel.send(Response.Failure(e))
+//        }
+//    }
 }

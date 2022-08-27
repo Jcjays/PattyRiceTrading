@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/riceImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/riceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="14sp"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            android:fontFamily="@font/oxygen"
+            app:layout_constraintStart_toEndOf="@+id/riceImage"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Sinandomeng" />
+
+
+        <TextView
+            android:id="@+id/refillCapLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/riceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/riceTitle"
+            tools:text="Display cap: 25/50 kg" />
+
+        <TextView
+            android:id="@+id/unitPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textSize="14sp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/riceTitle"
+            tools:text="P5000" />
+
+
+        <TextView
+            android:id="@+id/currentStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/riceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/refillCapLabel"
+            tools:text="Stock: 533" />
+
+        <TextView
+            android:id="@+id/riceVariation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/unitPrice"
+            app:layout_constraintTop_toBottomOf="@+id/unitPrice"
+            tools:text="Variation: 25kg" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/refillDisplay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Refill display"
+            app:cornerRadius="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/riceImage" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".home.admin.market.ProductMarketBottomSheet">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/paymentOutlinedTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Cash"
+        app:boxCornerRadiusTopStart="0dp"
+        app:boxCornerRadiusTopEnd="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/paymentOutlinedEditText"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/epoxyRecyclerViewProductMarketCashierList"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="@+id/paymentOutlinedTextField"
+        app:layout_constraintStart_toStartOf="@+id/paymentOutlinedTextField"
+        app:layout_constraintTop_toBottomOf="@+id/paymentOutlinedTextField" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/materialButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="Compute"
+        android:layout_marginTop="10dp"
+        android:textColor="?attr/colorOnSurface"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/epoxyRecyclerViewProductMarketCashierList"
+        app:layout_constraintTop_toTopOf="@+id/epoxyRecyclerViewProductMarketCashierList" />
+
+    <com.google.android.material.button.MaterialButton
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Cancel"
+        android:textColor="?attr/colorError"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/epoxyRecyclerViewProductMarketCashierList"
+        app:layout_constraintEnd_toEndOf="@+id/materialButton"
+        app:layout_constraintStart_toStartOf="@+id/materialButton"
+        app:layout_constraintTop_toBottomOf="@+id/materialButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sell"
+        android:textColor="?attr/colorOnSurface"
+        style="?attr/materialButtonOutlinedStyle"
+        app:cornerRadius="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/epoxyRecyclerViewProductMarketCashierList"
+        app:layout_constraintStart_toStartOf="@+id/epoxyRecyclerViewProductMarketCashierList"
+        app:layout_constraintTop_toBottomOf="@+id/epoxyRecyclerViewProductMarketCashierList" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

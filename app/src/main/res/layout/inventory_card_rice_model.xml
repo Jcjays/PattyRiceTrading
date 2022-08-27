@@ -47,6 +47,30 @@
             tools:text="Stocks left: 50" />
 
         <TextView
+            android:id="@+id/availabilityStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="@color/green"
+            android:textSize="12sp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/riceTitle"
+            tools:text="Available" />
+
+        <TextView
+            android:id="@+id/riceVariation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toStartOf="@+id/riceStockCount"
+            app:layout_constraintTop_toBottomOf="@+id/riceStockCount"
+            tools:text="Variation: 25kg" />
+
+        <TextView
             android:id="@+id/riceUnitPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

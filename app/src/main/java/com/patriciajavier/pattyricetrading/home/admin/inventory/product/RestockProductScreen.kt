@@ -1,8 +1,6 @@
 package com.patriciajavier.pattyricetrading.home.admin.inventory.product
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,17 +8,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.databinding.FragmentRestockProductScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import kotlinx.coroutines.flow.collect
 
 class RestockProductScreen : Fragment() {
 
@@ -34,7 +30,7 @@ class RestockProductScreen : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRestockProductScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,7 +39,21 @@ class RestockProductScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         args.productId.let {
-            viewModel.getProductFromFireStore(it)
+            if(MyApp.accessRights){
+                viewModel.getAdminProductFromFireStore(it)
+                binding.labelCurrentStockRestockScreen.isVisible = true
+                binding.labelRestockScreen1.isVisible = true
+                binding.updateStockEditText.isVisible = true
+                binding.labelTotalStockRestockScreen.isVisible = true
+            }
+            else
+            {
+                viewModel.getShopkeeperProductFromFireStore(it, MyApp.userId)
+                binding.labelCurrentStockRestockScreen.isGone = true
+                binding.labelRestockScreen1.isGone = true
+                binding.updateStockEditText.isGone = true
+                binding.labelTotalStockRestockScreen.isGone = true
+            }
         }
 
         viewModel.getProductLiveData.observe(viewLifecycleOwner){ response ->
@@ -123,7 +133,10 @@ class RestockProductScreen : Fragment() {
             binding.updatePriceEditText.text.toString().trim().toDouble()
         }
 
-        viewModel.updateProductFromFireStore(product!!.pId, newPrice, newStock)
+        if(MyApp.accessRights)
+            viewModel.updateAdminProductFromFireStore(product!!.pId, newPrice, newStock)
+        else
+            viewModel.updateShopkeeperProductFromFireStore(product!!.pId, newPrice, MyApp.userId)
     }
 
     override fun onDestroyView() {

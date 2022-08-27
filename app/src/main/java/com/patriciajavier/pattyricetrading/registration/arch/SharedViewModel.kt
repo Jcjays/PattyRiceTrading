@@ -8,7 +8,7 @@ import com.patriciajavier.pattyricetrading.firestore.models.User
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class RegistrationLoginViewModel : ViewModel(){
+class SharedViewModel : ViewModel(){
 
     private val _checkAccessRights = MutableLiveData<Boolean>()
     val checkAccessRights : LiveData<Boolean>
@@ -18,24 +18,16 @@ class RegistrationLoginViewModel : ViewModel(){
     val userMutableLiveData: LiveData<DataOrException<FirebaseUser, Exception?>>
         get() = _userMutableLiveData
 
-    //preventing concurrent calls
-    private var service : Job? = null
-    fun checkAccessRight(userId: String){
-        if(service != null) return
 
+    fun checkAccessRight(userId: String) = viewModelScope.launch{
         try {
-        service = viewModelScope.launch {
             val checking = FirebaseService.checkIfAdmin(userId)
-            if(checking == true){
+            if(checking == true)
                 _checkAccessRights.postValue(true)
-            } else{
+            else
                 _checkAccessRights.postValue(false)
-            }
-            }
         }catch (e : Exception){
             //optional bubble up exception
-        }finally {
-            service = null
         }
     }
 

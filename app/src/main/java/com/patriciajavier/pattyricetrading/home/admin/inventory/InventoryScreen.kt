@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentInventoryScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import com.patriciajavier.pattyricetrading.home.admin.account.profile.AccountProfileScreenDirections
 
 class InventoryScreen : Fragment() {
 
@@ -31,7 +33,7 @@ class InventoryScreen : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentInventoryScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,23 +43,40 @@ class InventoryScreen : Fragment() {
 
         //observe inventory table in fire store
         //and add it on epoxy recycler view
-        viewModel.getListOfProducts()
+        val accessRights = MyApp.accessRights
 
-        viewModel.getListOfProducts.observe(viewLifecycleOwner){ response ->
-            when(response){
-                is Response.Loading -> binding.loadingState.root.isVisible = true
-                is Response.Success -> {
-                    epoxyController.response = response.data
-                    binding.loadingState.root.isGone = true
-                }
-                is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()
-            }
+        //fetch the appropriate data
+        if(accessRights){
+            viewModel.getAdminListOfProducts()
+            binding.addRiceInventoryScreen.isVisible = true
+            binding.OrdersInventoryScreen.text = "Orders"
+        } else{
+            viewModel.getShopkeeperListOfProducts(MyApp.userId)
+            binding.addRiceInventoryScreen.isGone = true
+            binding.OrdersInventoryScreen.text = "Restock"
         }
+
+            viewModel.getListOfProducts.observe(viewLifecycleOwner){ response ->
+                when(response){
+                    is Response.Loading -> binding.loadingState.root.isVisible = true
+                    is Response.Success -> {
+                        epoxyController.response = response.data
+                        binding.loadingState.root.isGone = true
+                    }
+                    is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
 
         binding.riceListEpoxyRecyclerView.setController(epoxyController)
 
         binding.addRiceInventoryScreen.setOnClickListener {
-            val action = InventoryScreenDirections.actionInventoryScreenToAddRiceScreen(null)
+//            val action = InventoryScreenDirections.actionInventoryScreenToAddRiceScreen(args.uId)
+            findNavController().navigate(R.id.action_inventoryScreen_to_addRiceScreen)
+        }
+
+        binding.OrdersInventoryScreen.setOnClickListener {
+            val label = if(accessRights) "Orders" else "Restock"
+            val action = InventoryScreenDirections.actionInventoryScreenToOrderModuleScreen(label)
             findNavController().navigate(action)
         }
     }

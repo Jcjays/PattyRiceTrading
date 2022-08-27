@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.loginScreen, R.id.registrationScreen, R.id.adminScreen, R.id.shopkeeperScreen))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.loginScreen, R.id.registrationScreen, R.id.dashboardScreen))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
     }

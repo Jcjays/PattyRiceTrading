@@ -10,24 +10,21 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.patriciajavier.pattyricetrading.Constant
+import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentLoginScreenBinding
-import com.patriciajavier.pattyricetrading.registration.arch.RegistrationLoginViewModel
+import com.patriciajavier.pattyricetrading.registration.arch.SharedViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import kotlin.math.log
 
 class LoginScreen : Fragment() {
 
     private var _binding: FragmentLoginScreenBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: RegistrationLoginViewModel by activityViewModels()
+    private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,8 +49,8 @@ class LoginScreen : Fragment() {
             }
 
             if(it.data != null) {
-                Log.d("Login Screen", it.data!!.uid)
-                //search through fire store to determine the user access rights
+                //assign a global access to currentUserId
+                MyApp.userId = it.data!!.uid
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.checkAccessRight(it.data!!.uid)
                 }
@@ -63,12 +60,14 @@ class LoginScreen : Fragment() {
         //Determine whether the user is admin or shopkeeper
         viewModel.checkAccessRights.observe(viewLifecycleOwner) { accessRights ->
             if(accessRights != null){
-            if (accessRights)
-                findNavController().navigate(R.id.action_loginScreen_to_adminScreen)
-             else
-                 findNavController().navigate(R.id.action_loginScreen_to_shopkeeperScreen)
-            }
 
+                //assign a global access to currentUserId
+                MyApp.accessRights = accessRights
+
+                val label = if(accessRights) "Admin" else "Shopkeeper"
+                val action = LoginScreenDirections.actionLoginScreenToAdminScreen(label)
+                findNavController().navigate(action)
+            }
             viewModel.clearCheckingForAccessRights()
         }
 

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".home.admin.inventory.order.restock.OrderRequestScreen">
+
+    <ImageView
+        android:id="@+id/riceImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/riceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        android:fontFamily="@font/oxygen"
+        app:layout_constraintStart_toEndOf="@+id/riceImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Sinandomeng" />
+
+    <TextView
+        android:id="@+id/riceStockCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/oxygen"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/riceTitle"
+        app:layout_constraintTop_toBottomOf="@+id/riceTitle"
+        tools:text="Stocks left: 50" />
+
+    <TextView
+        android:id="@+id/riceVariation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="12sp"
+        android:layout_marginTop="3dp"
+        app:layout_constraintStart_toStartOf="@+id/riceStockCount"
+        app:layout_constraintTop_toBottomOf="@+id/riceStockCount"
+        tools:text="Variation: 25kg" />
+
+    <TextView
+        android:id="@+id/totalCost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:text="Total:"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/riceImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/riceVariation" />
+
+
+    <TextView
+        android:id="@+id/riceUnitPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:fontFamily="@font/oxygen"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="P850" />
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:inputType="number"
+        android:text="1"
+        android:layout_marginTop="10dp"
+        android:background="@color/fui_transparent"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/buttonIncreaseQty"
+        app:layout_constraintTop_toBottomOf="@+id/riceImage" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonIncreaseQty"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="20dp"
+        app:icon="@drawable/ic_arrow_right"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeWidth="0dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonDecreaseQty"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:cornerRadius="0dp"
+        app:icon="@drawable/ic_arrow_left"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintEnd_toStartOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="@+id/editText"
+        app:strokeWidth="0dp" />
+
+    <TextView
+        android:id="@+id/quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="Quantity:"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonDecreaseQty"
+        app:layout_constraintEnd_toEndOf="@+id/riceImage"
+        app:layout_constraintStart_toStartOf="@+id/riceImage"
+        app:layout_constraintTop_toTopOf="@+id/buttonDecreaseQty"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitOrder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Order"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

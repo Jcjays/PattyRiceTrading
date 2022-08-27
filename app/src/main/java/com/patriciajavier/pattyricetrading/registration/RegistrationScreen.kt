@@ -11,10 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.patriciajavier.pattyricetrading.Constant
+import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentRegistrationScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.User
-import com.patriciajavier.pattyricetrading.registration.arch.RegistrationLoginViewModel
+import com.patriciajavier.pattyricetrading.registration.arch.SharedViewModel
 import kotlinx.coroutines.launch
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -24,13 +25,12 @@ class RegistrationScreen : Fragment() {
     private var _binding: FragmentRegistrationScreenBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : RegistrationLoginViewModel by activityViewModels()
-    private val firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val viewModel : SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         _binding = FragmentRegistrationScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,24 +51,26 @@ class RegistrationScreen : Fragment() {
                 return@observe
             }
             if(it.data != null){
-                //search thru firestore to determine the user access rights
+
+                MyApp.userId = it.data!!.uid
+
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.checkAccessRight(it.data!!.uid)
                 }
-
-                //Determine whether the user is admin or shopkeeper
-                viewModel.checkAccessRights.observe(viewLifecycleOwner){ accessRights ->
-                    if(accessRights != null){
-                        if(accessRights){
-                            findNavController().navigate(R.id.adminScreen)
-                        }
-                        else {
-                            findNavController().navigate(R.id.shopkeeperScreen)
-                        }
-                        Toast.makeText(requireContext(), it.data!!.email.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
             }
+        }
+
+        //Determine whether the user is admin or shopkeeper
+        viewModel.checkAccessRights.observe(viewLifecycleOwner){ accessRights ->
+            if(accessRights != null){
+
+                MyApp.accessRights = accessRights
+
+                val label = if(accessRights) "Admin" else "Shopkeeper"
+                val action = RegistrationScreenDirections.actionRegistrationScreenToAdminScreen(label)
+                findNavController().navigate(action)
+            }
+            viewModel.clearCheckingForAccessRights()
         }
 
         //validating input from users

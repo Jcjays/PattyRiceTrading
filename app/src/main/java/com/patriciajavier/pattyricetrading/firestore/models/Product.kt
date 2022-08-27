@@ -13,13 +13,20 @@ data class Product(
     val productDesc: String = "",
     val kiloPerSack: Int = 0,
     val stock: Int = 0,
-    val unitPrice: Double = 0.0
+    val unitPrice: Double = 0.0,
+    var qty: Int = 0,
+    var isFromMarket: Boolean = false,
 ){
     companion object{
         private const val TAG = "Product"
 
         fun DocumentSnapshot.toProduct() : Product?{
             try {
+
+                if(data.isNullOrEmpty()){
+                    return null
+                }
+
                 val pId = getString("pId")!!
                 val productName = getString("productName")!!
                 val productDesc = getString("productDesc")!!
@@ -41,8 +48,13 @@ data class Product(
         fun QuerySnapshot.toListOfProduct() : List<Product>?{
             try{
                 val list : ArrayList<Product> = ArrayList()
-                documents.forEach { list.add(it.toProduct()!!) }
+
+                documents.forEach {
+                  it.toProduct()?.let { it1 -> list.add(it1) }
+                }
+
                 return list
+
             }catch (e: Exception){
                 Log.e(TAG, "Error fetching all the products", e)
                 FirebaseCrashlytics.getInstance().log("Error fetching all the products profile")

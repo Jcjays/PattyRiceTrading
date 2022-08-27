@@ -16,14 +16,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.patriciajavier.pattyricetrading.Constant
+import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.databinding.FragmentAddRiceScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import com.patriciajavier.pattyricetrading.home.admin.inventory.product.ProductInfoScreenViewModel
 import java.util.*
-import java.util.function.BinaryOperator
 
 
 class AddRiceScreen : Fragment() {
@@ -147,7 +145,7 @@ class AddRiceScreen : Fragment() {
             unitPrice = unitPrice.toDouble()
         )
 
-        viewModel.addProductToFireStore(productInfo)
+        viewModel.addAdminProductToFireStore(productInfo)
     }
 
     override fun onDestroyView() {

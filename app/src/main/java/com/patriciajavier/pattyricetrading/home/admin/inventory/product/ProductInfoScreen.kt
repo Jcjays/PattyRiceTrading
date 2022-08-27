@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.databinding.FragmentProductInfoScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
@@ -28,7 +29,7 @@ class ProductInfoScreen : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentProductInfoScreenBinding.inflate(inflater, container, false)
         return binding.root
@@ -38,7 +39,10 @@ class ProductInfoScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         args.let {
-            viewModel.getProductFromFireStore(it.productId)
+            if(MyApp.accessRights)
+                viewModel.getAdminProductFromFireStore(it.productId)
+            else
+                viewModel.getShopkeeperProductFromFireStore(it.productId, MyApp.userId)
         }
 
         var product : Product? = null
@@ -89,7 +93,11 @@ class ProductInfoScreen : Fragment() {
 
         binding.deleteProductInfoScreen.setOnClickListener {
             if(product != null){
-                viewModel.deleteProduct(product!!.pId)
+                if(MyApp.accessRights)
+                    viewModel.deleteAdminProduct(product!!.pId)
+                else
+                    viewModel.deleteShopkeeperProduct(product!!.pId, MyApp.userId)
+
                 return@setOnClickListener
             }
             Toast.makeText(requireContext(), "unknown error occurred.", Toast.LENGTH_SHORT).show()

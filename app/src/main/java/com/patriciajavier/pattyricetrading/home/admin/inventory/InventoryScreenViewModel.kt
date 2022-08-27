@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class InventoryScreenViewModel : ViewModel() {
@@ -16,10 +17,18 @@ class InventoryScreenViewModel : ViewModel() {
         get() = _getListOfProducts
 
 
-    fun getListOfProducts() = viewModelScope.launch {
-        FirebaseService.getListOfProductFromFireStore().collect{
-            _getListOfProducts.postValue(it)
+    fun getAdminListOfProducts() = viewModelScope.launch {
+        FirebaseService.getAdminListOfProductFromFireStore().collect{
+            _getListOfProducts.value = it
         }
     }
+
+    fun getShopkeeperListOfProducts(uId: String) = viewModelScope.launch{
+        FirebaseService.getShopkeeperListOfProductFromFireStore(uId).collect(){
+            _getListOfProducts.value = it
+        }
+    }
+
+
 
 }

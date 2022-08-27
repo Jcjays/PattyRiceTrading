@@ -80,21 +80,21 @@ object SharedRepository{
                                 FirebaseCrashlytics.getInstance().recordException(exception)
                             }
 
-                        //writing empty inventory collection new users
-                        fireStore.collection("users")
-                            .document(firebaseAuth.currentUser!!.uid)
-                            .collection("inventory")
-                            .document("rice-products")
-                            .set({})
-                            .addOnSuccessListener {
-                                Log.d(TAG, "Inventory successfully written!")
-                            }.addOnFailureListener { exception ->
-                                userMutableLiveData.postValue(DataOrException(exception = exception))
-                                Log.e(TAG, "Error writing documents in users > inventory -> rice-products", exception)
-                                FirebaseCrashlytics.getInstance().log("Error writing documents in users > inventory -> rice-products")
-                                FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser.uid)
-                                FirebaseCrashlytics.getInstance().recordException(exception)
-                            }
+//                        //writing empty inventory collection new users
+//                        fireStore.collection("users")
+//                            .document(firebaseAuth.currentUser!!.uid)
+//                            .collection("inventory")
+//                            .document("rice-products")
+//                            .set({})
+//                            .addOnSuccessListener {
+//                                Logs.d(TAG, "Inventory successfully written!")
+//                            }.addOnFailureListener { exception ->
+//                                userMutableLiveData.postValue(DataOrException(exception = exception))
+//                                Logs.e(TAG, "Error writing documents in users > inventory -> rice-products", exception)
+//                                FirebaseCrashlytics.getInstance().log("Error writing documents in users > inventory -> rice-products")
+//                                FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser.uid)
+//                                FirebaseCrashlytics.getInstance().recordException(exception)
+//                            }
 
 
                     } else {

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/oxygen_bold"
+        android:text="Add Product Per Kg"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen_bold"
+        android:text="Select Product:"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/selectProductPerKg"
+        app:layout_constraintStart_toStartOf="@+id/selectProductPerKg" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/selectProductPerKg"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:hint="Product"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oxygen_bold"
+        android:text="Price (per kg):"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/selectProductPerKg"
+        app:layout_constraintTop_toBottomOf="@+id/selectProductPerKg" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/productMarketPerKgUpdatePrice"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Price"
+        app:layout_constraintEnd_toEndOf="@+id/selectProductPerKg"
+        app:layout_constraintStart_toStartOf="@+id/selectProductPerKg"
+        app:layout_constraintTop_toBottomOf="@+id/textView21">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productAddRicePerKgPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancelProductKilo"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorError"
+        android:layout_marginTop="20dp"
+        android:text="Cancel"
+        app:cornerRadius="0dp"
+        app:layout_constraintStart_toStartOf="@+id/productMarketPerKgUpdatePrice"
+        app:layout_constraintTop_toBottomOf="@+id/productMarketPerKgUpdatePrice" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveProductKilo"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        app:cornerRadius="0dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/productMarketPerKgUpdatePrice"
+        app:layout_constraintTop_toBottomOf="@+id/productMarketPerKgUpdatePrice" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

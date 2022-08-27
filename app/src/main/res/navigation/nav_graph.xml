@@ -14,11 +14,8 @@
             android:id="@+id/action_loginScreen_to_registrationScreen"
             app:destination="@id/registrationScreen" />
         <action
-            android:id="@+id/action_loginScreen_to_shopkeeperScreen"
-            app:destination="@id/shopkeeperScreen" />
-        <action
             android:id="@+id/action_loginScreen_to_adminScreen"
-            app:destination="@id/adminScreen" />
+            app:destination="@id/dashboardScreen" />
     </fragment>
 
 
@@ -32,18 +29,15 @@
             app:destination="@id/loginScreen" />
         <action
             android:id="@+id/action_registrationScreen_to_adminScreen"
-            app:destination="@id/adminScreen" />
-        <action
-            android:id="@+id/action_registrationScreen_to_shopkeeperScreen"
-            app:destination="@id/shopkeeperScreen" />
+            app:destination="@id/dashboardScreen" />
     </fragment>
 
 
     <fragment
-        android:id="@+id/adminScreen"
-        android:name="com.patriciajavier.pattyricetrading.home.admin.AdminScreen"
-        android:label="Admin"
-        tools:layout="@layout/fragment_admin_screen" >
+        android:id="@+id/dashboardScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.DashboardScreen"
+        android:label="{title}"
+        tools:layout="@layout/fragment_dashboard_screen" >
         <action
             android:id="@+id/action_adminScreen_to_loginScreen"
             app:destination="@id/loginScreen" />
@@ -56,24 +50,21 @@
         <action
             android:id="@+id/action_adminScreen_to_inventoryScreen"
             app:destination="@id/inventoryScreen" />
-    </fragment>
-
-
-    <fragment
-        android:id="@+id/shopkeeperScreen"
-        android:name="com.patriciajavier.pattyricetrading.home.shopkeeper.ShopkeeperScreen"
-        android:label="Shopkeeper"
-        tools:layout="@layout/fragment_shopkeeper_screen" >
+        <argument
+            android:name="title"
+            app:argType="string" />
         <action
-            android:id="@+id/action_shopkeeperScreen_to_loginScreen"
-            app:destination="@id/loginScreen" />
+            android:id="@+id/action_dashboardScreen_to_productMarketScreen"
+            app:destination="@id/productMarketScreen" />
+        <action
+            android:id="@+id/action_dashboardScreen_to_productMarketKilo"
+            app:destination="@id/productMarketKilo" />
     </fragment>
 
 
     <fragment
         android:id="@+id/account"
         android:name="com.patriciajavier.pattyricetrading.home.admin.account.AccountScreen"
-        android:label="fragment_account"
         tools:layout="@layout/fragment_account_screen" >
         <action
             android:id="@+id/action_account_to_accountProfileScreen"
@@ -82,7 +73,7 @@
 
     <fragment
         android:id="@+id/salesReportScreen"
-        android:name="com.patriciajavier.pattyricetrading.SalesReportScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.sales.SalesReportScreen"
         android:label="Sales Report"
         tools:layout="@layout/fragment_sales_report_screen" />
 
@@ -98,6 +89,9 @@
         <action
             android:id="@+id/action_inventoryScreen_to_productInfoScreen"
             app:destination="@id/productInfoScreen" />
+        <action
+            android:id="@+id/action_inventoryScreen_to_orderModuleScreen"
+            app:destination="@id/orderModuleScreen" />
     </fragment>
 
 
@@ -130,10 +124,8 @@
         android:label=""
         tools:layout="@layout/fragment_add_rice_screen" >
         <argument
-            android:name="productId"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+            android:name="uId"
+            app:argType="string"/>
     </fragment>
 
     <fragment
@@ -151,12 +143,49 @@
     <fragment
         android:id="@+id/restockProductScreen"
         android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.product.RestockProductScreen"
-        android:label=""
         tools:layout="@layout/fragment_restock_product_screen" >
         <argument
             android:name="productId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/orderModuleScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.order.OrderModuleScreen"
+        tools:layout="@layout/fragment_order_module_screen" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_orderModuleScreen_to_orderRequestScreen"
+            app:destination="@id/orderRequestScreen" />
+    </fragment>
 
+    <dialog
+        android:id="@+id/orderRequestScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.order.restock.OrderRequestScreen"
+        android:label="fragment_order_request_screen"
+        tools:layout="@layout/fragment_order_request_screen" >
+        <argument
+            android:name="pId"
+            app:argType="string" />
+    </dialog>
+    <fragment
+        android:id="@+id/productMarketScreen"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.market.ProductMarketScreen"
+        android:label="Cashier"
+        tools:layout="@layout/fragment_product_market_screen" >
+    </fragment>
+    <fragment
+        android:id="@+id/productMarketKilo"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.market.kilo.ProductMarketKilo"
+        tools:layout="@layout/fragment_product_market_kilo" >
+        <action
+            android:id="@+id/action_productMarketKilo_to_addRicePerKg"
+            app:destination="@id/addRicePerKg" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRicePerKg"
+        android:name="com.patriciajavier.pattyricetrading.home.admin.market.kilo.AddRicePerKg"
+        tools:layout="@layout/fragment_add_rice_per_kg" />
 
 </navigation>
