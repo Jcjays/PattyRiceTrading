@@ -79,6 +79,27 @@ class SalesReportViewModel: ViewModel() {
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
                     }
+                    SalesSortedViewState.Sort.ANNUALLY ->{
+                        response.data!!.sortedByDescending { it.timeCreated }.forEach {
+                            //get the data that dates back within 30 days.
+                            if(Constant.getCalculatedDate("yyyyMMdd", -365).toInt()
+                                <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
+                                modifiedList.add(it)
+                            }
+                        }
+                        _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
+
+                    }
+                    SalesSortedViewState.Sort.LIFETIME ->{
+                        response.data!!.sortedByDescending { it.timeCreated }.forEach {
+                            //get the data that dates back within 30 days.
+                            if(Constant.getCalculatedDate("yyyyMMdd", -99999).toInt()
+                                <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
+                                modifiedList.add(it)
+                            }
+                        }
+                        _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
+                    }
                 }
             }
         }
@@ -93,7 +114,9 @@ class SalesReportViewModel: ViewModel() {
        enum class Sort{
            DAILY,
            WEEKLY,
-           MONTHLY
+           MONTHLY,
+           ANNUALLY,
+           LIFETIME
        }
     }
 }

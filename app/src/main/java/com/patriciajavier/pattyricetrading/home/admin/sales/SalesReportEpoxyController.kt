@@ -1,6 +1,7 @@
 package com.patriciajavier.pattyricetrading.home.admin.sales
 
 import com.airbnb.epoxy.EpoxyController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
@@ -11,7 +12,9 @@ import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class SalesReportEpoxyController : EpoxyController(){
+class SalesReportEpoxyController(
+    private val onClick: (Logs) -> Unit
+) : EpoxyController(){
 
     var logs : List<Logs>? = emptyList()
     set(value) {
@@ -22,16 +25,22 @@ class SalesReportEpoxyController : EpoxyController(){
     override fun buildModels() {
             logs?.forEach {
                 SalesReportCardModel(
-                    it
+                    it,
+                    onClick
                 ).id(it.transactionId).addTo(this)
             }
     }
 }
 
 data class SalesReportCardModel(
-    val logs : Logs
+    val logs : Logs,
+    val onClick: (Logs) -> Unit
 ): ViewBindingKotlinModel<TransactionCardButtonModelBinding>(R.layout.transaction_card_button_model){
     override fun TransactionCardButtonModelBinding.bind() {
+
+        root.setOnClickListener {
+            onClick(logs)
+        }
 
         if(MyApp.accessRights){
             textView15.text = "Transaction ID: ${logs.transactionId}"

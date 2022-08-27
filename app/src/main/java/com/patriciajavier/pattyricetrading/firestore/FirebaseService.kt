@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -72,6 +73,20 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().setCustomKey("userId", uId)
             FirebaseCrashlytics.getInstance().recordException(e)
             null
+        }
+    }
+
+    suspend fun resetPassword(email: String){
+        val db = FirebaseAuth.getInstance()
+        try {
+            db.sendPasswordResetEmail(email).addOnCompleteListener {
+                if(it.isSuccessful)
+                    Toast.makeText(MyApp.appContext, "Email Sent", Toast.LENGTH_SHORT).show()
+            }.await()
+        }catch (e:Exception){
+            Log.e(TAG, "Error sending reset email", e)
+            FirebaseCrashlytics.getInstance().log("Error getting user access rights")
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
@@ -831,6 +846,23 @@ object FirebaseService {
         }catch (e: Exception){
             Log.e(TAG, "Error refilling", e)
             FirebaseCrashlytics.getInstance().log("Error refilling")
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+    }
+
+    suspend fun updateProductPerKgPrice(productId: String, uId: String, newPrice: Double){
+        val db = FirebaseFirestore.getInstance()
+
+        try {
+            db.collection("users")
+                .document(uId)
+                .collection("inventoryPerKg")
+                .document(productId)
+                .update("unitPrice", newPrice).await()
+
+        }catch (e: Exception){
+            Log.e(TAG, "Error updating price", e)
+            FirebaseCrashlytics.getInstance().log("Error updating price")
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }

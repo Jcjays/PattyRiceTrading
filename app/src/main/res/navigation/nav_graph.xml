@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_loginScreen_to_adminScreen"
             app:destination="@id/dashboardScreen" />
+        <action
+            android:id="@+id/action_loginScreen_to_resetPasswordScreen"
+            app:destination="@id/resetPasswordScreen" />
     </fragment>
 
 
@@ -174,6 +177,11 @@
         android:name="com.patriciajavier.pattyricetrading.home.admin.market.ProductMarketScreen"
         android:label="Cashier"
         tools:layout="@layout/fragment_product_market_screen" >
+        <action
+            app:popUpTo="@id/productMarketScreen"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_productMarketScreen_self"
+            app:destination="@id/productMarketScreen" />
     </fragment>
     <fragment
         android:id="@+id/productMarketKilo"
@@ -182,10 +190,20 @@
         <action
             android:id="@+id/action_productMarketKilo_to_addRicePerKg"
             app:destination="@id/addRicePerKg" />
+        <action
+            app:popUpTo="@id/productMarketKilo"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_productMarketKilo_self"
+            app:destination="@id/productMarketKilo" />
     </fragment>
     <fragment
         android:id="@+id/addRicePerKg"
         android:name="com.patriciajavier.pattyricetrading.home.admin.market.kilo.AddRicePerKg"
         tools:layout="@layout/fragment_add_rice_per_kg" />
+    <fragment
+        android:id="@+id/resetPasswordScreen"
+        android:name="com.patriciajavier.pattyricetrading.registration.ResetPasswordScreen"
+        android:label="Reset Password"
+        tools:layout="@layout/fragment_reset_password_screen" />
 
 </navigation>

@@ -187,7 +187,7 @@
 
     <include
         android:id="@+id/loadingState"
-        android:visibility="invisible"
+        android:visibility="gone"
         layout="@layout/loading_screen"
         />
 

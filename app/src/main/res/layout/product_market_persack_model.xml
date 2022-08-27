@@ -35,17 +35,6 @@
 
 
         <TextView
-            android:id="@+id/refillCapLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/oxygen"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/riceTitle"
-            app:layout_constraintTop_toBottomOf="@+id/riceTitle"
-            tools:text="Display cap: 25/50 kg" />
-
-        <TextView
             android:id="@+id/unitPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,7 +54,7 @@
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/riceTitle"
-            app:layout_constraintTop_toBottomOf="@+id/refillCapLabel"
+            app:layout_constraintTop_toBottomOf="@+id/riceTitle"
             tools:text="Stock: 533" />
 
         <TextView
@@ -78,26 +67,6 @@
             app:layout_constraintEnd_toEndOf="@+id/unitPrice"
             app:layout_constraintTop_toBottomOf="@+id/unitPrice"
             tools:text="Variation: 25kg" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/refillDisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Refill"
-            app:cornerRadius="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/currentStock" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/updatePrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Update"
-            app:cornerRadius="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

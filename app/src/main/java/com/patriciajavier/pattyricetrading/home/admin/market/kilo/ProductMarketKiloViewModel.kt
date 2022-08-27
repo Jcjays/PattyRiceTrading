@@ -1,6 +1,5 @@
 package com.patriciajavier.pattyricetrading.home.admin.market.kilo
 
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +10,6 @@ import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.ProductPerKg
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ProductMarketKiloViewModel : ViewModel(){
@@ -71,5 +69,10 @@ class ProductMarketKiloViewModel : ViewModel(){
     fun refillProductPerKg(pId : String, uId : String) = viewModelScope.launch{
         FirebaseService.refillProductPerKg(pId, uId)
     }
+
+    fun updateProduckPerKgPrice(pId: String, uId: String, newPrice: Double) = viewModelScope.launch {
+        FirebaseService.updateProductPerKgPrice(pId, uId, newPrice)
+    }
+    //todo update price
 
 }

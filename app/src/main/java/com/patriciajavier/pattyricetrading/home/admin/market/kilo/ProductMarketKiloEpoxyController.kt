@@ -1,5 +1,6 @@
 package com.patriciajavier.pattyricetrading.home.admin.market.kilo
 
+import android.widget.Toast
 import androidx.core.view.isGone
 import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
@@ -12,7 +13,8 @@ import com.patriciajavier.pattyricetrading.registration.arch.ViewBindingKotlinMo
 
 class ProductMarketKiloEpoxyController(
     private val onItemClick: (String) -> Unit,
-    private val onRefillClick: (String) -> Unit
+    private val onRefillClick: (String) -> Unit,
+    private val onUpdateClick: (String) -> Unit
 ) : EpoxyController(){
 
     var products : List<ProductPerKg>? = emptyList()
@@ -29,6 +31,7 @@ class ProductMarketKiloEpoxyController(
             ProductMarketPerSackModel(
                 product,
                 onItemClick,
+                onUpdateClick,
                 onRefillClick
             ).id(product.id).addTo(this)
         }
@@ -39,18 +42,28 @@ class ProductMarketKiloEpoxyController(
 data class ProductMarketPerSackModel(
     val product: ProductPerKg,
     val onItemClick: (String) -> Unit,
+    val onUpdateClick: (String) -> Unit,
     val onRefillClick: (String) -> Unit
 ): ViewBindingKotlinModel<ProductMarketCardModelBinding>(R.layout.product_market_card_model){
     override fun ProductMarketCardModelBinding.bind() {
         root.setOnClickListener {
+            if(product.quantity == 0){
+                Toast.makeText(MyApp.appContext, "Not enough stock of ${product.productName}", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             onItemClick(product.id)
+        }
+
+        updatePrice.setOnClickListener {
+            onUpdateClick(product.id)
         }
 
         refillDisplay.setOnClickListener {
             onRefillClick(product.id)
         }
 
-        currentStock.isGone = true
+//        currentStock.isGone = true
 
         Glide.with(MyApp.appContext)
             .load(product.productImage)

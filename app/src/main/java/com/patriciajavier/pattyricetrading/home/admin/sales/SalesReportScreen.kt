@@ -13,9 +13,12 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentSalesReportScreenBinding
+import com.patriciajavier.pattyricetrading.firestore.models.Logs
 import com.patriciajavier.pattyricetrading.firestore.models.Response
 
 class SalesReportScreen : Fragment() {
@@ -23,7 +26,25 @@ class SalesReportScreen : Fragment() {
     private var _binding : FragmentSalesReportScreenBinding? = null
     private val binding get() = _binding!!
     private val viewModel : SalesReportViewModel by activityViewModels()
-    private val epoxyController = SalesReportEpoxyController()
+    private val epoxyController = SalesReportEpoxyController(::onClick)
+
+    private fun onClick(logs: Logs) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage("""
+TransID: ${logs.transactionId}
+ProductName: ${logs.productName}
+CustomerName: ${logs.customerName}
+Time: ${Constant.timeStampToGMT8(logs.timeCreated, Constant.YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)}
+Quantity: ${logs.quantity}
+Variation: ${logs.variation}kg
+Unit cost: ${logs.unitPrice}
+Total: ${logs.totalCost}              
+""")
+            .setPositiveButton("Ok") { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

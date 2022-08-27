@@ -71,6 +71,10 @@ class LoginScreen : Fragment() {
             viewModel.clearCheckingForAccessRights()
         }
 
+        binding.resetShortcutButton.setOnClickListener {
+            findNavController().navigate(R.id.action_loginScreen_to_resetPasswordScreen)
+        }
+
         binding.loginButton.setOnClickListener {
             validateInput()
         }

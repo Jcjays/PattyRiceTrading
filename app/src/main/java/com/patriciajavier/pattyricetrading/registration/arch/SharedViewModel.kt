@@ -43,6 +43,10 @@ class SharedViewModel : ViewModel(){
         SharedRepository.createAccountWithEmailPassword(userEntity)
     }
 
+    fun resetPassword(email: String) = viewModelScope.launch{
+        FirebaseService.resetPassword(email)
+    }
+
 }
 
 

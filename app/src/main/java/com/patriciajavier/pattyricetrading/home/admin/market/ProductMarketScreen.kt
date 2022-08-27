@@ -110,6 +110,7 @@ class ProductMarketScreen : Fragment() {
                     clearList(list,total,totalEpoxyController.product)
                     product.clear()
                     binding.paymentOutlinedEditText.setText("")
+                    findNavController().navigate(R.id.action_productMarketScreen_self)
                 }
                 .show()
         }

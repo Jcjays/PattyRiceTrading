@@ -1,23 +1,25 @@
 package com.patriciajavier.pattyricetrading.home.admin.market.kilo
 
+import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentProductMarketKiloBinding
-import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.ProductPerKg
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import javax.annotation.meta.When
+
 
 class ProductMarketKilo : Fragment() {
 
@@ -25,9 +27,33 @@ class ProductMarketKilo : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProductMarketKiloViewModel by activityViewModels()
-    private val epoxyController = ProductMarketKiloEpoxyController(::onItemClick, ::onRefillClick)
+
+
     private val totalEpoxyController = TotalEpoxyControllerPerKg()
 
+    private val epoxyController = ProductMarketKiloEpoxyController(::onItemClick, ::onRefillClick, ::onUpdateClick)
+
+    private var updateInput = 0.0
+
+    private fun onUpdateClick(pId: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        val input = EditText(requireContext())
+
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+
+        builder.setTitle("Update price?")
+
+        builder.setPositiveButton("Update") { dialog, which ->
+            updateInput = input.text.toString().toDouble()
+            viewModel.updateProduckPerKgPrice(pId, MyApp.userId, updateInput)
+            findNavController().navigate(R.id.action_productMarketKilo_self)
+        }
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            dialog.cancel() }
+
+        builder.show()
+    }
 
     private fun onItemClick(pId: String) {
         viewModel.addToCart(pId)
@@ -42,7 +68,7 @@ class ProductMarketKilo : Fragment() {
             }
             .setPositiveButton("Confirm") { dialog, which ->
                 viewModel.refillProductPerKg(pId, MyApp.userId)
-                findNavController().navigateUp()
+                findNavController().navigate(R.id.action_productMarketKilo_self)
             }
             .show()
     }
@@ -128,6 +154,7 @@ class ProductMarketKilo : Fragment() {
                     clearList(list,total,totalEpoxyController.product)
                     product.clear()
                     binding.paymentOutlinedEditText.setText("")
+                    findNavController().navigate(R.id.action_productMarketKilo_self)
                 }
                 .show()
         }

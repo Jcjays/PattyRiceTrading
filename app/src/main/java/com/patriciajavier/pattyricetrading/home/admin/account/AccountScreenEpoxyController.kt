@@ -18,7 +18,7 @@ class AccountScreenEpoxyController(
     }
 
     override fun buildModels() {
-            listOfUser.data?.forEach {
+            listOfUser.data?.sortedBy{it.firstName}?.forEach{
                 AccountCardButtonModel(
                     data = it,
                     onClick
