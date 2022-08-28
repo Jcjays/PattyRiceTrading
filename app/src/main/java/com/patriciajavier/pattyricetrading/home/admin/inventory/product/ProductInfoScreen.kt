@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.databinding.FragmentProductInfoScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
@@ -76,6 +77,7 @@ class ProductInfoScreen : Fragment() {
                 is Response.Success -> {
                     Toast.makeText(requireContext(), response.data, Toast.LENGTH_SHORT).show()
                     binding.loadingState.root.isGone = true
+                    viewModel.clearDeleteLiveData()
                     findNavController().navigateUp()
                 }
                 is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()
@@ -93,10 +95,20 @@ class ProductInfoScreen : Fragment() {
 
         binding.deleteProductInfoScreen.setOnClickListener {
             if(product != null){
-                if(MyApp.accessRights)
-                    viewModel.deleteAdminProduct(product!!.pId)
-                else
-                    viewModel.deleteShopkeeperProduct(product!!.pId, MyApp.userId)
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Notice")
+                    .setMessage("Please make sure all the information are correct before proceeding. You cannot UNDO this operation.")
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .setPositiveButton("Proceed") { dialog, which ->
+                        if(MyApp.accessRights)
+                            viewModel.deleteAdminProduct(product!!.pId)
+                        else
+                            viewModel.deleteShopkeeperProduct(product!!.pId, MyApp.userId)
+                    }
+                    .show()
 
                 return@setOnClickListener
             }

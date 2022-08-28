@@ -1,13 +1,18 @@
 package com.patriciajavier.pattyricetrading.registration.arch
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.firestore.models.DataOrException
 import com.patriciajavier.pattyricetrading.firestore.models.User
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 object SharedRepository{
@@ -43,13 +48,13 @@ object SharedRepository{
                 }
         }
 
-        fun createAccountWithEmailPassword(userEntity: User) {
+      fun createAccountWithEmailPassword(userEntity: User){
             userMutableLiveData.postValue(DataOrException(isLoading = true))
             firebaseAuth.createUserWithEmailAndPassword(userEntity.email, userEntity.password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "createUserWithEmail:success")
-
+                        isLoggedOutMutableLiveData.postValue(false)
                         val currentUser = firebaseAuth.currentUser
 
                         //ready the data to be uploaded in firestore
@@ -70,7 +75,7 @@ object SharedRepository{
                             .set(user)
                             .addOnSuccessListener {
                                 Log.d(TAG, "DocumentSnapshot successfully written!")
-                                userMutableLiveData.postValue(DataOrException(data = currentUser))
+                                Toast.makeText(MyApp.appContext, "Account successfully created", Toast.LENGTH_SHORT).show()
                             }
                             .addOnFailureListener { exception ->
                                 userMutableLiveData.postValue(DataOrException(exception = exception))
@@ -79,6 +84,8 @@ object SharedRepository{
                                 FirebaseCrashlytics.getInstance().setCustomKey("userId", currentUser.uid)
                                 FirebaseCrashlytics.getInstance().recordException(exception)
                             }
+
+                        userMutableLiveData.postValue(DataOrException(data = currentUser))
 
                     } else {
                         userMutableLiveData.postValue(DataOrException(exception = task.exception))
@@ -91,6 +98,6 @@ object SharedRepository{
         fun logOut() {
             firebaseAuth.signOut()
             isLoggedOutMutableLiveData.postValue(true)
-            userMutableLiveData.postValue(DataOrException(data = firebaseAuth.currentUser))
+            userMutableLiveData.postValue(DataOrException(data = null))
         }
     }

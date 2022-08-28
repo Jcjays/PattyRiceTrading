@@ -58,7 +58,9 @@ class ProductInfoScreenViewModel : ViewModel() {
         }
     }
 
-
+    fun clearDeleteLiveData(){
+        _deleteProductMutableLiveData.value = null
+    }
 
     fun deleteAdminProduct(productId : String) = viewModelScope.launch {
         FirebaseService.deleteAdminProductFromFirestore(productId).collect{

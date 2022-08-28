@@ -1,6 +1,8 @@
 package com.patriciajavier.pattyricetrading.home.admin.inventory.order
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patriciajavier.pattyricetrading.MyApp
+import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentOrderModuleScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Response
 import java.util.*
@@ -25,8 +28,6 @@ class OrderModuleScreen : Fragment() {
 
     private val viewModel : OrderModuleViewModel by activityViewModels()
     private val epoxyController = OrderModuleEpoxyController(::onItemClick, ::onOrderClick, ::onCancelOrder)
-
-    private val args : OrderModuleScreenArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +45,6 @@ class OrderModuleScreen : Fragment() {
         }else{
             viewModel.getAvailableListOfProducts()
         }
-
-        //set the main title
-        binding.mainLabelOrderModuleScreen.text = args.title
 
         //assign the access rights
         epoxyController.accessRights = MyApp.accessRights
@@ -85,6 +83,13 @@ class OrderModuleScreen : Fragment() {
             }
             .setPositiveButton("Proceed") { dialog, which ->
                 viewModel.declineOrderAndLog(oId, pId, uId)
+
+                binding.loadingState.root.isVisible = true
+                Handler(Looper.myLooper()!!).postDelayed({
+                    findNavController().navigate(R.id.action_orderModuleScreen_self)
+                    binding.loadingState.root.isVisible = false
+                    }, 2500 //Specific time in milliseconds
+                )
             }
             .show()
     }
@@ -98,7 +103,13 @@ class OrderModuleScreen : Fragment() {
             }
             .setPositiveButton("Proceed") { dialog, which ->
                 viewModel.proceedOrderAndLog(oId, pId, uId)
-                viewModel.getPendingOrdersOfProducts()
+
+                binding.loadingState.root.isVisible = true
+                Handler(Looper.myLooper()!!).postDelayed({
+                    findNavController().navigate(R.id.action_orderModuleScreen_self)
+                    binding.loadingState.root.isVisible = false
+                }, 3000 //Specific time in milliseconds
+                )
             }
             .show()
     }

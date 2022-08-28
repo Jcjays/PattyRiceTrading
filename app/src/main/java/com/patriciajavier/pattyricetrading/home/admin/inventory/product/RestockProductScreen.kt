@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patriciajavier.pattyricetrading.MyApp
@@ -97,6 +98,19 @@ class RestockProductScreen : Fragment() {
             }
         }
 
+        binding.cancelUpdateProduct.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Cancel operation?")
+                .setMessage("Your input cannot be saved.")
+                .setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Proceed") { dialog, which ->
+                    findNavController().navigateUp()
+                }
+                .show()
+        }
+
         binding.saveUpdateProduct.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Notice")
@@ -106,9 +120,15 @@ class RestockProductScreen : Fragment() {
                 }
                 .setPositiveButton("Proceed") { dialog, which ->
                     validateInput()
+                    clear()
                 }
                 .show()
         }
+    }
+
+    private fun clear(){
+        binding.updateStockEditText.setText("")
+        binding.updatePriceEditText.setText("")
     }
 
     private fun validateInput() {

@@ -15,6 +15,9 @@
             app:destination="@id/registrationScreen" />
         <action
             android:id="@+id/action_loginScreen_to_adminScreen"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true"
             app:destination="@id/dashboardScreen" />
         <action
             android:id="@+id/action_loginScreen_to_resetPasswordScreen"
@@ -32,6 +35,9 @@
             app:destination="@id/loginScreen" />
         <action
             android:id="@+id/action_registrationScreen_to_adminScreen"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/nav_graph"
             app:destination="@id/dashboardScreen" />
     </fragment>
 
@@ -161,6 +167,12 @@
         <action
             android:id="@+id/action_orderModuleScreen_to_orderRequestScreen"
             app:destination="@id/orderRequestScreen" />
+        <action
+            app:popUpTo="@id/orderModuleScreen"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true"
+            android:id="@+id/action_orderModuleScreen_self"
+            app:destination="@id/orderModuleScreen" />
     </fragment>
 
     <dialog

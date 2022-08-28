@@ -2,6 +2,8 @@ package com.patriciajavier.pattyricetrading.home.admin.inventory.addproduct
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +18,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
+import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentAddRiceScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
@@ -71,6 +75,19 @@ class AddRiceScreen : Fragment() {
             }
         }
 
+        binding.cancelAddRiceScreen.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Cancel this operation?")
+                .setMessage("All the information cannot be saved.")
+                .setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Proceed") { dialog, which ->
+                    findNavController().navigateUp()
+                }
+                .show()
+        }
+
         binding.removeImageButtonAddRiceScreen.setOnClickListener {
             binding.riceImageAddRiceScreen.setImageURI(null)
             binding.removeImageButtonAddRiceScreen.isVisible = false
@@ -86,9 +103,10 @@ class AddRiceScreen : Fragment() {
     }
 
     private fun validateInput() {
-        val productTitle = binding.productNameEditTextAddRiceScreen.text.toString().trim().replaceFirstChar { it.uppercase() }
+        val productTitle = binding.productNameEditTextAddRiceScreen.text.toString().trim()
+            .replaceFirstChar { it.uppercase() }
 
-        if(productTitle.isEmpty()){
+        if (productTitle.isEmpty()) {
             binding.productNameTextFieldAddRiceScreen.error = Constant.TEXT_FIELD_ERROR_MSG
             return
         }
@@ -98,13 +116,14 @@ class AddRiceScreen : Fragment() {
 
         //-------------------------------------------------------------------
 
-        val productDescription = binding.productDescEditTextAddRiceScreen.text.toString().trim().replaceFirstChar { it.uppercase() }
+        val productDescription = binding.productDescEditTextAddRiceScreen.text.toString().trim()
+            .replaceFirstChar { it.uppercase() }
 
         //-------------------------------------------------------------------
 
         val stocks = binding.productStockEditTextAddRiceScreen.text.toString().trim()
 
-        if(stocks.isEmpty()){
+        if (stocks.isEmpty()) {
             binding.productStockTextFieldAddRiceScreen.error = Constant.TEXT_FIELD_ERROR_MSG
             return
         }
@@ -117,7 +136,7 @@ class AddRiceScreen : Fragment() {
 
         val unitPrice = binding.productPriceEditTextAddRiceScreen.text.toString().trim()
 
-        if(unitPrice.isEmpty()){
+        if (unitPrice.isEmpty()) {
             binding.productPriceTextFieldAddRiceScreen.error = Constant.TEXT_FIELD_ERROR_MSG
             return
         }
@@ -127,17 +146,18 @@ class AddRiceScreen : Fragment() {
         //-------------------------------------------------------------------
 
         val checkRadioGroup = binding.radioGroup.checkedRadioButtonId
-        val checkKilogramsPerSack = if(checkRadioGroup == binding.radioButton25kg.id) 25 else 50
+        val checkKilogramsPerSack = if (checkRadioGroup == binding.radioButton25kg.id) 25 else 50
         //-------------------------------------------------------------------
 
-        if(uriHolder == null){
-            Toast.makeText(requireContext(), "Please upload a product image", Toast.LENGTH_SHORT).show()
+        if (uriHolder == null) {
+            Toast.makeText(requireContext(), "Please upload a product image", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         val productInfo = Product(
             pId = UUID.randomUUID().toString(),
-            productImage =  uriHolder.toString(),
+            productImage = uriHolder.toString(),
             productName = productTitle,
             productDesc = productDescription,
             kiloPerSack = checkKilogramsPerSack,
@@ -145,8 +165,26 @@ class AddRiceScreen : Fragment() {
             unitPrice = unitPrice.toDouble()
         )
 
-        viewModel.addAdminProductToFireStore(productInfo)
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Add this product?")
+            .setMessage("Please make sure that all the information are correct.")
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Proceed") { dialog, which ->
+                viewModel.addAdminProductToFireStore(productInfo)
+                clear()
+            }
+            .show()
     }
+
+    private fun clear(){
+        binding.productNameEditTextAddRiceScreen.setText("")
+        binding.productDescEditTextAddRiceScreen.setText("")
+        binding.productStockEditTextAddRiceScreen.setText("")
+        binding.productPriceEditTextAddRiceScreen.setText("")
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

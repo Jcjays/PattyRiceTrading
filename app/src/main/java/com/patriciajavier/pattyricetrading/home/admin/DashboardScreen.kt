@@ -37,7 +37,6 @@ class DashboardScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         //determine access rights
         epoxyController.userAccess = MyApp.accessRights
 
@@ -56,6 +55,7 @@ class DashboardScreen : Fragment() {
         viewModel.isLoggedOutLiveData.observe(viewLifecycleOwner){ isLoggedOut ->
             if(isLoggedOut){
                 findNavController().navigate(R.id.action_adminScreen_to_loginScreen)
+                viewModel.isLoggedOutLiveData.removeObservers(this)
             }
         }
 
@@ -76,6 +76,8 @@ class DashboardScreen : Fragment() {
 
     private fun signOut(){
         viewModel.logOut()
+        MyApp.userId = ""
+        viewModel.userMutableLiveData.removeObservers(viewLifecycleOwner)
     }
 
     private fun onCardButtonClickListener(title: String){

@@ -1,6 +1,9 @@
 package com.patriciajavier.pattyricetrading.home.admin.market
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import com.patriciajavier.pattyricetrading.MainActivity
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentProductMarketScreenBinding
@@ -110,7 +114,13 @@ class ProductMarketScreen : Fragment() {
                     clearList(list,total,totalEpoxyController.product)
                     product.clear()
                     binding.paymentOutlinedEditText.setText("")
-                    findNavController().navigate(R.id.action_productMarketScreen_self)
+
+                    binding.loadingState.root.isVisible = true
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding.loadingState.root.isGone = true
+                        findNavController().navigate(R.id.action_productMarketScreen_self)
+                    }, 1500)
+
                 }
                 .show()
         }

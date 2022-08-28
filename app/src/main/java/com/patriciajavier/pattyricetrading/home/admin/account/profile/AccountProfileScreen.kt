@@ -52,7 +52,7 @@ class AccountProfileScreen : Fragment() {
             if(it.data != null){
 
                 if(it.data!!.isAdmin)
-                    binding.statusUserProfile.isInvisible = true
+                    binding.statusUserProfile.isGone = true
                 else
                     binding.statusUserProfile.isVisible = true
 
@@ -74,7 +74,7 @@ class AccountProfileScreen : Fragment() {
         binding.statusUserProfile.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Are you sure?")
-                .setMessage("Do you want to set this user as active/inactive?")
+                .setMessage("Do you want to set this user as active/inactive? If a user is set as inactive he/she cannot perform any operation in their app.")
                 .setNegativeButton("Cancel") { dialog, which ->
                     dialog.dismiss()
                 }

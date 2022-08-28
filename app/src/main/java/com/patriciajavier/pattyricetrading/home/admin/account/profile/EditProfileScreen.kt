@@ -61,7 +61,16 @@ class EditProfileScreen : Fragment() {
 
 
         binding.cancelEditProfile.setOnClickListener {
-            findNavController().navigateUp()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Cancel this operation?")
+                .setMessage("All the new information cannot be save.")
+                .setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Confirm") { dialog, which ->
+                    findNavController().navigateUp()
+                }
+                .show()
         }
 
         binding.saveEditProfile.setOnClickListener {
@@ -73,7 +82,7 @@ class EditProfileScreen : Fragment() {
                 }
                 .setPositiveButton("Confirm") { dialog, which ->
                     validateInput()
-                    //todo make the result more responsive
+                    findNavController().navigateUp()
                 }
                 .show()
         }

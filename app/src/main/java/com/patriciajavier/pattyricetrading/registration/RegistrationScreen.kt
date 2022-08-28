@@ -1,11 +1,14 @@
 package com.patriciajavier.pattyricetrading.registration
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,6 +19,7 @@ import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentRegistrationScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.User
 import com.patriciajavier.pattyricetrading.registration.arch.SharedViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -39,21 +43,19 @@ class RegistrationScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         //observe firebase
         viewModel.userMutableLiveData.observe(viewLifecycleOwner){
             //Observe loading state
-            binding.loadingState.root.visibility = if(it.isLoading) View.VISIBLE else View.GONE
+            if(it.isLoading)
+                binding.loadingState.root.isVisible = true
 
             if(it.exception != null){
                 Toast.makeText(requireContext(),it.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                 return@observe
             }
             if(it.data != null){
-
                 MyApp.userId = it.data!!.uid
-
+                binding.loadingState.root.isVisible = false
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.checkAccessRight(it.data!!.uid)
                 }
@@ -186,6 +188,8 @@ class RegistrationScreen : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.checkAccessRights.removeObservers(viewLifecycleOwner)
+        viewModel.userMutableLiveData.removeObservers(viewLifecycleOwner)
         _binding = null
     }
 }

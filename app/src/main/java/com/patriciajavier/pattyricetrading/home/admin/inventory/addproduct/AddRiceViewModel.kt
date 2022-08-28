@@ -19,19 +19,10 @@ class AddRiceViewModel : ViewModel() {
         eventChannel.send(Response.Loading)
         try {
             FirebaseService.addAdminProductToFireStore(productInfo)
-            eventChannel.send(Response.Success("Upload Success"))
+            eventChannel.send(Response.Success("Product Successfully added"))
         }catch (e: Exception){
             eventChannel.send(Response.Failure(e))
         }
     }
 
-//    fun addShopkeeperProductToFireStore(productInfo: Product, uid: String) = viewModelScope.launch{
-//        eventChannel.send(Response.Loading)
-//        try {
-//            FirebaseService.addShopkeeperProductToFireStore(productInfo, uid)
-//            eventChannel.send(Response.Success("Upload Success"))
-//        }catch (e: Exception){
-//            eventChannel.send(Response.Failure(e))
-//        }
-//    }
 }

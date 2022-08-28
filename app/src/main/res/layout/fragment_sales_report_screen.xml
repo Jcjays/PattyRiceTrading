@@ -13,7 +13,7 @@
         android:layout_marginHorizontal="14dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/oxygen"
-        android:text="Transaction History"
+        android:text="Sales History"
         android:textColor="?attr/colorOnBackground"
         android:textSize="25sp"
         android:textStyle="bold"

@@ -21,9 +21,6 @@ class AccountScreenViewModel : ViewModel(){
     fun getAllUsers(){
         if(service != null) return
 
-        if(_listOfUser.value != null)
-            return
-
         _listOfUser.postValue(DataOrException(isLoading = true))
 
         try {

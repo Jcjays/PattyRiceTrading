@@ -44,7 +44,7 @@ class SalesReportViewModel: ViewModel() {
     }
 
     private fun updateSalesViewState(response: Response<List<Logs>>) {
-        val modifiedList: ArrayList<Logs> = ArrayList()  //container for modified data
+        val modifiedList: ArrayList<Logs> = ArrayList()//container for modified data
         when(response){
             is Response.Loading -> _updateViewStateMutableLiveData.postValue(SalesSortedViewState(isLoading = true))
             is Response.Failure -> _updateViewStateMutableLiveData.postValue(SalesSortedViewState(exception = response.e))

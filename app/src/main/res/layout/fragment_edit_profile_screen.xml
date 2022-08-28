@@ -50,6 +50,7 @@
             android:id="@+id/newFirstNameEditProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -83,7 +84,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/newLastNameEditProfile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,7 +118,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/newAddressEditProfile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

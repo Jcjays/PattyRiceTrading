@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.PattyRiceTrading" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.PattyRiceTrading" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/patty_green</item>
         <item name="colorPrimaryVariant">@color/patty_green</item>
@@ -15,7 +15,7 @@
         <item name="colorControlNormal">@color/patty_green</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/patty_green</item>
     </style>
 

@@ -2,6 +2,8 @@ package com.patriciajavier.pattyricetrading.home.admin.market.kilo
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
@@ -68,7 +70,12 @@ class ProductMarketKilo : Fragment() {
             }
             .setPositiveButton("Confirm") { dialog, which ->
                 viewModel.refillProductPerKg(pId, MyApp.userId)
-                findNavController().navigate(R.id.action_productMarketKilo_self)
+
+                binding.loadingState.root.isVisible = true
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.loadingState.root.isGone = true
+                    findNavController().navigate(R.id.action_productMarketKilo_self)
+                }, 1500)
             }
             .show()
     }
@@ -154,7 +161,13 @@ class ProductMarketKilo : Fragment() {
                     clearList(list,total,totalEpoxyController.product)
                     product.clear()
                     binding.paymentOutlinedEditText.setText("")
-                    findNavController().navigate(R.id.action_productMarketKilo_self)
+
+                    binding.loadingState.root.isVisible = true
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding.loadingState.root.isGone = true
+                        findNavController().navigate(R.id.action_productMarketKilo_self)
+                    }, 1500)
+
                 }
                 .show()
         }
