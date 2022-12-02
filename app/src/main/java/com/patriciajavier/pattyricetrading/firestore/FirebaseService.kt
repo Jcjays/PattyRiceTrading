@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.util.*
-
+// make database
 object FirebaseService {
     private const val TAG = "FirebaseService"
 
@@ -44,7 +44,7 @@ object FirebaseService {
             null
         }
     }
-
+//get all users from firebase
     suspend fun getAllUsers(): List<User>? {
         val db = FirebaseFirestore.getInstance()
         return try {
@@ -59,7 +59,7 @@ object FirebaseService {
             null
         }
     }
-
+// for account access to modules
     suspend fun checkIfAdmin(uId: String): Boolean? {
         val db = FirebaseFirestore.getInstance()
         return try {
@@ -75,7 +75,7 @@ object FirebaseService {
             null
         }
     }
-
+// for reset password
     suspend fun resetPassword(email: String){
         val db = FirebaseAuth.getInstance()
         try {
@@ -89,7 +89,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-
+// turn accounts in app to active or inactive
     suspend fun setAccountStatus(uId: String) {
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("users").document(uId)
@@ -111,15 +111,35 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
+// change user roles
+    suspend fun setAccountRole(uId: String){
+        val db = FirebaseFirestore.getInstance()
+        val docRef = db.collection("users").document(uId)
+        try{
+            db.runTransaction{ transaction ->
+                val snapshot = transaction.get(docRef)
+                val newRole = snapshot.getBoolean("isAdmin")!!
+                if(newRole){
+                    transaction.update(docRef,"isAdmin", false)
+                } else{
+                    transaction.update(docRef,"isAdmin", true)
+                }
+            }.await()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating user role", e)
+            FirebaseCrashlytics.getInstance().log("Error updating user role")
+            FirebaseCrashlytics.getInstance().setCustomKey("userId", uId)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+    }
 
-
+// edit profile info
    suspend fun setNewUserInfo(newUserInfo: EditableUserInfo) {
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("users").document(newUserInfo.uId)
         try {
             db.runTransaction { transaction ->
                 val snapshot = transaction.get(docRef)
-
                 val userName = snapshot.getString("firstName")!!
                 val lastName = snapshot.getString("lastName")!!
                 val address = snapshot.getString("address")!!
@@ -147,7 +167,7 @@ object FirebaseService {
     }
 
 
-    //-----------------------------------------------------------
+    //------------------------adding new rice variant within store-----------------------------------
     suspend fun addAdminProductToFireStore(productInfo: Product) {
         val db = FirebaseFirestore.getInstance()
 
@@ -176,7 +196,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-
+//----- adding image to firebase
     private suspend fun addImageToFirebaseStorage(imageUri: Uri, productId: String): Uri? {
         val storageRef = FirebaseStorage.getInstance()
         return try {
@@ -193,7 +213,7 @@ object FirebaseService {
             null
         }
     }
-    //-----------------------------------------------------------
+    //---------------------update rice info--------------------------------------
 
     suspend fun updateAdminProductFromFireStore(productId: String, unitPrice: Double, stock: Int) {
         val db = FirebaseFirestore.getInstance()
@@ -216,7 +236,7 @@ object FirebaseService {
         }
     }
 
-
+// update rice price from store(pag may tumawad)
     suspend fun updateShopkeeperProductFromFireStore(productId: String, unitPrice: Double, uId: String) {
         val db = FirebaseFirestore.getInstance()
 
@@ -240,7 +260,7 @@ object FirebaseService {
         }
     }
 
-    //-----------------------------------------------------------
+    //---------------------deleting rice variant from store--------------------------------------
     suspend fun deleteAdminProductFromFirestore(productId: String) = flow {
         val db = FirebaseFirestore.getInstance()
         try {
@@ -260,7 +280,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-
+//------deleting from shop keeper. pag ubos na ung sako ganun
     suspend fun deleteShopkeeperProductFromFirestore(productId: String, uId: String) = flow {
         val db = FirebaseFirestore.getInstance()
         try {
@@ -295,7 +315,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-    //-----------------------------------------------------------
+    //-----------------------pang kuha ng list of product sa inventory------------------------------------
 
 
     suspend fun getAdminListOfProductFromFireStore() = flow {
@@ -314,7 +334,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-
+// pang kuha sa database para sa shopkeeper
     suspend fun getShopkeeperListOfProductFromFireStore(uId: String) = flow {
         val db = FirebaseFirestore.getInstance()
         try {
@@ -333,7 +353,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-
+//product info by id
     suspend fun getAdminProductByIdFlow(productId: String) = flow {
         val db = FirebaseFirestore.getInstance()
         try {
@@ -393,7 +413,7 @@ object FirebaseService {
             null
         }
     }
-    //-----------------------------------------------------------
+    //------------------------pang set ng order galing database ng admin-----------------------------------
 
 
     suspend fun setOrderRequest(orderInfo: Order) {
@@ -423,7 +443,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-
+//get order sa admin page
     suspend fun getOrderRequest() = flow {
         val db = FirebaseFirestore.getInstance()
 
@@ -457,7 +477,7 @@ object FirebaseService {
         }
     }
 
-    //-----------------------------------------------------------
+    //-----------------------kung mag dedeliver or hindi------------------------------------
 
     suspend fun deliverOrder(oId: String, pId: String, uId: String): Unit = coroutineScope{
         val db = FirebaseFirestore.getInstance()
@@ -554,7 +574,7 @@ object FirebaseService {
         }
     }
 
-    //-----------------------------------------------------------
+    //-------------------pag di accept order dahil wala na sa rice mill----------------------------------------
 
     suspend fun declineOrder(oId: String, pId: String, uId: String): Unit = coroutineScope{
         val db = FirebaseFirestore.getInstance()
@@ -712,6 +732,8 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
+ //per sack function end
+//----per KG function start--------
 
     suspend fun sellProductPerKgThenLog(userId: String, product: ProductPerKg): Unit = coroutineScope{
         val db = FirebaseFirestore.getInstance()
@@ -768,7 +790,6 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
-
 
     suspend fun saveProductPerKiloOnFireStore(product: Product, price: Double, userId: String){
         val db = FirebaseFirestore.getInstance()
@@ -865,5 +886,6 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().log("Error updating price")
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+  //---Per KG functions end
     }
 }

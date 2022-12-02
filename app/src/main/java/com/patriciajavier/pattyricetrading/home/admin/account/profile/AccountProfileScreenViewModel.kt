@@ -39,6 +39,9 @@ class AccountProfileScreenViewModel: ViewModel() {
     fun setStatus(uId : String) = viewModelScope.launch{
         FirebaseService.setAccountStatus(uId)
     }
+    fun setRole(uId : String) = viewModelScope.launch{
+        FirebaseService.setAccountRole(uId)
+    }
 
     fun updateUserProfile(newUserInfo: EditableUserInfo) = viewModelScope.launch{
         FirebaseService.setNewUserInfo(newUserInfo)

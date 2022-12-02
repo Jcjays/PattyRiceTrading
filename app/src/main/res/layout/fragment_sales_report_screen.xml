@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.admin.sales.SalesReportScreen">
 
     <TextView
@@ -20,13 +20,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/mainLabelSalesReportScreen2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/oxygen"
+        android:text="Generate pdf: "
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/sortMenu"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Sort type"
+        android:layout_width="160dp"
+        android:layout_height="49dp"
         android:layout_marginHorizontal="10dp"
+        android:hint="Sort type"
         app:layout_constraintBottom_toBottomOf="@+id/mainLabelSalesReportScreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mainLabelSalesReportScreen"
@@ -42,17 +56,17 @@
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/salesReportScreenEpoxyRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="380dp"
+        android:layout_height="560dp"
         android:layout_marginHorizontal="10dp"
-        android:orientation="vertical"
         android:layout_marginTop="30dp"
-        tools:listitem="@layout/transaction_card_button_model"
+        android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainLabelSalesReportScreen" />
+        app:layout_constraintTop_toBottomOf="@+id/mainLabelSalesReportScreen"
+        tools:listitem="@layout/transaction_card_button_model" />
 
     <include
         android:id="@+id/loadingState"
@@ -62,5 +76,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/DownloadPDF"
+        android:layout_width="104dp"
+        android:layout_height="40dp"
+        android:text="Download"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/mainLabelSalesReportScreen2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.23"
+        app:layout_constraintStart_toEndOf="@+id/mainLabelSalesReportScreen2"
+        app:layout_constraintTop_toTopOf="@+id/mainLabelSalesReportScreen2"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

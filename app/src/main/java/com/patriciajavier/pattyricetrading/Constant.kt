@@ -16,7 +16,7 @@ object Constant {
 
     //admin
     val CARD_TITLE_ACCOUNT : String = "Accounts"
-    val CARD_TITLE_INVENTORY : String = "Inventory"
+    val CARD_TITLE_INVENTORY : String = "Stock"
     val CARD_TITLE_ORDER : String = "Orders"
     val CARD_TITLE_SALES_REPORT : String = "Sales Report"
 

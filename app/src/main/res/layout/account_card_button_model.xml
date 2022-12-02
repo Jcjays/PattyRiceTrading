@@ -33,7 +33,7 @@
             android:layout_margin="10dp"
             app:layout_constraintStart_toEndOf="@+id/accountModelImageButton"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Christopher Adonis" />
+            tools:text="Patricia Javier" />
 
         <TextView
             android:id="@+id/accountRole"

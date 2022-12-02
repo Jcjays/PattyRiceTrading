@@ -48,7 +48,7 @@ class ProductMarketKilo : Fragment() {
 
         builder.setPositiveButton("Update") { dialog, which ->
             updateInput = input.text.toString().toDouble()
-            viewModel.updateProduckPerKgPrice(pId, MyApp.userId, updateInput)
+            viewModel.updateProductPerKgPrice(pId, MyApp.userId, updateInput)
             findNavController().navigate(R.id.action_productMarketKilo_self)
         }
         builder.setNegativeButton("Cancel") { dialog, which ->

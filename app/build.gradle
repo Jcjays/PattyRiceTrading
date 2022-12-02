@@ -21,7 +21,7 @@ android {
         minSdk 26
         targetSdk 32
         versionCode 1
-        versionName "1.0"
+        versionName "1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,6 +67,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1"
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
 
     //Epoxy
     def epoxyVersion = "4.6.4"

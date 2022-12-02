@@ -90,8 +90,8 @@
     <fragment
         android:id="@+id/inventoryScreen"
         android:name="com.patriciajavier.pattyricetrading.home.admin.inventory.InventoryScreen"
-        android:label="Inventory"
-        tools:layout="@layout/fragment_inventory_screen" >
+        android:label="Stock"
+        tools:layout="@layout/fragment_inventory_screen">
         <action
             android:id="@+id/action_inventoryScreen_to_addRiceScreen"
             app:destination="@id/addRiceScreen" />

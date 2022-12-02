@@ -10,9 +10,11 @@ import com.patriciajavier.pattyricetrading.databinding.InventoryCardRiceModelBin
 import com.patriciajavier.pattyricetrading.registration.arch.ViewBindingKotlinModel
 
 data class CardRiceModel(
+    // variables
     val product: Product,
     val onItemClick: (String) -> Unit,
     val accessRights: Boolean = true
+
 ): ViewBindingKotlinModel<InventoryCardRiceModelBinding>(R.layout.inventory_card_rice_model){
     override fun InventoryCardRiceModelBinding.bind() {
         root.setOnClickListener {

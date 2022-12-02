@@ -70,7 +70,7 @@ class ProductMarketKiloViewModel : ViewModel(){
         FirebaseService.refillProductPerKg(pId, uId)
     }
 
-    fun updateProduckPerKgPrice(pId: String, uId: String, newPrice: Double) = viewModelScope.launch {
+    fun updateProductPerKgPrice(pId: String, uId: String, newPrice: Double) = viewModelScope.launch {
         FirebaseService.updateProductPerKgPrice(pId, uId, newPrice)
     }
     //todo update price

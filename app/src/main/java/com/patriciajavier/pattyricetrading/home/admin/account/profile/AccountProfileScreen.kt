@@ -85,6 +85,20 @@ class AccountProfileScreen : Fragment() {
                 }
                 .show()
         }
+        binding.editUserRole.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Are you sure?")
+                .setMessage("Do you want to change this user's role? If a role is changed, the user's will have new functions to use.")
+                .setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Confirm") { dialog, which ->
+                    viewModel.setRole(args.userId)
+                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
+                }
+                .show()
+        }
     }
 
     override fun onDestroyView() {

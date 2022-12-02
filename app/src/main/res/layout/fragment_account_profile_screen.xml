@@ -96,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="@+id/textView"
-        tools:text="Christopher Adonis" />
+        tools:text="Patricia Javier" />
 
     <TextView
         android:id="@+id/addressAccountProfile"
@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="@+id/nameAccountProfile"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toTopOf="@+id/textView3"
-        tools:text="Lambakin" />
+        tools:text="Turo" />
 
     <TextView
         android:id="@+id/phoneNumberAccountProfile"
@@ -135,7 +135,7 @@
         app:layout_constraintEnd_toEndOf="@+id/phoneNumberAccountProfile"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toTopOf="@+id/textView5"
-        tools:text="cjadonis20@gmail.com" />
+        tools:text="PatriciaJ@gmail.com" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -163,15 +163,29 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/editUserRole"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:text="Change Role"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.375"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editUserProfile" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/statusUserProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cornerRadius="0dp"
+        android:layout_marginTop="48dp"
         android:backgroundTint="?attr/colorError"
-        tools:text="Active"
+        app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="@+id/editUserProfile"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editUserProfile"
-        app:layout_constraintTop_toBottomOf="@+id/editUserProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/editUserProfile"
+        tools:text="Active" />
 
     <include
         android:id="@+id/loadingState"
