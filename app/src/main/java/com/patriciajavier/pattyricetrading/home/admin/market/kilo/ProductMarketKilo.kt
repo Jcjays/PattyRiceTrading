@@ -118,10 +118,9 @@ class ProductMarketKilo : Fragment() {
 
                 if(currentProduct.qty < result.quantity)
                     currentProduct.qty = quantity + 1
-                else{
+                else
                     Toast.makeText(requireContext(), "Not enough stock of ${result.productName}", Toast.LENGTH_SHORT).show()
-                    return@observe
-                }
+
 
                 clearList(list, total, totalEpoxyController.product)
 
@@ -168,6 +167,7 @@ class ProductMarketKilo : Fragment() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         binding.loadingState.root.isGone = true
                         findNavController().navigate(R.id.action_productMarketKilo_self)
+                        Toast.makeText(requireContext(), getString(R.string.transaction_success), Toast.LENGTH_SHORT).show()
                     }, 1500)
 
                 }

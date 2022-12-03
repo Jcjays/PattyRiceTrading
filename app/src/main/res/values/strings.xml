@@ -5,4 +5,5 @@
     <string name="confirm">Confirm</string>
     <string name="Add_this_item_on_your_kilo_sales">Add this item on your kilo sales? make sure that this item is not existing on kilo sales.</string>
     <string name="cancel">Cancel</string>
+    <string name="transaction_success">Transaction success</string>
 </resources>
