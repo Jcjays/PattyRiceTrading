@@ -73,7 +73,7 @@
 
     <fragment
         android:id="@+id/account"
-        android:name="com.patriciajavier.pattyricetrading.home.admin.account.AccountScreen"
+        android:name="com.patriciajavier.pattyricetrading.firestore.models.account.AccountScreen"
         tools:layout="@layout/fragment_account_screen" >
         <action
             android:id="@+id/action_account_to_accountProfileScreen"
@@ -106,7 +106,7 @@
 
     <fragment
         android:id="@+id/accountProfileScreen"
-        android:name="com.patriciajavier.pattyricetrading.home.admin.account.profile.AccountProfileScreen"
+        android:name="com.patriciajavier.pattyricetrading.firestore.models.account.profile.AccountProfileScreen"
         android:label="Profile"
         tools:layout="@layout/fragment_account_profile_screen" >
         <argument
@@ -119,7 +119,7 @@
 
     <fragment
         android:id="@+id/editProfileScreen"
-        android:name="com.patriciajavier.pattyricetrading.home.admin.account.profile.EditProfileScreen"
+        android:name="com.patriciajavier.pattyricetrading.firestore.models.account.profile.EditProfileScreen"
         android:label="Edit"
         tools:layout="@layout/fragment_edit_profile_screen" >
         <argument

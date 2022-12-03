@@ -1,10 +1,14 @@
 package com.patriciajavier.pattyricetrading.home.admin.sales
 
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.common.internal.Constants
+import com.google.android.gms.dynamic.OnDelegateCreatedListener
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Logs
@@ -55,6 +59,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", 0).toInt()
                                 == Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                // add sales profit
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -65,6 +71,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -7).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                /// divided by day.
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -75,6 +83,9 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -30).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+
+                            // divided by week.lagyan ng profts
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -85,6 +96,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -365).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                // divided by month. lagyan ng profts
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -96,6 +109,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -99999).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                // by year. lagyan ng profts
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -104,6 +119,9 @@ class SalesReportViewModel: ViewModel() {
             }
         }
     }
+
+    // new filter? for search by date
+
 
     data class SalesSortedViewState(
        val isLoading: Boolean = false,
@@ -118,5 +136,6 @@ class SalesReportViewModel: ViewModel() {
            ANNUALLY,
            LIFETIME
        }
+
     }
 }

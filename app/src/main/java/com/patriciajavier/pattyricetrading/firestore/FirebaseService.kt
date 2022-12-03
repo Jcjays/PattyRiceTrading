@@ -184,6 +184,7 @@ object FirebaseService {
                 "productDesc" to productInfo.productDesc,
                 "kiloPerSack" to productInfo.kiloPerSack,
                 "stock" to productInfo.stock,
+                "timeAdded" to productInfo.timeAdded,
                 "unitPrice" to productInfo.unitPrice
             )
 
@@ -519,6 +520,7 @@ object FirebaseService {
                         "pId" to pId,
                         "productImage" to productImage,
                         "productName" to productName,
+                        "timeAdded" to Timestamp.now().toDate(),
                         "productDesc" to productDesc,
                         "kiloPerSack" to kiloPerSack,
                         "unitPrice" to unitPrice
@@ -678,7 +680,7 @@ object FirebaseService {
         }
     }
 
-
+//sack sales
     suspend fun sellProductThenLog(userId: String, product: Product): Unit = coroutineScope{
         withContext(Dispatchers.IO){
             val db = FirebaseFirestore.getInstance()
@@ -892,5 +894,7 @@ object FirebaseService {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
   //---Per KG functions end
+
+
     }
 }

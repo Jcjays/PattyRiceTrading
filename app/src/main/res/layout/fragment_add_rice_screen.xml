@@ -144,7 +144,7 @@
             android:id="@+id/productDescTextFieldAddRiceScreen"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="(Optional)"
+            android:hint="(required)"
             android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="@+id/productNameTextFieldAddRiceScreen"
             app:layout_constraintStart_toStartOf="@+id/productNameTextFieldAddRiceScreen"

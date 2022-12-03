@@ -115,10 +115,17 @@ class AddRiceScreen : Fragment() {
         binding.productNameTextFieldAddRiceScreen.isErrorEnabled = false
 
         //-------------------------------------------------------------------
-
         val productDescription = binding.productDescEditTextAddRiceScreen.text.toString().trim()
             .replaceFirstChar { it.uppercase() }
 
+
+        if (productDescription.isEmpty()) {
+            binding.productDescTextFieldAddRiceScreen.error = Constant.TEXT_FIELD_ERROR_MSG
+            return
+        }
+        //removing error
+        binding.productDescTextFieldAddRiceScreen.error = null
+        binding.productDescTextFieldAddRiceScreen.isErrorEnabled = false
         //-------------------------------------------------------------------
 
         val stocks = binding.productStockEditTextAddRiceScreen.text.toString().trim()

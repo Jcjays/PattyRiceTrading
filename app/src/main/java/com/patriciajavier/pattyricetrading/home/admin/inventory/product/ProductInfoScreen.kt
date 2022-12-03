@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.databinding.FragmentProductInfoScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
@@ -61,11 +62,11 @@ class ProductInfoScreen : Fragment() {
                         .into(binding.productImageProductInfoScreen)
 
                     binding.productNameProductInfoScreen.text = response.data.productName
-                    binding.productDescProductInfoScreen.text = response.data.productDesc
+                    binding.productDescProductInfoScreen.text = "Rice Description: \n${response.data.productDesc}"
                     binding.productStockProductInfoScreen.text = "Stocks Left: \n${response.data.stock}"
                     binding.productKilosPerSackProductInfoScreen.text = "Kg per sack: \n${response.data.kiloPerSack}kg"
                     binding.productPriceProductInfoScreen.text = "Unit Price: \n${response.data.unitPrice}"
-
+                    binding.productDateProductInfoScreen2.text = "Time Added: \n${response.data.timeAdded.toDate().toString()}"
                     binding.loadingState.root.isGone = true
                 }
                 is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()

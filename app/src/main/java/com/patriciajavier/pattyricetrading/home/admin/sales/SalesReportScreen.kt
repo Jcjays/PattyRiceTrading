@@ -1,5 +1,7 @@
 package com.patriciajavier.pattyricetrading.home.admin.sales
 
+import android.app.DatePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,19 +10,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.database.Query
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentSalesReportScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Logs
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import org.checkerframework.common.returnsreceiver.qual.This
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.Calendar.*
 
 class SalesReportScreen : Fragment() {
 
@@ -28,6 +37,7 @@ class SalesReportScreen : Fragment() {
     private val binding get() = _binding!!
     private val viewModel : SalesReportViewModel by activityViewModels()
     private val epoxyController = SalesReportEpoxyController(::onClick)
+
 
     private fun onClick(logs: Logs) {
         MaterialAlertDialogBuilder(requireContext())
@@ -89,20 +99,30 @@ Total: ${logs.totalCost}
 
         binding.salesReportScreenEpoxyRecyclerView.setController(epoxyController)
 
-        //PDF generation
-        binding.DownloadPDFbutton.setOnClickListener{
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Download Sales Report PDF")
-                .setMessage("Make sure the correct Data is being shown on screen for PDF download")
-                .setNegativeButton("Cancel") { dialog, which ->
-                    dialog.dismiss()
-                }
-                .setPositiveButton("Confirm") { dialog, which ->
-                    //change to download pdf ?
-                }
-                .show()
+        /// search date via date picker?
+        var DateShown = binding.DateShown
+        binding.SearchDate.setOnClickListener(){
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                {
+                    view, year, month,dayOfMonth ->
+                    val dat = ("$dayOfMonth-${month+1}-$year")
+                    DateShown.setText(dat)
+                },
+                year,
+                month,
+                day
+            )
+
+            datePickerDialog.show()
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
