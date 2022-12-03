@@ -108,7 +108,6 @@ class ProductMarketKilo : Fragment() {
         val product = LinkedHashMap<String, ProductPerKg>()
         val list : ArrayList<ProductPerKg?> = ArrayList()
         val total : ArrayList<Double> = ArrayList()
-
         viewModel.cartContents.observe(viewLifecycleOwner){ result ->
             if(result != null){
                 if(!product.containsKey(result.id))

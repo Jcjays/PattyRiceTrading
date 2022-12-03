@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.QuickContactBadge
 import android.widget.Toast
+import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -16,6 +19,7 @@ import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentInventoryScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import com.patriciajavier.pattyricetrading.home.admin.inventory.order.OrderCardModel
 
 class InventoryScreen : Fragment() {
 
@@ -25,7 +29,7 @@ class InventoryScreen : Fragment() {
     private val viewModel : InventoryScreenViewModel by activityViewModels()
     private val epoxyController = InventoryScreenEpoxyController(::onItemClicked)
 
-    private fun onItemClicked(productId: String) {
+     fun onItemClicked(productId: String) {
         val action = InventoryScreenDirections.actionInventoryScreenToProductInfoScreen(productId)
         findNavController().navigate(action)
     }
@@ -50,6 +54,7 @@ class InventoryScreen : Fragment() {
             viewModel.getAdminListOfProducts()
             binding.addRiceInventoryScreen.isVisible = true
             binding.OrdersInventoryScreen.text = "Orders"
+
         } else{
             viewModel.getShopkeeperListOfProducts(MyApp.userId)
             binding.addRiceInventoryScreen.isGone = true
@@ -85,4 +90,5 @@ class InventoryScreen : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

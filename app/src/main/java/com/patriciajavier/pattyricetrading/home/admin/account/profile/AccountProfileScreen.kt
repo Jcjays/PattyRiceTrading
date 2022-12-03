@@ -85,10 +85,12 @@ class AccountProfileScreen : Fragment() {
                 }
                 .show()
         }
+
+        //set role of shopkeeper
         binding.editUserRole.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Are you sure?")
-                .setMessage("Do you want to change this user's role? If a role is changed, the user's will have new functions to use.")
+                .setMessage("Do you want to change this user's role? If a role is changed, the user will have new functions to use.")
                 .setNegativeButton("Cancel") { dialog, which ->
                     dialog.dismiss()
                 }

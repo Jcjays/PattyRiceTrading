@@ -29,7 +29,7 @@ import java.util.*
 // make database
 object FirebaseService {
     private const val TAG = "FirebaseService"
-
+//kuha profile data
     suspend fun getProfileData(uId: String): User? {
         val db = FirebaseFirestore.getInstance()
         return try {

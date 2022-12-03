@@ -13,6 +13,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
@@ -57,21 +58,21 @@ Total: ${logs.totalCost}
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(MyApp.accessRights)
+        if (MyApp.accessRights)
             viewModel.getAdminLogs()
         else
             viewModel.getShopkeeperLogs(MyApp.userId)
 
 
-        viewModel.updateViewStateLiveData.observe(viewLifecycleOwner){
-            if(it.exception != null){
+        viewModel.updateViewStateLiveData.observe(viewLifecycleOwner) {
+            if (it.exception != null) {
                 Toast.makeText(requireContext(), it.exception.message, Toast.LENGTH_SHORT).show()
                 return@observe
             }
 
             binding.loadingState.root.isVisible = it.isLoading
 
-            if(it.data.isNotEmpty()){
+            if (it.data.isNotEmpty()) {
                 epoxyController.logs = it.data
             }
         }
@@ -83,12 +84,28 @@ Total: ${logs.totalCost}
 
         //sort the data base on user wants.
         binding.autoCompleteTextView.doOnTextChanged { text, _, _, _ ->
-            viewModel.currentSort = items.find { it.name == text.toString()}!!
+            viewModel.currentSort = items.find { it.name == text.toString() }!!
         }
 
         binding.salesReportScreenEpoxyRecyclerView.setController(epoxyController)
-    }
 
+        //PDF generation
+        binding.DownloadPDFbutton.setOnClickListener{
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Download Sales Report PDF")
+                .setMessage("Make sure the correct Data is being shown on screen for PDF download")
+                .setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Confirm") { dialog, which ->
+                    //change to download pdf method?
+                    GeneratePDF()
+                    Toast.makeText(requireContext(), "Downloading", Toast.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
+                }
+                .show()
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

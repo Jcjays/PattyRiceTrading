@@ -57,4 +57,5 @@ data class SalesReportCardModel(
         }
 
     }
+
 }
