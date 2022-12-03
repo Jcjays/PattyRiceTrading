@@ -117,8 +117,8 @@ class ProductMarketScreen : Fragment() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         binding.loadingState.root.isGone = true
                         findNavController().navigate(R.id.action_productMarketScreen_self)
+                        Toast.makeText(requireContext(), getString(R.string.transaction_success), Toast.LENGTH_SHORT).show()
                     }, 1500)
-
                 }
                 .show()
         }
