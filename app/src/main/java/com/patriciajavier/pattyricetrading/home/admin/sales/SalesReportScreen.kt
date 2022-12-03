@@ -98,10 +98,7 @@ Total: ${logs.totalCost}
                     dialog.dismiss()
                 }
                 .setPositiveButton("Confirm") { dialog, which ->
-                    //change to download pdf method?
-                    GeneratePDF()
-                    Toast.makeText(requireContext(), "Downloading", Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
+                    //change to download pdf ?
                 }
                 .show()
         }
