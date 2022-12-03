@@ -1,18 +1,14 @@
 package com.patriciajavier.pattyricetrading.home.admin.market
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
-import com.patriciajavier.pattyricetrading.firestore.models.Order
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.ConcurrentHashMap
 
 class ProductMarketViewModel : ViewModel(){
 
@@ -34,12 +30,11 @@ class ProductMarketViewModel : ViewModel(){
         }
     }
 
-    fun sellProductToCustomer(userId: String, product: LinkedHashMap<String, Product>) = viewModelScope.launch{
+    fun sellProductToCustomer(userId: String, product: ConcurrentHashMap<String, Product>) = viewModelScope.launch{
         product.forEach {
             it.value.isFromMarket = true
             FirebaseService.sellProductThenLog(userId, it.value)
         }
-        Toast.makeText(MyApp.appContext, "Transaction success", Toast.LENGTH_SHORT).show()
     }
 
     fun addToCart(pId: String) {

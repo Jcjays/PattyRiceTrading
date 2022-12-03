@@ -1,26 +1,22 @@
 package com.patriciajavier.pattyricetrading.home.admin.market.kilo
 
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.ProductPerKg
 import com.patriciajavier.pattyricetrading.firestore.models.Response
 import kotlinx.coroutines.launch
+import java.util.concurrent.ConcurrentHashMap
 
 class ProductMarketKiloViewModel : ViewModel(){
 
     private val _getListOfProductsPerKg = MutableLiveData<Response<List<ProductPerKg>>>()
-    val getListOfProductsPerKg : LiveData<Response<List<ProductPerKg>>>
-        get() = _getListOfProductsPerKg
+    val getListOfProductsPerKg get() = _getListOfProductsPerKg
 
     private val _cartContents = MutableLiveData<ProductPerKg>()
-    val cartContents : LiveData<ProductPerKg>
-        get() = _cartContents
+    val cartContents get() = _cartContents
 
     val mutableListOfProducts = MutableLiveData<List<Product>>()
 
@@ -54,17 +50,15 @@ class ProductMarketKiloViewModel : ViewModel(){
         _cartContents.value = null
     }
 
-    fun sellProductToCustomer(userId: String, product: LinkedHashMap<String, ProductPerKg>) = viewModelScope.launch{
+    fun sellProductToCustomer(userId: String, product: ConcurrentHashMap<String, ProductPerKg>) = viewModelScope.launch{
         product.forEach {
             FirebaseService.sellProductPerKgThenLog(userId, it.value)
         }
-        Toast.makeText(MyApp.appContext, "Transaction success", Toast.LENGTH_SHORT).show()
     }
 
     fun saveProductPerKg(product: Product, price : Double, userId: String) = viewModelScope.launch{
         FirebaseService.saveProductPerKiloOnFireStore(product, price, userId)
     }
-
 
     fun refillProductPerKg(pId : String, uId : String) = viewModelScope.launch{
         FirebaseService.refillProductPerKg(pId, uId)
@@ -73,6 +67,5 @@ class ProductMarketKiloViewModel : ViewModel(){
     fun updateProductPerKgPrice(pId: String, uId: String, newPrice: Double) = viewModelScope.launch {
         FirebaseService.updateProductPerKgPrice(pId, uId, newPrice)
     }
-    //todo update price
 
 }

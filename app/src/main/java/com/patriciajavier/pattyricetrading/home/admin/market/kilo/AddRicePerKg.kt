@@ -1,12 +1,11 @@
 package com.patriciajavier.pattyricetrading.home.admin.market.kilo
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,7 +13,6 @@ import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentAddRicePerKgBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
-import com.patriciajavier.pattyricetrading.home.admin.sales.SalesReportViewModel
 
 class AddRicePerKg : Fragment() {
 
@@ -50,12 +48,12 @@ class AddRicePerKg : Fragment() {
 
         binding.saveProductKilo.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Confirm")
-                .setMessage("Add this item on your kilo sales? make sure that this item is not existing on kilo sales.")
-                .setNegativeButton("Cancel") { dialog, which ->
+                .setTitle(getString(R.string.confirm))
+                .setMessage(getString(R.string.Add_this_item_on_your_kilo_sales))
+                .setNegativeButton(getString(R.string.cancel)) { dialog, which ->
                     dialog.dismiss()
                 }
-                .setPositiveButton("Confirm") { dialog, which ->
+                .setPositiveButton(getString(R.string.confirm)) { dialog, which ->
                     validateInput()
                 }
                 .show()
@@ -64,8 +62,6 @@ class AddRicePerKg : Fragment() {
 
     private fun validateInput() {
         val productName = binding.autoCompleteTextView.text.trim()
-
-        Log.d("dou", "Im here")
 
         if(productName.isEmpty()){
             binding.selectProductPerKg.error = "*Select a product"
