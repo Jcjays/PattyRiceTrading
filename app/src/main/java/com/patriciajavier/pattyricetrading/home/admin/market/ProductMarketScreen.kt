@@ -1,26 +1,24 @@
 package com.patriciajavier.pattyricetrading.home.admin.market
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.tabs.TabLayout
-import com.patriciajavier.pattyricetrading.MainActivity
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentProductMarketScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import java.util.concurrent.ConcurrentHashMap
 
 
 class ProductMarketScreen : Fragment() {
@@ -36,7 +34,7 @@ class ProductMarketScreen : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProductMarketScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,7 +59,7 @@ class ProductMarketScreen : Fragment() {
             }
         }
 
-        val product = LinkedHashMap<String, Product >()
+        val product = ConcurrentHashMap<String, Product >()
         val list : ArrayList<Product?> = ArrayList()
         val total : ArrayList<Double> = ArrayList()
 

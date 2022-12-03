@@ -21,6 +21,7 @@ import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentProductMarketKiloBinding
 import com.patriciajavier.pattyricetrading.firestore.models.ProductPerKg
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import java.util.concurrent.ConcurrentHashMap
 
 
 class ProductMarketKilo : Fragment() {
@@ -29,7 +30,6 @@ class ProductMarketKilo : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProductMarketKiloViewModel by activityViewModels()
-
 
     private val totalEpoxyController = TotalEpoxyControllerPerKg()
 
@@ -105,7 +105,7 @@ class ProductMarketKilo : Fragment() {
                }
         }
 
-        val product = LinkedHashMap<String, ProductPerKg>()
+        val product = ConcurrentHashMap<String, ProductPerKg>()
         val list : ArrayList<ProductPerKg?> = ArrayList()
         val total : ArrayList<Double> = ArrayList()
         viewModel.cartContents.observe(viewLifecycleOwner){ result ->
@@ -118,8 +118,10 @@ class ProductMarketKilo : Fragment() {
 
                 if(currentProduct.qty < result.quantity)
                     currentProduct.qty = quantity + 1
-                else
+                else{
                     Toast.makeText(requireContext(), "Not enough stock of ${result.productName}", Toast.LENGTH_SHORT).show()
+                    return@observe
+                }
 
                 clearList(list, total, totalEpoxyController.product)
 
@@ -157,6 +159,7 @@ class ProductMarketKilo : Fragment() {
                 }
                 .setPositiveButton("Confirm") { dialog, which ->
                     viewModel.sellProductToCustomer(MyApp.userId, product)
+
                     clearList(list,total,totalEpoxyController.product)
                     product.clear()
                     binding.paymentOutlinedEditText.setText("")

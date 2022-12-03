@@ -20,12 +20,14 @@ import com.patriciajavier.pattyricetrading.firestore.models.Product.Companion.to
 import com.patriciajavier.pattyricetrading.firestore.models.ProductPerKg.Companion.toListOfProductPerKg
 import com.patriciajavier.pattyricetrading.firestore.models.User.Companion.toListOfUsers
 import com.patriciajavier.pattyricetrading.firestore.models.User.Companion.toUser
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
+import kotlinx.coroutines.withContext
 import java.util.*
+
 // make database
 object FirebaseService {
     private const val TAG = "FirebaseService"
@@ -678,116 +680,119 @@ object FirebaseService {
 
 
     suspend fun sellProductThenLog(userId: String, product: Product): Unit = coroutineScope{
-        val db = FirebaseFirestore.getInstance()
+        withContext(Dispatchers.IO){
+            val db = FirebaseFirestore.getInstance()
 
-        val dbRefUserInventory = db.collection("users")
-            .document(userId)
-            .collection("inventory")
-            .document(product.pId)
+            val dbRefUserInventory = db.collection("users")
+                .document(userId)
+                .collection("inventory")
+                .document(product.pId)
 
 
-        try {
-            db.runTransaction { transaction ->
-                val userInventory = transaction.get(dbRefUserInventory)
-                val stock = userInventory.getLong("stock")!!.toInt()
+            try {
+                db.runTransaction { transaction ->
+                    val userInventory = transaction.get(dbRefUserInventory)
+                    val stock = userInventory.getLong("stock")!!.toInt()
 
-                if(stock < product.qty)
-                    return@runTransaction
+                    if(stock < product.qty)
+                        return@runTransaction
 
-                val newStock = stock - product.qty
+                    val newStock = stock - product.qty
 
-                transaction.update(dbRefUserInventory, "stock", newStock)
+                    transaction.update(dbRefUserInventory, "stock", newStock)
 
-                val transactionID = UUID.randomUUID().toString()
+                    val transactionID = UUID.randomUUID().toString()
 
-                val newLog = mapOf(
-                        "transactionId" to transactionID,
-                        "productName" to product.productName,
-                        "customerName" to "",
-                        "timeCreated" to Timestamp.now().toDate(),
-                        "quantity" to product.qty,
-                        "totalCost" to product.qty * product.unitPrice,
-                        "unitPrice" to product.unitPrice,
-                        "variation" to product.kiloPerSack,
-                        "status" to "success",
-                        "isFromMarket" to product.isFromMarket
-                    )
+                    val newLog = mapOf(
+                            "transactionId" to transactionID,
+                            "productName" to product.productName,
+                            "customerName" to "",
+                            "timeCreated" to Timestamp.now().toDate(),
+                            "quantity" to product.qty,
+                            "totalCost" to product.qty * product.unitPrice,
+                            "unitPrice" to product.unitPrice,
+                            "variation" to product.kiloPerSack,
+                            "status" to "success",
+                            "isFromMarket" to product.isFromMarket
+                        )
 
-                    //log
-                    launch {
-                        db.collection("users")
-                            .document(userId)
-                            .collection("sales_report")
-                            .document(transactionID)
-                            .set(newLog)
-                            .await()
-                    }
+                        //log
+                        launch {
+                            db.collection("users")
+                                .document(userId)
+                                .collection("sales_report")
+                                .document(transactionID)
+                                .set(newLog)
+                                .await()
+                        }
 
-            }.await()
+                }.await()
 
-        }catch (e: Exception){
-            Log.e(TAG, "Error transaction sell products", e)
-            FirebaseCrashlytics.getInstance().log("Error transaction sell products")
-            FirebaseCrashlytics.getInstance().setCustomKey("transactionOrder", "sell products")
-            FirebaseCrashlytics.getInstance().recordException(e)
+            }catch (e: Exception){
+                Log.e(TAG, "Error transaction sell products", e)
+                FirebaseCrashlytics.getInstance().log("Error transaction sell products")
+                FirebaseCrashlytics.getInstance().setCustomKey("transactionOrder", "sell products")
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
         }
     }
  //per sack function end
 //----per KG function start--------
 
     suspend fun sellProductPerKgThenLog(userId: String, product: ProductPerKg): Unit = coroutineScope{
-        val db = FirebaseFirestore.getInstance()
+        withContext(Dispatchers.IO){ //Using dispatcher for better threads concurrency.
 
-        val dbRefUserInventory = db.collection("users")
-            .document(userId)
-            .collection("inventoryPerKg")
-            .document(product.id)
+            val db = FirebaseFirestore.getInstance()
 
+            val dbRefUserInventory = db.collection("users")
+                .document(userId)
+                .collection("inventoryPerKg")
+                .document(product.id)
 
-        try {
-            db.runTransaction { transaction ->
-                val userInventory = transaction.get(dbRefUserInventory)
-                val stock = userInventory.getLong("quantity")!!.toInt()
+                try {
+                    db.runTransaction { transaction ->
+                        val userInventory = transaction.get(dbRefUserInventory)
+                        val stock = userInventory.getLong("quantity")!!.toInt()
 
-                if(stock < product.qty)
-                    return@runTransaction
+                        if(stock < product.qty)
+                            return@runTransaction
 
-                val newStock = stock - product.qty
+                        val newStock = stock - product.qty
 
-                transaction.update(dbRefUserInventory, "quantity", newStock)
+                        transaction.update(dbRefUserInventory, "quantity", newStock)
 
-                val transactionID = UUID.randomUUID().toString()
+                        val transactionID = UUID.randomUUID().toString()
 
-                val newLog = mapOf(
-                    "transactionId" to transactionID,
-                    "productName" to product.productName,
-                    "customerName" to "",
-                    "timeCreated" to Timestamp.now().toDate(),
-                    "quantity" to product.qty,
-                    "totalCost" to product.qty * product.unitPrice,
-                    "unitPrice" to product.unitPrice,
-                    "variation" to product.capacity,
-                    "status" to "success",
-                    "isFromMarket" to product.isFromMarket
-                )
+                        val newLog = mapOf(
+                            "transactionId" to transactionID,
+                            "productName" to product.productName,
+                            "customerName" to "",
+                            "timeCreated" to Timestamp.now().toDate(),
+                            "quantity" to product.qty,
+                            "totalCost" to product.qty * product.unitPrice,
+                            "unitPrice" to product.unitPrice,
+                            "variation" to product.capacity,
+                            "status" to "success",
+                            "isFromMarket" to product.isFromMarket
+                        )
 
-                //log
-                launch {
-                    db.collection("users")
-                        .document(userId)
-                        .collection("sales_report")
-                        .document(transactionID)
-                        .set(newLog)
-                        .await()
+                        //log
+                        launch {
+                            db.collection("users")
+                                .document(userId)
+                                .collection("sales_report")
+                                .document(transactionID)
+                                .set(newLog)
+                                .await()
+                        }
+                    }.await()
+
+                }catch (e: Exception){
+                    Log.e(TAG, "Error transaction sell products", e)
+                    FirebaseCrashlytics.getInstance().log("Error transaction sell products")
+                    FirebaseCrashlytics.getInstance().setCustomKey("transactionOrder", "sell products")
+                    FirebaseCrashlytics.getInstance().recordException(e)
                 }
-
-            }.await()
-
-        }catch (e: Exception){
-            Log.e(TAG, "Error transaction sell products", e)
-            FirebaseCrashlytics.getInstance().log("Error transaction sell products")
-            FirebaseCrashlytics.getInstance().setCustomKey("transactionOrder", "sell products")
-            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 

@@ -2,4 +2,7 @@
     <string name="app_name">Patty Rice Trading</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirm">Confirm</string>
+    <string name="Add_this_item_on_your_kilo_sales">Add this item on your kilo sales? make sure that this item is not existing on kilo sales.</string>
+    <string name="cancel">Cancel</string>
 </resources>
