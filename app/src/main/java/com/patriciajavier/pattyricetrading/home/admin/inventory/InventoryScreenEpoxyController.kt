@@ -15,10 +15,10 @@ class InventoryScreenEpoxyController(
 ): EpoxyController() {
 
     var response : List<Product>? = emptyList()
-    set(value) {
-        field = value
-        requestModelBuild()
-    }
+        set(value) {
+            field = value
+            requestModelBuild()
+        }
 
     override fun buildModels() {
         response?.forEach { product ->

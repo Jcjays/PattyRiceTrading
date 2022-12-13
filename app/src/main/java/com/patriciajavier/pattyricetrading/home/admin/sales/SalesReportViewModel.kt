@@ -55,6 +55,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", 0).toInt()
                                 == Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                // add sales profit
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -65,6 +67,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -7).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                /// divided by day.
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -75,6 +79,9 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -30).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+
+                            // divided by week.lagyan ng profts
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -85,6 +92,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -365).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                // divided by month. lagyan ng profts
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
@@ -96,6 +105,8 @@ class SalesReportViewModel: ViewModel() {
                             if(Constant.getCalculatedDate("yyyyMMdd", -99999).toInt()
                                 <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
                                 modifiedList.add(it)
+                                // by year. lagyan ng profts
+
                             }
                         }
                         _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))

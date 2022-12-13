@@ -3,22 +3,26 @@ package com.patriciajavier.pattyricetrading.home.admin.inventory.order
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentOrderModuleScreenBinding
+import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import java.util.*
 
 
 class OrderModuleScreen : Fragment() {
@@ -28,6 +32,7 @@ class OrderModuleScreen : Fragment() {
 
     private val viewModel : OrderModuleViewModel by activityViewModels()
     private val epoxyController = OrderModuleEpoxyController(::onItemClick, ::onOrderClick, ::onCancelOrder)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +46,7 @@ class OrderModuleScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if(MyApp.accessRights){
+
             viewModel.getPendingOrdersOfProducts()
         }else{
             viewModel.getAvailableListOfProducts()
@@ -83,7 +89,6 @@ class OrderModuleScreen : Fragment() {
             }
             .setPositiveButton("Proceed") { dialog, which ->
                 viewModel.declineOrderAndLog(oId, pId, uId)
-
                 binding.loadingState.root.isVisible = true
                 Handler(Looper.myLooper()!!).postDelayed({
                     findNavController().navigate(R.id.action_orderModuleScreen_self)
@@ -103,7 +108,6 @@ class OrderModuleScreen : Fragment() {
             }
             .setPositiveButton("Proceed") { dialog, which ->
                 viewModel.proceedOrderAndLog(oId, pId, uId)
-
                 binding.loadingState.root.isVisible = true
                 Handler(Looper.myLooper()!!).postDelayed({
                     findNavController().navigate(R.id.action_orderModuleScreen_self)
@@ -114,13 +118,28 @@ class OrderModuleScreen : Fragment() {
             .show()
     }
 
-
     private fun onItemClick(pId: String) {
         val action = OrderModuleScreenDirections.actionOrderModuleScreenToOrderRequestScreen(pId)
         findNavController().navigate(action)
     }
 
-    override fun onDestroyView() {
+    // data change
+    private val db = FirebaseDatabase.getInstance().reference.child("orders")
+
+    val valueEventListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+           // push notifications if shopkeep orders
+            if(dataSnapshot.exists()){
+
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.d("TAG", error.getMessage())
+
+        }
+    }
+override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

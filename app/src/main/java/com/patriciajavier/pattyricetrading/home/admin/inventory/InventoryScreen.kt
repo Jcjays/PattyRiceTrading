@@ -1,6 +1,7 @@
 package com.patriciajavier.pattyricetrading.home.admin.inventory
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentInventoryScreenBinding
+import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Response
 import com.patriciajavier.pattyricetrading.home.admin.inventory.order.OrderCardModel
 
@@ -73,7 +79,6 @@ class InventoryScreen : Fragment() {
             }
 
         binding.riceListEpoxyRecyclerView.setController(epoxyController)
-
         binding.addRiceInventoryScreen.setOnClickListener {
 //            val action = InventoryScreenDirections.actionInventoryScreenToAddRiceScreen(args.uId)
             findNavController().navigate(R.id.action_inventoryScreen_to_addRiceScreen)
@@ -85,6 +90,7 @@ class InventoryScreen : Fragment() {
             findNavController().navigate(action)
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

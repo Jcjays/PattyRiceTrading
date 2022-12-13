@@ -4,11 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
+import com.patriciajavier.pattyricetrading.firestore.models.Logs
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import com.patriciajavier.pattyricetrading.home.admin.sales.SalesReportViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+
 
 class InventoryScreenViewModel : ViewModel() {
 

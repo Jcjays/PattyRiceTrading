@@ -25,12 +25,13 @@
         android:id="@+id/productDescProductInfoScreen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/oxygen"
         android:textAlignment="center"
         android:textColor="?attr/colorOnBackground"
-        android:textSize="12sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="20dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productImageProductInfoScreen"
@@ -40,13 +41,13 @@
         android:id="@+id/productKilosPerSackProductInfoScreen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginTop="20dp"
         android:background="@color/light_gray"
         android:fontFamily="@font/oxygen"
         android:textAlignment="center"
         android:textColor="?attr/colorOnBackground"
         android:textSize="15sp"
-        android:layout_marginHorizontal="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productDescProductInfoScreen"
@@ -71,16 +72,32 @@
         android:id="@+id/productPriceProductInfoScreen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@color/light_gray"
         android:fontFamily="@font/oxygen"
         android:textAlignment="center"
         android:textColor="?attr/colorOnBackground"
         android:textSize="15sp"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="@+id/productStockProductInfoScreen"
         app:layout_constraintStart_toStartOf="@+id/productStockProductInfoScreen"
         app:layout_constraintTop_toBottomOf="@+id/productStockProductInfoScreen"
         tools:text="Unit Price: \n500 pesos" />
+
+
+    <TextView
+        android:id="@+id/productDateProductInfoScreen2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@color/light_gray"
+        android:fontFamily="@font/oxygen"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="@+id/productPriceProductInfoScreen"
+        app:layout_constraintStart_toStartOf="@+id/productPriceProductInfoScreen"
+        app:layout_constraintTop_toBottomOf="@+id/productPriceProductInfoScreen"
+        tools:text="Date Added: \n2022-12-01" />
 
     <ImageView
         android:id="@+id/productImageProductInfoScreen"
@@ -98,20 +115,23 @@
         android:id="@+id/deleteProductInfoScreen"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:backgroundTint="?attr/colorError"
         android:text="Delete"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="@+id/productPriceProductInfoScreen"
-        app:layout_constraintTop_toBottomOf="@+id/productPriceProductInfoScreen" />
+        app:layout_constraintEnd_toStartOf="@+id/restockProductInfoScreen"
+        app:layout_constraintHorizontal_bias="0.611"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productDateProductInfoScreen2" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/restockProductInfoScreen"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="44dp"
         android:text="Update"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/productPriceProductInfoScreen"
-        app:layout_constraintTop_toBottomOf="@+id/productPriceProductInfoScreen" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productDateProductInfoScreen2" />
 
     <include
         android:id="@+id/loadingState"
@@ -121,9 +141,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

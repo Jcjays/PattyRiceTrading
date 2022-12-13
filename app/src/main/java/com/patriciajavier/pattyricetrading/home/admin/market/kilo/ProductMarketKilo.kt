@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -108,6 +109,7 @@ class ProductMarketKilo : Fragment() {
         val product = ConcurrentHashMap<String, ProductPerKg>()
         val list : ArrayList<ProductPerKg?> = ArrayList()
         val total : ArrayList<Double> = ArrayList()
+        var sum: Double= 0.0
         viewModel.cartContents.observe(viewLifecycleOwner){ result ->
             if(result != null){
                 if(!product.containsKey(result.id))
@@ -123,16 +125,16 @@ class ProductMarketKilo : Fragment() {
 
 
                 clearList(list, total, totalEpoxyController.product)
+                    product.forEach {
+                        list.add(it.value)
+                        total.add(it.value.qty * it.value.unitPrice)
+                    }
 
-                product.forEach {
-                    list.add(it.value)
-                    total.add(it.value.qty * it.value.unitPrice)
-                }
+                    sum = 0.0
+                    total.forEach {
+                        sum += it
+                    }
 
-                var sum = 0.0
-                total.forEach {
-                    sum += it
-                }
 
                 binding.paymentOutlinedEditText.setText(sum.toString())
                 totalEpoxyController.product = list
@@ -146,32 +148,67 @@ class ProductMarketKilo : Fragment() {
         binding.clearProductsButton.setOnClickListener {
             clearList(list, total, totalEpoxyController.product)
             product.clear()
+            sum=0.0
             binding.paymentOutlinedEditText.setText("")
         }
 
         binding.sellProductsButton.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Confirm Order")
-                .setMessage("Make sure all details are correct.")
+            var inputEditTextField = EditText(requireActivity())
+            var dialog = AlertDialog.Builder(requireContext())
+                .setTitle("Confirm order?")
+                .setMessage("Input customer payment")
+                .setView(inputEditTextField)
                 .setNegativeButton("Cancel") { dialog, which ->
                     dialog.dismiss()
                 }
                 .setPositiveButton("Confirm") { dialog, which ->
                     viewModel.sellProductToCustomer(MyApp.userId, product)
-
-                    clearList(list,total,totalEpoxyController.product)
+                    clearList(list, total, totalEpoxyController.product)
                     product.clear()
-                    binding.paymentOutlinedEditText.setText("")
 
-                    binding.loadingState.root.isVisible = true
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        binding.loadingState.root.isGone = true
-                        findNavController().navigate(R.id.action_productMarketKilo_self)
-                        Toast.makeText(requireContext(), getString(R.string.transaction_success), Toast.LENGTH_SHORT).show()
-                    }, 1500)
+                    if (inputEditTextField.text.trim().isEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            "No payment received. Input payment",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        dialog.dismiss()
+                        viewModel.sellProductToCustomer(MyApp.userId, product).cancel()
+                    }
+                    else if(inputEditTextField.text.isDigitsOnly().not()) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Invalid input. Input number",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        dialog.dismiss()
+                        viewModel.sellProductToCustomer(MyApp.userId, product).cancel()
+                    }
+                    else if(inputEditTextField.text.toString().toDouble()<sum){
+                        Toast.makeText(requireContext(),"Customer payment not enough", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                        viewModel.sellProductToCustomer(MyApp.userId, product).cancel()
+                    }
 
-                }
-                .show()
+                    else {
+
+                        var paymentTotal: Double = inputEditTextField.text.toString().toDouble()
+                        var customerChange= paymentTotal.minus(sum)
+                        Toast.makeText(requireContext(), "Customer change$customerChange", Toast.LENGTH_LONG).show()
+                        binding.paymentOutlinedEditText.setText("")
+                        binding.loadingState.root.isVisible = true
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            binding.loadingState.root.isGone = true
+                            findNavController().navigate(R.id.action_productMarketKilo_self)
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.transaction_success),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }, 1000)
+
+                    }
+                } .show()
         }
 
         binding.addPerKilo.setOnClickListener {
