@@ -14,10 +14,12 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.database.Query
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
@@ -97,7 +99,7 @@ Total: ${logs.totalCost}
 
         binding.salesReportScreenEpoxyRecyclerView.setController(epoxyController)
 
-        /// find date
+        /// search date via date picker?
         var DateShown = binding.DateShown
         binding.SearchDate.setOnClickListener(){
             val c = Calendar.getInstance()
@@ -116,6 +118,7 @@ Total: ${logs.totalCost}
                 month,
                 day
             )
+
             datePickerDialog.show()
         }
     }

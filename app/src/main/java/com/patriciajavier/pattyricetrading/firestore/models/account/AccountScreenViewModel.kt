@@ -1,4 +1,4 @@
-package com.patriciajavier.pattyricetrading.home.admin.account
+package com.patriciajavier.pattyricetrading.firestore.models.account
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,10 +1,14 @@
 package com.patriciajavier.pattyricetrading.home.admin.sales
 
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.common.internal.Constants
+import com.google.android.gms.dynamic.OnDelegateCreatedListener
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Logs
@@ -116,6 +120,9 @@ class SalesReportViewModel: ViewModel() {
         }
     }
 
+    // new filter? for search by date
+
+
     data class SalesSortedViewState(
        val isLoading: Boolean = false,
        val data: List<Logs> = emptyList(),
@@ -129,5 +136,6 @@ class SalesReportViewModel: ViewModel() {
            ANNUALLY,
            LIFETIME
        }
+
     }
 }
