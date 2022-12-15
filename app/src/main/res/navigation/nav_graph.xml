@@ -62,7 +62,8 @@
             app:destination="@id/salesReportScreen" />
         <action
             android:id="@+id/action_adminScreen_to_inventoryScreen"
-            app:destination="@id/inventoryScreen" />
+            app:destination="@id/inventoryScreen"
+            />
         <argument
             android:name="title"
             app:argType="string" />

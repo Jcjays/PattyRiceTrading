@@ -3,33 +3,21 @@ package com.patriciajavier.pattyricetrading.home.admin.sales
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.database.Query
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentSalesReportScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Logs
-import com.patriciajavier.pattyricetrading.firestore.models.Response
-import org.checkerframework.common.returnsreceiver.qual.This
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.Calendar.*
 
 class SalesReportScreen : Fragment() {
 
@@ -38,23 +26,28 @@ class SalesReportScreen : Fragment() {
     private val viewModel : SalesReportViewModel by activityViewModels()
     private val epoxyController = SalesReportEpoxyController(::onClick)
 
-
     private fun onClick(logs: Logs) {
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage("""
-TransID: ${logs.transactionId}
-ProductName: ${logs.productName}
-CustomerName: ${logs.customerName}
-Time: ${Constant.timeStampToGMT8(logs.timeCreated, Constant.YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)}
-Quantity: ${logs.quantity}
-Variation: ${logs.variation}kg
-Unit cost: ${logs.unitPrice}
-Total: ${logs.totalCost}              
-""")
+            .setMessage(setDialogMessage(logs))
             .setPositiveButton("Ok") { dialog, which ->
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun setDialogMessage(logs: Logs): String{
+        val stringBuilder = StringBuilder()
+
+        stringBuilder.append("TransID: ${logs.transactionId}\n")
+        stringBuilder.append("ProductName: ${logs.productName}\n")
+        stringBuilder.append("CustomerName: ${logs.customerName}\n")
+        stringBuilder.append("Time: ${Constant.timeStampToGMT8(logs.timeCreated, Constant.YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)}\n")
+        stringBuilder.append("Quantity: ${logs.quantity}\n")
+        stringBuilder.append("Variation: ${logs.variation}kg\n")
+        stringBuilder.append("Unit cost: ${logs.unitPrice}\n")
+        stringBuilder.append("Total: ${logs.totalCost}\n")
+
+        return stringBuilder.toString()
     }
 
     override fun onCreateView(
@@ -65,15 +58,52 @@ Total: ${logs.totalCost}
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (MyApp.accessRights)
-            viewModel.getAdminLogs()
-        else
-            viewModel.getShopkeeperLogs(MyApp.userId)
+        initAccessRights()
+        initObservables()
+        initViews()
 
 
+    }
+
+    private fun initViews() {
+        val items = SalesReportViewModel.SalesSortedViewState.Sort.values()
+        val adapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, items)
+        binding.autoCompleteTextView.setAdapter(adapter)
+
+        //sort the data base on user wants.
+        binding.autoCompleteTextView.doOnTextChanged { text, _, _, _ ->
+            viewModel.currentSort = items.find { it.name == text.toString() }!!
+        }
+
+        /// search date via date picker?
+        val dateShown = binding.DateShown
+        binding.SearchDate.setOnClickListener(){
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { _, y, m, dayOfMonth ->
+                    dateShown.text = ("$dayOfMonth-${m+1}-$y")
+                },
+                year,
+                month,
+                day
+            )
+
+            datePickerDialog.show()
+        }
+
+    }
+
+    private fun initObservables() {
         viewModel.updateViewStateLiveData.observe(viewLifecycleOwner) {
             if (it.exception != null) {
                 Toast.makeText(requireContext(), it.exception.message, Toast.LENGTH_SHORT).show()
@@ -87,40 +117,14 @@ Total: ${logs.totalCost}
             }
         }
 
-        //provide the data needed for sorting values
-        val items = SalesReportViewModel.SalesSortedViewState.Sort.values()
-        val adapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, items)
-        binding.autoCompleteTextView.setAdapter(adapter)
-
-        //sort the data base on user wants.
-        binding.autoCompleteTextView.doOnTextChanged { text, _, _, _ ->
-            viewModel.currentSort = items.find { it.name == text.toString() }!!
-        }
-
         binding.salesReportScreenEpoxyRecyclerView.setController(epoxyController)
+    }
 
-        /// search date via date picker?
-        var DateShown = binding.DateShown
-        binding.SearchDate.setOnClickListener(){
-            val c = Calendar.getInstance()
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
-
-            val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                {
-                    view, year, month,dayOfMonth ->
-                    val dat = ("$dayOfMonth-${month+1}-$year")
-                    DateShown.setText(dat)
-                },
-                year,
-                month,
-                day
-            )
-
-            datePickerDialog.show()
-        }
+    private fun initAccessRights() {
+        if (MyApp.accessRights)
+            viewModel.getAdminLogs()
+        else
+            viewModel.getShopkeeperLogs(MyApp.userId)
     }
 
     override fun onDestroyView() {
