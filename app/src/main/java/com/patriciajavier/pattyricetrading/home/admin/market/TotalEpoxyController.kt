@@ -30,4 +30,5 @@ data class TotalModel(
         textView17.text = "Qty:(${product.qty}) P${product.unitPrice * product.qty}"
     }
 
+
 }

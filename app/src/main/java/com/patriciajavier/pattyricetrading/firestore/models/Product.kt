@@ -1,6 +1,7 @@
 package com.patriciajavier.pattyricetrading.firestore.models
 
 import android.util.Log
+import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
@@ -13,6 +14,7 @@ data class Product(
     val productDesc: String = "",
     val kiloPerSack: Int = 0,
     val stock: Int = 0,
+    val timeAdded: Timestamp = Timestamp.now(),
     val unitPrice: Double = 0.0,
     var qty: Int = 0,
     var isFromMarket: Boolean = false,
@@ -31,11 +33,12 @@ data class Product(
                 val productName = getString("productName")!!
                 val productDesc = getString("productDesc")!!
                 val stock = getLong("stock")!!.toInt()
+                val timeAdded = getTimestamp("timeAdded")!!
                 val kiloPerSack = getLong("kiloPerSack")!!.toInt()
                 val unitPrice = getDouble("unitPrice")!!
                 val productImage = getString("productImage")!!
 
-                return Product(pId, productImage, productName, productDesc, kiloPerSack, stock, unitPrice)
+                return Product(pId, productImage, productName, productDesc, kiloPerSack, stock,timeAdded, unitPrice)
             }catch (e :Exception){
                 Log.e(TAG, "Error converting product", e)
                 FirebaseCrashlytics.getInstance().log("Error converting product")
@@ -50,7 +53,7 @@ data class Product(
                 val list : ArrayList<Product> = ArrayList()
 
                 documents.forEach {
-                  it.toProduct()?.let { it1 -> list.add(it1) }
+                    it.toProduct()?.let { it1 -> list.add(it1) }
                 }
 
                 return list

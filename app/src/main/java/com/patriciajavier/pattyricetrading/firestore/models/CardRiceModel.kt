@@ -34,5 +34,6 @@ data class CardRiceModel(
         riceTitle.text = product.productName
         riceStockCount.text = "Stocks left: ${product.stock}"
         riceUnitPrice.text = "Unit price: ${product.unitPrice}"
+        riceDescription.text ="description:  ${product.productDesc}"
     }
 }

@@ -26,10 +26,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textSize="16sp"
-            android:textColor="?attr/colorOnSurface"
-            android:textStyle="bold"
             android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/riceImage"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Sinandomeng" />
@@ -50,36 +50,63 @@
             android:id="@+id/availabilityStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:fontFamily="@font/oxygen"
             android:textColor="@color/green"
             android:textSize="12sp"
-            android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/riceTitle"
             tools:text="Available" />
 
         <TextView
-            android:id="@+id/riceVariation"
+            android:id="@+id/RiceDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:fontFamily="@font/oxygen"
             android:textColor="?attr/colorOnSurface"
             android:textSize="12sp"
-            android:layout_marginTop="3dp"
             app:layout_constraintStart_toStartOf="@+id/riceStockCount"
             app:layout_constraintTop_toBottomOf="@+id/riceStockCount"
             tools:text="Variation: 25kg" />
 
         <TextView
-            android:id="@+id/riceUnitPrice"
+            android:id="@+id/riceVariation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="3dp"
             android:fontFamily="@font/oxygen"
             android:textColor="?attr/colorOnSurface"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/riceStockCount"
+            app:layout_constraintTop_toBottomOf="@+id/riceStockCount"
+            tools:text="Variation: 25kg" />
+
+        <TextView
+            android:id="@+id/riceDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/RiceDescription"
+            app:layout_constraintTop_toBottomOf="@+id/RiceDescription"
+            tools:text="Description" />
+
+        <TextView
+            android:id="@+id/riceUnitPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="88dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/riceStockCount"
+            app:layout_constraintTop_toBottomOf="@+id/availabilityStatus"
             tools:text="Unit price: 850php" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

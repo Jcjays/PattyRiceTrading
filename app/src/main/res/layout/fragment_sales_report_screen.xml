@@ -7,6 +7,19 @@
     tools:context=".home.admin.sales.SalesReportScreen">
 
     <TextView
+        android:id="@+id/DateShown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="day-month-year"
+        android:textSize="20dp"
+
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/SearchDate"
+        app:layout_constraintTop_toBottomOf="@+id/sortMenu" />
+
+    <TextView
         android:id="@+id/mainLabelSalesReportScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,21 +27,6 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/oxygen"
         android:text="Sales History"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/mainLabelSalesReportScreen2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="14dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="80dp"
-        android:fontFamily="@font/oxygen"
-        android:text="Generate pdf: "
         android:textColor="?attr/colorOnBackground"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -57,8 +55,8 @@
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/salesReportScreenEpoxyRecyclerView"
-        android:layout_width="380dp"
-        android:layout_height="560dp"
+        android:layout_width="387dp"
+        android:layout_height="562dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="30dp"
         android:orientation="vertical"
@@ -79,16 +77,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/DownloadPDFbutton"
-        android:layout_width="104dp"
-        android:layout_height="40dp"
-        android:text="download"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/mainLabelSalesReportScreen2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.23"
-        app:layout_constraintStart_toEndOf="@+id/mainLabelSalesReportScreen2"
-        app:layout_constraintTop_toTopOf="@+id/mainLabelSalesReportScreen2"
-        app:layout_constraintVertical_bias="1.0" />
+        android:id="@+id/SearchDate"
+        android:layout_width="164dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Search by date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainLabelSalesReportScreen" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

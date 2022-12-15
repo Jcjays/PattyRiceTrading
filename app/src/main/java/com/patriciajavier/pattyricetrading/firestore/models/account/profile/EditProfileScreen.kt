@@ -1,4 +1,4 @@
-package com.patriciajavier.pattyricetrading.home.admin.account.profile
+package com.patriciajavier.pattyricetrading.firestore.models.account.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
