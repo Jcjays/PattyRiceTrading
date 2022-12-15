@@ -1,7 +1,5 @@
 package com.patriciajavier.pattyricetrading.firestore.models
 
-import android.net.Uri
-
 sealed class Response<out T> {
     object Loading: Response<Nothing>()
 

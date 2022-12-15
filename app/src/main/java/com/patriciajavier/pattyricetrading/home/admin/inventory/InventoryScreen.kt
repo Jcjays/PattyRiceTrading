@@ -1,25 +1,17 @@
 package com.patriciajavier.pattyricetrading.home.admin.inventory
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.QuickContactBadge
-import android.widget.Toast
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentInventoryScreenBinding
-import com.patriciajavier.pattyricetrading.firestore.models.Response
-import com.patriciajavier.pattyricetrading.home.admin.inventory.order.OrderCardModel
 
 class InventoryScreen : Fragment() {
 
@@ -62,14 +54,23 @@ class InventoryScreen : Fragment() {
         }
 
             viewModel.getListOfProducts.observe(viewLifecycleOwner){ response ->
-                when(response){
-                    is Response.Loading -> binding.loadingState.root.isVisible = true
-                    is Response.Success -> {
-                        epoxyController.response = response.data
-                        binding.loadingState.root.isGone = true
-                    }
-                    is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()
-                }
+                binding.loadingState.root.isGone = response.isLoadingDone
+                viewModel.sortProductsByName(response.sortOption)
+                epoxyController.response = response.product
+
+
+
+
+
+
+//                when(response){
+//                    is Response.Loading -> binding.loadingState.root.isVisible = true
+//                    is Response.Success -> {
+//                        epoxyController.response = response.data
+//                        binding.loadingState.root.isGone = true
+//                    }
+//                    is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()
+//                }
             }
 
         binding.riceListEpoxyRecyclerView.setController(epoxyController)
