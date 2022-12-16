@@ -22,13 +22,14 @@
 
         <TextView
             android:id="@+id/riceTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textSize="14sp"
-            android:textColor="?attr/colorOnSurface"
-            android:textStyle="bold"
             android:fontFamily="@font/oxygen"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/unitPrice"
             app:layout_constraintStart_toEndOf="@+id/riceImage"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Sinandomeng" />
@@ -36,11 +37,13 @@
 
         <TextView
             android:id="@+id/refillCapLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/oxygen"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/riceTitle"
             app:layout_constraintTop_toBottomOf="@+id/riceTitle"
             tools:text="Display cap: 25/50 kg" />
@@ -59,11 +62,13 @@
 
         <TextView
             android:id="@+id/riceVariation"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/oxygen"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/refillCapLabel"
             app:layout_constraintTop_toBottomOf="@+id/refillCapLabel"
             tools:text="Variation: 25kg" />

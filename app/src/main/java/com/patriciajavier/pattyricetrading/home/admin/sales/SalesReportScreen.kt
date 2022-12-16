@@ -199,21 +199,21 @@ class SalesReportScreen : Fragment() {
                 return@observe
             }
 
+            Log.d("Length", logsResponseState.dateToDisplay.length.toString() )
 
-            if(logsResponseState.dateToDisplay.length <= 3){
+            if(logsResponseState.dateToDisplay.length == 4 ){
                 val year = logsResponseState.dateToDisplay.substring(0)
                 binding.transactionDateLabel.text = "Transactions : $year"
             }
 
-            if(logsResponseState.dateToDisplay.length in 4..6){
+            if(logsResponseState.dateToDisplay.length == 6){
                 val year = logsResponseState.dateToDisplay.substring(0, 4)
                 val month = logsResponseState.dateToDisplay.substring(4)
 
                 binding.transactionDateLabel.text = "Transactions : $year-$month"
             }
 
-
-            if(logsResponseState.dateToDisplay.length in 4..logsResponseState.dateToDisplay.length){
+            if(logsResponseState.dateToDisplay.length >= 8){
                 val year = logsResponseState.dateToDisplay.substring(0, 4)
                 val month = logsResponseState.dateToDisplay.substring(4, 6)
                 val day = logsResponseState.dateToDisplay.substring(6)

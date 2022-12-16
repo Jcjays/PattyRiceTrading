@@ -78,7 +78,7 @@ class SalesReportViewModel: ViewModel() {
             var listOfFilteredLogs = ArrayList<Logs>()
             var currentDate = ZonedDateTime.now(ZoneId.of("Asia/Hong_Kong"))
 
-            var dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            var dateToDisplay = currentDate.formatWithPattern(constant.formatYear)
 
             var firstDay : ZonedDateTime
             var lastDay : ZonedDateTime
@@ -89,7 +89,7 @@ class SalesReportViewModel: ViewModel() {
                 currentDate = currentDate.minusYears(newCurrentDate.toLong())
                 firstDay = currentDate.with(firstDayOfYear())
                 lastDay = currentDate.with(lastDayOfYear())
-                dateToDisplay = yearlyFilterState.date.formatWithPattern(constant.formatYearMonthDay)
+                dateToDisplay = yearlyFilterState.date.formatWithPattern(constant.formatYear)
 
                 //if the transaction is within the year add it all to the list
                 _fullCopyOfLogsMutableLiveData.value!!.sortedByDescending { it.timeCreated }.forEach {
@@ -359,7 +359,7 @@ data class LogsResponseState(
     val logs : List<Logs> = emptyList(),
     val isLoadingDone : Boolean = true,
     val errorMessage : String? = null,
-    val dateToDisplay : String = ZonedDateTime.now(ZoneId.of("Asia/Hong_Kong")).formatWithPattern("yyyyMMdd")
+    val dateToDisplay : String = ZonedDateTime.now(ZoneId.of("Asia/Hong_Kong")).formatWithPattern(Constant.formatYear)
 )
 
 enum class DayFilterOptions{
