@@ -1,7 +1,5 @@
 package com.patriciajavier.pattyricetrading.firestore.models
 
-import android.content.res.ColorStateList
-import android.drm.DrmRights
 import android.graphics.Color
 import com.bumptech.glide.Glide
 import com.patriciajavier.pattyricetrading.MyApp

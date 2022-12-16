@@ -1,35 +1,24 @@
 package com.patriciajavier.pattyricetrading.home.admin.sales
 
-import android.app.DatePickerDialog
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.database.Query
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentSalesReportScreenBinding
 import com.patriciajavier.pattyricetrading.firestore.models.Logs
-import com.patriciajavier.pattyricetrading.firestore.models.Response
-import org.checkerframework.common.returnsreceiver.qual.This
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.Calendar.*
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class SalesReportScreen : Fragment() {
 
@@ -38,23 +27,28 @@ class SalesReportScreen : Fragment() {
     private val viewModel : SalesReportViewModel by activityViewModels()
     private val epoxyController = SalesReportEpoxyController(::onClick)
 
-
     private fun onClick(logs: Logs) {
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage("""
-TransID: ${logs.transactionId}
-ProductName: ${logs.productName}
-CustomerName: ${logs.customerName}
-Time: ${Constant.timeStampToGMT8(logs.timeCreated, Constant.YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)}
-Quantity: ${logs.quantity}
-Variation: ${logs.variation}kg
-Unit cost: ${logs.unitPrice}
-Total: ${logs.totalCost}              
-""")
+            .setMessage(setDialogMessage(logs))
             .setPositiveButton("Ok") { dialog, which ->
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun setDialogMessage(logs: Logs): String{
+        val stringBuilder = StringBuilder()
+
+        stringBuilder.append("TransID: ${logs.transactionId}\n")
+        stringBuilder.append("ProductName: ${logs.productName}\n")
+        stringBuilder.append("CustomerName: ${logs.customerName}\n")
+        stringBuilder.append("Time: ${Constant.timeStampToGMT8(logs.timeCreated, Constant.YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)}\n")
+        stringBuilder.append("Quantity: ${logs.quantity}\n")
+        stringBuilder.append("Variation: ${logs.variation}kg\n")
+        stringBuilder.append("Unit cost: ${logs.unitPrice}\n")
+        stringBuilder.append("Total: ${logs.totalCost}\n")
+
+        return stringBuilder.toString()
     }
 
     override fun onCreateView(
@@ -65,62 +59,174 @@ Total: ${logs.totalCost}
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAccessRights()
+        initObservables()
+        initFilter()
 
+    }
+
+    private fun initFilter() {
+        binding.filterLabel.setOnClickListener {
+            binding.linearLayoutCompat.isGone = !binding.linearLayoutCompat.isGone
+        }
+
+        binding.cancel.setOnClickListener {
+            viewModel.filterTransactionRecord(
+                DayFilterState(),
+                WeeklyFilterState(),
+                MonthlyFilterState(),
+                YearlyFilterState()
+            )
+
+            binding.autoCompleteTextViewSortByDay.text = null
+            binding.autoCompleteTextViewSortByWeek.text = null
+            binding.autoCompleteTextViewSortByMonth.text = null
+            binding.autoCompleteTextViewSortByYear.text = null
+
+            binding.linearLayoutCompat.isGone = true
+        }
+
+
+        var dayFilterState = DayFilterState()
+        var weekFilterState = WeeklyFilterState()
+        var monthFilterState = MonthlyFilterState()
+        var yearFilterState = YearlyFilterState()
+
+        binding.apply.setOnClickListener {
+            viewModel.filterTransactionRecord(
+                dayFilterState,
+                weekFilterState,
+                monthFilterState,
+                yearFilterState
+            )
+            binding.linearLayoutCompat.isGone = true
+        }
+
+        val dayItems = DayFilterOptions.getDays()
+        val dayAdapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, dayItems)
+        binding.autoCompleteTextViewSortByDay.setAdapter(dayAdapter)
+
+        binding.autoCompleteTextViewSortByDay.doOnTextChanged { text, _, _, _ ->
+            dayFilterState = when(text.toString()){
+                DayFilterOptions.Mon.name -> DayFilterState(day1 = true)
+                DayFilterOptions.Tue.name -> DayFilterState(day2 = true)
+                DayFilterOptions.Wed.name -> DayFilterState(day3 = true)
+                DayFilterOptions.Thu.name -> DayFilterState(day4 = true)
+                DayFilterOptions.Fri.name -> DayFilterState(day5 = true)
+                DayFilterOptions.Sat.name -> DayFilterState(day6 = true)
+                DayFilterOptions.Sun.name -> DayFilterState(day7 = true)
+                else -> DayFilterState()
+            }
+        }
+
+        val weekItems = WeekFilterOptions.getWeeks()
+        val weekAdapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, weekItems)
+        binding.autoCompleteTextViewSortByWeek.setAdapter(weekAdapter)
+
+        binding.autoCompleteTextViewSortByWeek.doOnTextChanged { text, _, _, _ ->
+            weekFilterState = when(text.toString()){
+                WeekFilterOptions.Week1.name -> WeeklyFilterState(week1 = true)
+                WeekFilterOptions.Week2.name -> WeeklyFilterState(week2 = true)
+                WeekFilterOptions.Week3.name -> WeeklyFilterState(week3 = true)
+                WeekFilterOptions.Week4.name -> WeeklyFilterState(week4 = true)
+                else -> WeeklyFilterState()
+            }
+        }
+
+        val monthItems = MonthFilterOption.getMonths()
+        val monthAdapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, monthItems)
+        binding.autoCompleteTextViewSortByMonth.setAdapter(monthAdapter)
+
+        binding.autoCompleteTextViewSortByMonth.doOnTextChanged { text, _, _, _ ->
+            monthFilterState = when(text.toString()){
+                MonthFilterOption.Jan.name -> MonthlyFilterState(january = true)
+                MonthFilterOption.Feb.name -> MonthlyFilterState(february = true)
+                MonthFilterOption.Mar.name -> MonthlyFilterState(march = true)
+                MonthFilterOption.Apr.name -> MonthlyFilterState(april = true)
+                MonthFilterOption.May.name -> MonthlyFilterState(may = true)
+                MonthFilterOption.Jun.name -> MonthlyFilterState(june = true)
+                MonthFilterOption.Jul.name -> MonthlyFilterState(july = true)
+                MonthFilterOption.Aug.name -> MonthlyFilterState(august = true)
+                MonthFilterOption.Sep.name -> MonthlyFilterState(september = true)
+                MonthFilterOption.Oct.name -> MonthlyFilterState(october = true)
+                MonthFilterOption.Nov.name -> MonthlyFilterState(november = true)
+                MonthFilterOption.Dec.name -> MonthlyFilterState(december = true)
+                else -> MonthlyFilterState()
+            }
+        }
+
+        val yearItems = Constant.getListOfDatesFromOrigin()
+        val yearAdapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, yearItems)
+        binding.autoCompleteTextViewSortByYear.setAdapter(yearAdapter)
+
+        binding.autoCompleteTextViewSortByYear.doOnTextChanged { text, _, _, _ ->
+
+            if(text.isNullOrBlank()){
+                yearFilterState = YearlyFilterState()
+                return@doOnTextChanged
+            }
+
+            //start the year from january 1st,
+            val zoneDateTimeBaseOnYearSelected = ZonedDateTime.of(
+                Integer.parseInt(text.toString()),
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                ZoneId.of("Asia/Hong_Kong"))
+
+            yearFilterState = YearlyFilterState(zoneDateTimeBaseOnYearSelected)
+        }
+
+    }
+
+    private fun initObservables() {
+        viewModel.logsResponseStateLiveData.observe(viewLifecycleOwner) { logsResponseState ->
+            binding.loadingState.root.isGone = logsResponseState.isLoadingDone
+
+            if (!logsResponseState.errorMessage.isNullOrBlank()) {
+                Toast.makeText(requireContext(), logsResponseState.errorMessage, Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+
+            Log.d("Length", logsResponseState.dateToDisplay.length.toString() )
+
+            if(logsResponseState.dateToDisplay.length == 4 ){
+                val year = logsResponseState.dateToDisplay.substring(0)
+                binding.transactionDateLabel.text = "Transactions : $year"
+            }
+
+            if(logsResponseState.dateToDisplay.length == 6){
+                val year = logsResponseState.dateToDisplay.substring(0, 4)
+                val month = logsResponseState.dateToDisplay.substring(4)
+
+                binding.transactionDateLabel.text = "Transactions : $year-$month"
+            }
+
+            if(logsResponseState.dateToDisplay.length >= 8){
+                val year = logsResponseState.dateToDisplay.substring(0, 4)
+                val month = logsResponseState.dateToDisplay.substring(4, 6)
+                val day = logsResponseState.dateToDisplay.substring(6)
+                binding.transactionDateLabel.text = "Transactions : $year-$month-$day"
+            }
+
+            epoxyController.logs = logsResponseState.logs
+        }
+
+        binding.salesReportScreenEpoxyRecyclerView.setController(epoxyController)
+    }
+
+    private fun initAccessRights() {
         if (MyApp.accessRights)
             viewModel.getAdminLogs()
         else
             viewModel.getShopkeeperLogs(MyApp.userId)
-
-
-        viewModel.updateViewStateLiveData.observe(viewLifecycleOwner) {
-            if (it.exception != null) {
-                Toast.makeText(requireContext(), it.exception.message, Toast.LENGTH_SHORT).show()
-                return@observe
-            }
-
-            binding.loadingState.root.isVisible = it.isLoading
-
-            if (it.data.isNotEmpty()) {
-                epoxyController.logs = it.data
-            }
-        }
-
-        //provide the data needed for sorting values
-        val items = SalesReportViewModel.SalesSortedViewState.Sort.values()
-        val adapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, items)
-        binding.autoCompleteTextView.setAdapter(adapter)
-
-        //sort the data base on user wants.
-        binding.autoCompleteTextView.doOnTextChanged { text, _, _, _ ->
-            viewModel.currentSort = items.find { it.name == text.toString() }!!
-        }
-
-        binding.salesReportScreenEpoxyRecyclerView.setController(epoxyController)
-
-        /// search date via date picker?
-        var DateShown = binding.DateShown
-        binding.SearchDate.setOnClickListener(){
-            val c = Calendar.getInstance()
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
-
-            val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                {
-                    view, year, month,dayOfMonth ->
-                    val dat = ("$dayOfMonth-${month+1}-$year")
-                    DateShown.setText(dat)
-                },
-                year,
-                month,
-                day
-            )
-
-            datePickerDialog.show()
-        }
     }
 
     override fun onDestroyView() {

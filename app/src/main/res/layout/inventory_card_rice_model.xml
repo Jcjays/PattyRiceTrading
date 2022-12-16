@@ -72,24 +72,26 @@
 
         <TextView
             android:id="@+id/riceVariation"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:fontFamily="@font/oxygen"
             android:textColor="?attr/colorOnSurface"
             android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/riceUnitPrice"
             app:layout_constraintStart_toStartOf="@+id/riceStockCount"
             app:layout_constraintTop_toBottomOf="@+id/riceStockCount"
             tools:text="Variation: 25kg" />
 
         <TextView
             android:id="@+id/riceDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/oxygen"
             android:textColor="?attr/colorOnSurface"
             android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/riceVariation"
             app:layout_constraintStart_toStartOf="@+id/RiceDescription"
             app:layout_constraintTop_toBottomOf="@+id/RiceDescription"
             tools:text="Description" />
@@ -100,6 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="88dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="5dp"
             android:fontFamily="@font/oxygen"
             android:textColor="?attr/colorOnSurface"
             android:textSize="12sp"

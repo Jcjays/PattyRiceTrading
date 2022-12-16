@@ -1,12 +1,11 @@
 package com.patriciajavier.pattyricetrading.registration
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,7 +28,7 @@ class LoginScreen : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentLoginScreenBinding.inflate(inflater, container, false)
         return binding.root
@@ -38,9 +37,9 @@ class LoginScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //observe firebase
+
         viewModel.userMutableLiveData.observe(viewLifecycleOwner) {
-            //loading state
+
             binding.loadingState.root.visibility = if (it.isLoading) View.VISIBLE else View.GONE
 
             if (it.exception != null) {
@@ -49,7 +48,6 @@ class LoginScreen : Fragment() {
             }
 
             if(it.data != null) {
-                //assign a global access to currentUserId
                 MyApp.userId = it.data!!.uid
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.checkAccessRight(it.data!!.uid)
@@ -61,7 +59,6 @@ class LoginScreen : Fragment() {
         viewModel.checkAccessRights.observe(viewLifecycleOwner) { accessRights ->
             if(accessRights != null){
 
-                //assign a global access to currentUserId
                 MyApp.accessRights = accessRights
 
                 val label = if(accessRights) "Admin" else "Shopkeeper"
@@ -81,6 +78,7 @@ class LoginScreen : Fragment() {
 
         binding.registerShortcutButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginScreen_to_registrationScreen)
+
         }
 
     }

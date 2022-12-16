@@ -10,10 +10,10 @@
         android:id="@+id/addRiceInventoryScreen"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:text="@string/add_rice"
+        app:cornerRadius="0dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="Add Rice"
-        app:cornerRadius="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,9 +21,10 @@
         android:id="@+id/OrdersInventoryScreen"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:text="@string/orders"
+        android:layout_marginEnd="15dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Orders"
         app:cornerRadius="0dp"
         app:layout_constraintStart_toEndOf="@+id/addRiceInventoryScreen"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,20 +33,20 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/sortInventoryMenu"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="125dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="16dp"
-        android:hint="Sort"
+        android:hint="@string/sort"
+        app:layout_constraintBottom_toBottomOf="@+id/OrdersInventoryScreen"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toEndOf="@+id/OrdersInventoryScreen"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/OrdersInventoryScreen">
 
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="11sp"
             android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -70,7 +71,7 @@
     <include
         android:id="@+id/loadingState"
         layout="@layout/loading_screen"
-        android:visibility="gone"
+        tools:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

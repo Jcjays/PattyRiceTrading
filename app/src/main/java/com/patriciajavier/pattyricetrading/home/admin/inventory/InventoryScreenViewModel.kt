@@ -1,93 +1,157 @@
 package com.patriciajavier.pattyricetrading.home.admin.inventory
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.patriciajavier.pattyricetrading.Constant
+import androidx.lifecycle.*
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
-import com.patriciajavier.pattyricetrading.firestore.models.Logs
 import com.patriciajavier.pattyricetrading.firestore.models.Product
 import com.patriciajavier.pattyricetrading.firestore.models.Response
-import com.patriciajavier.pattyricetrading.home.admin.sales.SalesReportViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-
 
 class InventoryScreenViewModel : ViewModel() {
 
-    private val _getListOfProducts = MutableLiveData<Response<List<Product>>>()
-    val getListOfProducts: LiveData<Response<List<Product>>>
-        get() = _getListOfProducts
+    private val _getListOfProductsMutableLiveData = MutableLiveData<InventoryState>()
+    val getListOfProducts : LiveData<InventoryState> get() = _getListOfProductsMutableLiveData
 
-    //dinagdag ko
-    private val _updateViewStateMutableLiveData = MutableLiveData<InventoryScreenViewModel.InventorySortedViewState>()
-    val updateViewStateLiveData: LiveData<InventoryScreenViewModel.InventorySortedViewState> = _updateViewStateMutableLiveData
-
-    fun getAdminListOfProducts() = viewModelScope.launch {
-        FirebaseService.getAdminListOfProductFromFireStore().collect {
-            _getListOfProducts.value = it
-            updateInventoryViewState(it)
-
-        }
-    }
-
-    fun getShopkeeperListOfProducts(uId: String) = viewModelScope.launch {
-        FirebaseService.getShopkeeperListOfProductFromFireStore(uId).collect() {
-            _getListOfProducts.value = it
-            updateInventoryViewState(it)
-        }
-    }
-
-    // for sorting dinagdag ko lang sana makatulong po
-    var currentSort: InventoryScreenViewModel.InventorySortedViewState.Sort =
-        InventoryScreenViewModel.InventorySortedViewState.Sort.New
-        set(value) {
-            field = value
-            updateInventoryViewState(_getListOfProducts.value!!)
-        }
-
-    private fun updateInventoryViewState(response: Response<List<Product>>) {
-        val modifiedList: ArrayList<Product> = ArrayList()//container for modified data
-        when (response) {
-            is Response.Loading -> _updateViewStateMutableLiveData.postValue(
-                InventoryScreenViewModel.InventorySortedViewState(isLoading = true)
-            )
-            is Response.Failure -> _updateViewStateMutableLiveData.postValue(
-                InventoryScreenViewModel.InventorySortedViewState(exception = response.e)
-            )
-            is Response.Success -> {
-                when (currentSort) {
-                    InventoryScreenViewModel.InventorySortedViewState.Sort.New -> {
-
-                        _updateViewStateMutableLiveData.postValue(
-                            InventoryScreenViewModel.InventorySortedViewState(data = modifiedList)
-                        )
+    fun sortProducts(sortOptions: SortOptions = SortOptions.NAME){
+        if (getListOfProducts.value != null){
+            when(sortOptions){
+                SortOptions.NAME -> {
+                    val sortedProduct = _getListOfProductsMutableLiveData.value!!.product.sortedBy {
+                            it.productName
                     }
-                    InventoryScreenViewModel.InventorySortedViewState.Sort.Popular -> {
 
+                    val newState = InventoryState(
+                        product = sortedProduct,
+                    )
 
-                        _updateViewStateMutableLiveData.postValue(
-                            InventoryScreenViewModel.InventorySortedViewState(
-                                data = modifiedList
-                            )
-                        )
+                    _getListOfProductsMutableLiveData.postValue(newState)
+                }
+                SortOptions.LOWEST_STOCK -> {
+                    val sortedProduct = _getListOfProductsMutableLiveData.value!!.product.sortedBy{
+                        it.stock
                     }
+
+                    val newState = InventoryState(
+                        product = sortedProduct
+                    )
+
+                    _getListOfProductsMutableLiveData.postValue(newState)
+                }
+                SortOptions.HIGHEST_STOCK -> {
+                    val sortedProduct = _getListOfProductsMutableLiveData.value!!.product.sortedByDescending {
+                        it.stock
+                    }
+
+                    val newState = InventoryState(
+                        product = sortedProduct
+                    )
+
+                    _getListOfProductsMutableLiveData.postValue(newState)
+                }
+                SortOptions.LOWEST_PRICE -> {
+                    val sortedProduct = _getListOfProductsMutableLiveData.value!!.product.sortedBy {
+                        it.unitPrice
+                    }
+
+                    val newState = InventoryState(
+                        product = sortedProduct
+                    )
+
+                    _getListOfProductsMutableLiveData.postValue(newState)
+                }
+                SortOptions.HIGHEST_PRICE -> {
+                    val sortedProduct = _getListOfProductsMutableLiveData.value!!.product.sortedByDescending {
+                        it.unitPrice
+                    }
+
+                    val newState = InventoryState(
+                        product = sortedProduct
+                    )
+
+                    _getListOfProductsMutableLiveData.postValue(newState)
                 }
             }
         }
     }
 
+    fun getAdminListOfProducts() = viewModelScope.launch {
+        FirebaseService.getAdminListOfProductFromFireStore().collect{
+            when(it){
+                Response.Loading -> _getListOfProductsMutableLiveData.postValue(
+                    InventoryState(isLoadingDone = false)
+                )
+                is Response.Failure -> _getListOfProductsMutableLiveData.postValue(
+                    InventoryState(errorMessage = it.e.message, isLoadingDone = true)
+                )
+                is Response.Success -> _getListOfProductsMutableLiveData.postValue(
+                    InventoryState(product = it.data!!, isLoadingDone = true)
+                )
+            }
+        }
+    }
 
-    data class InventorySortedViewState(
-        val isLoading: Boolean = false,
-        val data: List<Product> = emptyList(),
-        val exception: Exception? = null,
-        val sort: Sort = Sort.New
-    ) {
-        enum class Sort {
-            New,
-            Popular
+    fun getShopkeeperListOfProducts(uId: String) = viewModelScope.launch{
+        FirebaseService.getShopkeeperListOfProductFromFireStore(uId).collect(){
+            when(it){
+                Response.Loading -> _getListOfProductsMutableLiveData.postValue(
+                    InventoryState(isLoadingDone = false)
+                )
+                is Response.Failure -> _getListOfProductsMutableLiveData.postValue(
+                    InventoryState(errorMessage = it.e.message, isLoadingDone = true)
+                )
+                is Response.Success -> _getListOfProductsMutableLiveData.postValue(
+                    InventoryState(product = it.data!!, isLoadingDone = true)
+                )
+            }
+        }
+    }
+
+}
+
+data class InventoryState(
+    val product : List<Product> = emptyList(),
+    val errorMessage : String? = null,
+    var isLoadingDone : Boolean = true,
+)
+
+enum class SortOptions{
+    NAME, LOWEST_STOCK, HIGHEST_STOCK, LOWEST_PRICE, HIGHEST_PRICE;
+
+    companion object{
+
+        private const val name = "Name"
+        private const val lowStock = "Low stock"
+        private const val highStock = "High stock"
+        private const val lowPrice = "Low price"
+        private const val highPrice = "High price"
+
+        fun getSortNames() : ArrayList<String> {
+
+            val sortTitles = ArrayList<String>()
+
+                for(item in values()){
+                    when(item){
+                        NAME -> sortTitles.add(name)
+                        LOWEST_STOCK -> sortTitles.add(lowStock)
+                        HIGHEST_STOCK -> sortTitles.add(highStock)
+                        LOWEST_PRICE -> sortTitles.add(lowPrice)
+                        HIGHEST_PRICE -> sortTitles.add(highPrice)
+                    }
+                }
+            return sortTitles
+        }
+
+        fun getSelection(sortOption : String): SortOptions {
+
+            when(sortOption){
+                name -> return NAME
+                lowStock -> return LOWEST_STOCK
+                highStock -> return HIGHEST_STOCK
+                lowPrice -> return LOWEST_PRICE
+                highPrice -> return HIGHEST_PRICE
+            }
+
+            //default
+            return NAME
         }
 
     }

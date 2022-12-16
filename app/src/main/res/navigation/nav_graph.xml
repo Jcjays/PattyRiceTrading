@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_login_screen" >
         <action
             android:id="@+id/action_loginScreen_to_registrationScreen"
-            app:destination="@id/registrationScreen" />
+            app:destination="@id/registrationScreen"
+            />
         <action
             android:id="@+id/action_loginScreen_to_adminScreen"
             app:popUpTo="@id/nav_graph"
@@ -32,7 +33,10 @@
         tools:layout="@layout/fragment_registration_screen" >
         <action
             android:id="@+id/action_registrationScreen_to_loginScreen"
-            app:destination="@id/loginScreen" />
+            app:destination="@id/loginScreen"
+            app:popUpTo="@id/registrationScreen"
+            app:popUpToInclusive="true"/>
+
         <action
             android:id="@+id/action_registrationScreen_to_adminScreen"
             app:launchSingleTop="true"
@@ -58,7 +62,8 @@
             app:destination="@id/salesReportScreen" />
         <action
             android:id="@+id/action_adminScreen_to_inventoryScreen"
-            app:destination="@id/inventoryScreen" />
+            app:destination="@id/inventoryScreen"
+            />
         <argument
             android:name="title"
             app:argType="string" />

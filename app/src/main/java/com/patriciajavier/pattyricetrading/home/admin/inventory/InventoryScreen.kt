@@ -1,44 +1,33 @@
 package com.patriciajavier.pattyricetrading.home.admin.inventory
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.QuickContactBadge
 import android.widget.Toast
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.patriciajavier.pattyricetrading.MyApp
 import com.patriciajavier.pattyricetrading.R
 import com.patriciajavier.pattyricetrading.databinding.FragmentInventoryScreenBinding
-import com.patriciajavier.pattyricetrading.firestore.FirebaseService
-import com.patriciajavier.pattyricetrading.firestore.models.Response
-import com.patriciajavier.pattyricetrading.home.admin.inventory.order.OrderCardModel
-import com.patriciajavier.pattyricetrading.home.admin.sales.SalesReportViewModel
+import java.util.*
 
 class InventoryScreen : Fragment() {
 
     private var _binding : FragmentInventoryScreenBinding? = null
     private val binding get() = _binding!!
 
+    private val accessRights = MyApp.accessRights
+
     private val viewModel : InventoryScreenViewModel by activityViewModels()
     private val epoxyController = InventoryScreenEpoxyController(::onItemClicked)
 
-     fun onItemClicked(productId: String) {
+     private fun onItemClicked(productId: String) {
         val action = InventoryScreenDirections.actionInventoryScreenToProductInfoScreen(productId)
         findNavController().navigate(action)
     }
@@ -54,10 +43,27 @@ class InventoryScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //observe inventory table in fire store
-        //and add it on epoxy recycler view
-        val accessRights = MyApp.accessRights
+        initUserAccessRights()
+        initObservables()
+        initViews()
 
+    }
+
+    private fun initObservables() {
+        viewModel.getListOfProducts.observe(viewLifecycleOwner){ response ->
+            if(!response.errorMessage.isNullOrBlank()){
+                Toast.makeText(requireContext(), response.errorMessage, Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+
+            binding.loadingState.root.isGone = response.isLoadingDone
+            epoxyController.response = response.product
+        }
+
+        binding.riceListEpoxyRecyclerView.setController(epoxyController)
+    }
+
+    private fun initUserAccessRights() {
         //fetch the appropriate data
         if(accessRights){
             viewModel.getAdminListOfProducts()
@@ -69,34 +75,10 @@ class InventoryScreen : Fragment() {
             binding.addRiceInventoryScreen.isGone = true
             binding.OrdersInventoryScreen.text = "Restock"
         }
+    }
 
-            viewModel.getListOfProducts.observe(viewLifecycleOwner){ response ->
-                when(response){
-                    is Response.Loading -> binding.loadingState.root.isVisible = true
-                    is Response.Success -> {
-                        epoxyController.response = response.data
-                        binding.loadingState.root.isGone = true
-                    }
-                    is Response.Failure -> Toast.makeText(requireContext(), response.e.message.toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-        //dagdag lang
-        viewModel.updateViewStateLiveData.observe(viewLifecycleOwner) {
-            if (it.exception != null) {
-                Toast.makeText(requireContext(), it.exception.message, Toast.LENGTH_SHORT).show()
-                return@observe
-            }
-
-            binding.loadingState.root.isVisible = it.isLoading
-
-            if (it.data.isNotEmpty()) {
-                epoxyController.response = it.data
-            }
-        }
-        //end of dagdag
-        binding.riceListEpoxyRecyclerView.setController(epoxyController)
+    private fun initViews() {
         binding.addRiceInventoryScreen.setOnClickListener {
-//            val action = InventoryScreenDirections.actionInventoryScreenToAddRiceScreen(args.uId)
             findNavController().navigate(R.id.action_inventoryScreen_to_addRiceScreen)
         }
 
@@ -106,19 +88,21 @@ class InventoryScreen : Fragment() {
             findNavController().navigate(action)
         }
 
-        // sorting, dinagdagan
-        val items = InventoryScreenViewModel.InventorySortedViewState.Sort.values()
-        val adapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, items)
-        binding.autoCompleteTextView.setAdapter(adapter)
+        val sortOptions = SortOptions.getSortNames()
+        val adapter = ArrayAdapter(requireContext(), R.layout.sort_list_item, sortOptions)
+            binding.autoCompleteTextView.setAdapter(adapter)
 
-        //sort the data base on user wants.
         binding.autoCompleteTextView.doOnTextChanged { text, _, _, _ ->
-            viewModel.currentSort = items.find { it.name == text.toString() }!!
+            viewModel.sortProducts(SortOptions.getSelection(text.toString()))
+
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    binding.riceListEpoxyRecyclerView.smoothScrollToPosition(0)
+                }
+            }, 500)
         }
 
-        binding.riceListEpoxyRecyclerView.setController(epoxyController)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
