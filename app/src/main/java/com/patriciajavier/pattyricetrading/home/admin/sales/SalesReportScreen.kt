@@ -121,7 +121,6 @@ class SalesReportScreen : Fragment() {
                 DayFilterOptions.Sun.name -> DayFilterState(day7 = true)
                 else -> DayFilterState()
             }
-            Log.d("DayFilter", dayFilterState.toString())
         }
 
         val weekItems = WeekFilterOptions.getWeeks()
@@ -136,7 +135,6 @@ class SalesReportScreen : Fragment() {
                 WeekFilterOptions.Week4.name -> WeeklyFilterState(week4 = true)
                 else -> WeeklyFilterState()
             }
-            Log.d("DayFilter", weekFilterState.toString())
         }
 
         val monthItems = MonthFilterOption.getMonths()
@@ -159,7 +157,6 @@ class SalesReportScreen : Fragment() {
                 MonthFilterOption.Dec.name -> MonthlyFilterState(december = true)
                 else -> MonthlyFilterState()
             }
-            Log.d("DayFilter", monthFilterState.toString())
         }
 
         val yearItems = Constant.getListOfDatesFromOrigin()
@@ -185,7 +182,6 @@ class SalesReportScreen : Fragment() {
                 ZoneId.of("Asia/Hong_Kong"))
 
             yearFilterState = YearlyFilterState(zoneDateTimeBaseOnYearSelected)
-            Log.d("DayFilter", yearFilterState.toString())
         }
 
     }
