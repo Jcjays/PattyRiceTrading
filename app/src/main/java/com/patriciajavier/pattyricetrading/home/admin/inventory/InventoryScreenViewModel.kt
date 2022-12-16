@@ -113,7 +113,7 @@ data class InventoryState(
     var isLoadingDone : Boolean = true,
 )
 
-enum class SortOptions(){
+enum class SortOptions{
     NAME, LOWEST_STOCK, HIGHEST_STOCK, LOWEST_PRICE, HIGHEST_PRICE;
 
     companion object{

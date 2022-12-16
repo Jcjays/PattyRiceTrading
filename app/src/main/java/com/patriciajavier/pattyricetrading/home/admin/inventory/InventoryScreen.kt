@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -50,6 +51,11 @@ class InventoryScreen : Fragment() {
 
     private fun initObservables() {
         viewModel.getListOfProducts.observe(viewLifecycleOwner){ response ->
+            if(!response.errorMessage.isNullOrBlank()){
+                Toast.makeText(requireContext(), response.errorMessage, Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+
             binding.loadingState.root.isGone = response.isLoadingDone
             epoxyController.response = response.product
         }

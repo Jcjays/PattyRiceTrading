@@ -7,64 +7,44 @@
     tools:context=".home.admin.sales.SalesReportScreen">
 
     <TextView
-        android:id="@+id/DateShown"
+        android:id="@+id/transactionDateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="day-month-year"
-        android:textSize="20dp"
-
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/SearchDate"
-        app:layout_constraintTop_toBottomOf="@+id/sortMenu" />
-
-    <TextView
-        android:id="@+id/mainLabelSalesReportScreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="14dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/oxygen"
-        android:text="Sales History"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="25sp"
-        android:textStyle="bold"
+        tools:text="Transactions: 2022/1/23"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutCompat"
+        app:layout_constraintEnd_toStartOf="@+id/filterLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/filterLabel" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sortMenu"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="160dp"
-        android:layout_height="49dp"
-        android:layout_marginHorizontal="10dp"
-        android:hint="Sort type"
-        app:layout_constraintBottom_toBottomOf="@+id/mainLabelSalesReportScreen"
+    <Button
+        android:id="@+id/filterLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/oxygen"
+        android:text="@string/filters"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/ic_baseline_arrow_drop_down_24"
+        android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mainLabelSalesReportScreen"
-        app:layout_constraintTop_toTopOf="@+id/mainLabelSalesReportScreen">
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded" />
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/salesReportScreenEpoxyRecyclerView"
-        android:layout_width="387dp"
-        android:layout_height="562dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
+        android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainLabelSalesReportScreen"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
         tools:listitem="@layout/transaction_card_button_model" />
 
     <include
@@ -76,14 +56,132 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/SearchDate"
-        android:layout_width="164dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Search by date"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainLabelSalesReportScreen" />
+        app:layout_constraintTop_toBottomOf="@+id/filterLabel">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sortByDay"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="1"
+            android:hint="@string/day"
+            android:textSize="11sp"
+            >
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewSortByDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sortByWeek"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:hint="@string/by_week"
+            android:layout_weight="1">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewSortByWeek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sortByMonth"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:hint="@string/month"
+            android:layout_weight="1">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewSortByMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sortByYear"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:hint="@string/year"
+            android:layout_weight="1">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewSortByYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:text="@string/cancel"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/red"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                />
+
+            <Button
+                android:id="@+id/apply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/oxygen"
+                android:text="@string/apply"
+                android:layout_marginHorizontal="5dp"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="14sp"
+                android:layout_weight="1"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

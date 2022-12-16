@@ -9,4 +9,11 @@
     <string name="add_rice">Add Rice</string>
     <string name="orders">Orders</string>
     <string name="sort">Sort</string>
+    <string name="filters">Filters</string>
+    <string name="sales_history">Sales History</string>
+    <string name="by_week">Week</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="apply">Apply</string>
 </resources>

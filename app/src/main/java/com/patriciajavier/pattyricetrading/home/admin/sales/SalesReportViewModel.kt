@@ -1,141 +1,447 @@
 package com.patriciajavier.pattyricetrading.home.admin.sales
 
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.common.internal.Constants
-import com.google.android.gms.dynamic.OnDelegateCreatedListener
 import com.patriciajavier.pattyricetrading.Constant
 import com.patriciajavier.pattyricetrading.firestore.FirebaseService
 import com.patriciajavier.pattyricetrading.firestore.models.Logs
 import com.patriciajavier.pattyricetrading.firestore.models.Response
+import com.patriciajavier.pattyricetrading.formatWithPattern
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
-import javax.annotation.meta.When
-import kotlin.collections.ArrayList
+import java.time.DayOfWeek
+import java.time.Month
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.temporal.TemporalAdjusters.*
 
 class SalesReportViewModel: ViewModel() {
 
-    private val _logsMutableLiveData = MutableLiveData<Response<List<Logs>>>()
+    private val _fullCopyOfLogsMutableLiveData = MutableLiveData<List<Logs>>()
 
-    private val _updateViewStateMutableLiveData = MutableLiveData<SalesSortedViewState>()
-    val updateViewStateLiveData: LiveData<SalesSortedViewState> = _updateViewStateMutableLiveData
+    private val _logsResponseMutableLiveData = MutableLiveData<LogsResponseState>()
+    val logsResponseStateLiveData : LiveData<LogsResponseState> get() = _logsResponseMutableLiveData
 
     fun getAdminLogs() = viewModelScope.launch {
-        FirebaseService.getAdminLogs().collect{
-            _logsMutableLiveData.value = it
-            updateSalesViewState(it)
-        }
-    }
+        FirebaseService.getAdminLogs().collect{ response ->
+            when(response){
+                Response.Loading -> _logsResponseMutableLiveData.postValue(
+                    LogsResponseState(isLoadingDone = false)
+                )
+                is Response.Failure -> _logsResponseMutableLiveData.postValue(
+                    LogsResponseState(errorMessage = response.e.message)
+                )
+                is Response.Success ->{
+                    _logsResponseMutableLiveData.postValue(
+                        LogsResponseState(logs = response.data!!)
+                    )
 
-    fun getShopkeeperLogs(uId: String) = viewModelScope.launch {
-        FirebaseService.getShopkeeperLogs(uId).collect {
-            _logsMutableLiveData.value = it
-            updateSalesViewState(it)
-        }
-    }
-
-    var currentSort: SalesSortedViewState.Sort = SalesSortedViewState.Sort.DAILY
-    set(value) {
-        field = value
-        updateSalesViewState(_logsMutableLiveData.value!!)
-    }
-
-    private fun updateSalesViewState(response: Response<List<Logs>>) {
-        val modifiedList: ArrayList<Logs> = ArrayList()//container for modified data
-        when(response){
-            is Response.Loading -> _updateViewStateMutableLiveData.postValue(SalesSortedViewState(isLoading = true))
-            is Response.Failure -> _updateViewStateMutableLiveData.postValue(SalesSortedViewState(exception = response.e))
-            is Response.Success -> {
-                when(currentSort){
-                    SalesSortedViewState.Sort.DAILY ->{
-                        response.data!!.sortedByDescending { it.timeCreated }.forEach {
-                            if(Constant.getCalculatedDate("yyyyMMdd", 0).toInt()
-                                == Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
-                                modifiedList.add(it)
-                                // add sales profit
-
-                            }
-                        }
-                        _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
-                    }
-                    SalesSortedViewState.Sort.WEEKLY ->{
-                        response.data!!.sortedByDescending { it.timeCreated }.forEach {
-                            //get the data that dates back within 7 days.
-                            if(Constant.getCalculatedDate("yyyyMMdd", -7).toInt()
-                                <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
-                                modifiedList.add(it)
-                                /// divided by day.
-
-                            }
-                        }
-                        _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
-                    }
-                    SalesSortedViewState.Sort.MONTHLY ->{
-                        response.data!!.sortedByDescending { it.timeCreated }.forEach {
-                            //get the data that dates back within 30 days.
-                            if(Constant.getCalculatedDate("yyyyMMdd", -30).toInt()
-                                <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
-                                modifiedList.add(it)
-
-                            // divided by week.lagyan ng profts
-
-                            }
-                        }
-                        _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
-                    }
-                    SalesSortedViewState.Sort.ANNUALLY ->{
-                        response.data!!.sortedByDescending { it.timeCreated }.forEach {
-                            //get the data that dates back within 30 days.
-                            if(Constant.getCalculatedDate("yyyyMMdd", -365).toInt()
-                                <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
-                                modifiedList.add(it)
-                                // divided by month. lagyan ng profts
-
-                            }
-                        }
-                        _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
-
-                    }
-                    SalesSortedViewState.Sort.LIFETIME ->{
-                        response.data!!.sortedByDescending { it.timeCreated }.forEach {
-                            //get the data that dates back within 30 days.
-                            if(Constant.getCalculatedDate("yyyyMMdd", -99999).toInt()
-                                <= Constant.timeStampToGMT8(it.timeCreated, "yyyyMMdd").toInt()){
-                                modifiedList.add(it)
-                                // by year. lagyan ng profts
-
-                            }
-                        }
-                        _updateViewStateMutableLiveData.postValue(SalesSortedViewState(data = modifiedList))
-                    }
+                    _fullCopyOfLogsMutableLiveData.postValue(response.data)
                 }
             }
         }
     }
 
-    // new filter? for search by date
+    fun getShopkeeperLogs(uId: String) = viewModelScope.launch {
+        FirebaseService.getShopkeeperLogs(uId).collect { response ->
+            when(response){
+                Response.Loading -> _logsResponseMutableLiveData.postValue(
+                    LogsResponseState(isLoadingDone = false)
+                )
+                is Response.Failure -> _logsResponseMutableLiveData.postValue(
+                    LogsResponseState(errorMessage = response.e.message)
+                )
+                is Response.Success -> {
+                    _logsResponseMutableLiveData.postValue(
+                        LogsResponseState(logs = response.data!!)
+                    )
+
+                    _fullCopyOfLogsMutableLiveData.postValue(response.data)
+                }
+            }
+        }
+    }
 
 
-    data class SalesSortedViewState(
-       val isLoading: Boolean = false,
-       val data: List<Logs> = emptyList(),
-       val exception: Exception? = null,
-       val sort: Sort = Sort.DAILY
+    fun filterTransactionRecord(
+        dayFilterState: DayFilterState = DayFilterState(),
+        weeklyFilterState: WeeklyFilterState = WeeklyFilterState(),
+        monthlyFilterState: MonthlyFilterState = MonthlyFilterState(),
+        yearlyFilterState: YearlyFilterState = YearlyFilterState()
     ){
-       enum class Sort{
-           DAILY,
-           WEEKLY,
-           MONTHLY,
-           ANNUALLY,
-           LIFETIME
-       }
+        if(_fullCopyOfLogsMutableLiveData.value != null){
+
+            val constant = Constant
+
+            var listOfFilteredLogs = ArrayList<Logs>()
+            var currentDate = ZonedDateTime.now(ZoneId.of("Asia/Hong_Kong"))
+
+            var dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+
+            var firstDay : ZonedDateTime
+            var lastDay : ZonedDateTime
+
+            if(yearlyFilterState.date.year <= currentDate.year){
+                val newCurrentDate = (currentDate.year - yearlyFilterState.date.year)
+
+                currentDate = currentDate.minusYears(newCurrentDate.toLong())
+                firstDay = currentDate.with(firstDayOfYear())
+                lastDay = currentDate.with(lastDayOfYear())
+                dateToDisplay = yearlyFilterState.date.formatWithPattern(constant.formatYearMonthDay)
+
+                //if the transaction is within the year add it all to the list
+                _fullCopyOfLogsMutableLiveData.value!!.sortedByDescending { it.timeCreated }.forEach {
+                    if(firstDay.formatWithPattern(constant.formatYearMonthDay) <= Constant.timeStampToGMT8(it.timeCreated, constant.formatYearMonthDay)
+                        && Constant.timeStampToGMT8(it.timeCreated, constant.formatYearMonthDay) <= lastDay.formatWithPattern(constant.formatYearMonthDay)){
+
+                        listOfFilteredLogs.add(it)
+
+                    }
+                }
+            }
+
+            /**
+             *  Monthly filters
+             */
+
+            if(monthlyFilterState.january){
+                currentDate = currentDate.with(Month.JANUARY)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.february){
+                currentDate = currentDate.with(Month.FEBRUARY)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.march){
+                currentDate = currentDate.with(Month.MARCH)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.april){
+                currentDate = currentDate.with(Month.APRIL)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.may){
+                currentDate = currentDate.with(Month.MAY)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.june){
+                currentDate = currentDate.with(Month.JUNE)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.july){
+                currentDate = currentDate.with(Month.JULY)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.august){
+                currentDate = currentDate.with(Month.AUGUST)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.september){
+                currentDate = currentDate.with(Month.SEPTEMBER)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.october){
+                currentDate = currentDate.with(Month.OCTOBER)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.november){
+                currentDate = currentDate.with(Month.NOVEMBER)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(monthlyFilterState.december){
+                currentDate = currentDate.with(Month.DECEMBER)
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.with(lastDayOfMonth())
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth)
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            /**
+             * Weekly filters
+             */
+
+            if(weeklyFilterState.week1){
+                firstDay = currentDate.with(firstDayOfMonth())
+                lastDay = currentDate.withDayOfMonth(7)
+                currentDate = lastDay
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth) + "${firstDay.formatWithPattern("dd")}-7"
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(weeklyFilterState.week2){
+                firstDay = currentDate.withDayOfMonth(8)
+                lastDay = currentDate.withDayOfMonth(14)
+                currentDate = lastDay
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth) + "8-14"
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(weeklyFilterState.week3){
+                firstDay = currentDate.withDayOfMonth(15)
+                lastDay = currentDate.withDayOfMonth(22)
+                currentDate = lastDay
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth) + "15-22"
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            if(weeklyFilterState.week4){
+                firstDay = currentDate.withDayOfMonth(23)
+                lastDay = currentDate.with(lastDayOfMonth())
+                currentDate = lastDay
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonth) + "23-${lastDay.formatWithPattern("dd")}"
+
+                listOfFilteredLogs = addLogsWithinSpecifiedRange(firstDay, lastDay)
+            }
+
+            /**
+             *  Day filters
+             */
+
+            if (dayFilterState.day1){
+                currentDate = currentDate.minusWeeks(1).with(DayOfWeek.MONDAY)
+                listOfFilteredLogs = addLogsIfMatch(
+                    currentDate
+                )
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            }
+
+            if (dayFilterState.day2){
+                currentDate = currentDate.minusWeeks(1).with(DayOfWeek.TUESDAY)
+                listOfFilteredLogs = addLogsIfMatch(
+                    currentDate
+                )
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            }
+
+            if (dayFilterState.day3){
+                currentDate = currentDate.minusWeeks(1).with(DayOfWeek.WEDNESDAY)
+                listOfFilteredLogs = addLogsIfMatch(
+                    currentDate
+                )
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            }
+
+            if (dayFilterState.day4){
+                currentDate = currentDate.minusWeeks(1).with(DayOfWeek.THURSDAY)
+                listOfFilteredLogs = addLogsIfMatch(
+                    currentDate
+                )
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            }
+            if (dayFilterState.day5){
+                currentDate = currentDate.minusWeeks(1).with(DayOfWeek.FRIDAY)
+                listOfFilteredLogs = addLogsIfMatch(
+                    currentDate
+                )
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            }
+
+            if (dayFilterState.day6){
+                currentDate = currentDate.minusWeeks(1).with(DayOfWeek.SATURDAY)
+                listOfFilteredLogs = addLogsIfMatch(
+                    currentDate
+                )
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            }
+
+            if (dayFilterState.day7){
+                currentDate = currentDate.minusWeeks(1).with(DayOfWeek.SUNDAY)
+                listOfFilteredLogs = addLogsIfMatch(
+                    currentDate
+                )
+                dateToDisplay = currentDate.formatWithPattern(constant.formatYearMonthDay)
+            }
+
+            Log.d("value", listOfFilteredLogs.toString())
+
+            _logsResponseMutableLiveData.postValue(LogsResponseState(logs = listOfFilteredLogs, dateToDisplay = dateToDisplay))
+        }
+    }
+
+
+    /**
+     * Helper function below
+     */
+
+    private fun addLogsWithinSpecifiedRange(firstDay : ZonedDateTime, lastDay : ZonedDateTime): ArrayList<Logs> {
+        val format = "yyyyMMdd"
+        val newFilteredLogs = ArrayList<Logs>()
+
+        _fullCopyOfLogsMutableLiveData.value!!.sortedByDescending { it.timeCreated }.forEach {
+            if(firstDay.formatWithPattern(format) <= Constant.timeStampToGMT8(it.timeCreated, format)
+                && Constant.timeStampToGMT8(it.timeCreated, format) <= lastDay.formatWithPattern(format)){
+                newFilteredLogs.add(it)
+            }
+        }
+        return newFilteredLogs
+    }
+
+    private fun addLogsIfMatch(filterDate : ZonedDateTime): ArrayList<Logs> {
+        val format = "yyyyMMdd"
+        val newFilteredLogs = ArrayList<Logs>()
+
+        _fullCopyOfLogsMutableLiveData.value!!.sortedByDescending { it.timeCreated }.forEach {
+            if(filterDate.formatWithPattern(format) == Constant.timeStampToGMT8(it.timeCreated, format))
+                newFilteredLogs.add(it)
+        }
+        return newFilteredLogs
+    }
+}
+
+
+/**
+ * State classes
+ */
+
+
+data class LogsResponseState(
+    val logs : List<Logs> = emptyList(),
+    val isLoadingDone : Boolean = true,
+    val errorMessage : String? = null,
+    val dateToDisplay : String = ZonedDateTime.now(ZoneId.of("Asia/Hong_Kong")).formatWithPattern("yyyyMMdd")
+)
+
+enum class DayFilterOptions{
+    Mon, Tue, Wed, Thu, Fri, Sat, Sun;
+
+    companion object{
+        fun getDays() : ArrayList<String>{
+            val listOfDays = ArrayList<String>()
+            for (day in values()){
+                listOfDays.add(day.name)
+            }
+
+            return listOfDays
+        }
 
     }
 }
+
+enum class WeekFilterOptions{
+    Week1, Week2, Week3, Week4;
+
+    companion object{
+        fun getWeeks() : ArrayList<String>{
+            val listWeeks = ArrayList<String>()
+            for (week in values()){
+                listWeeks.add(week.name)
+            }
+
+            return listWeeks
+        }
+    }
+}
+
+enum class MonthFilterOption{
+    Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec;
+
+    companion object{
+        fun getMonths() : ArrayList<String>{
+            val listMonths = ArrayList<String>()
+            for (month in values()){
+                listMonths.add(month.name)
+            }
+
+            return listMonths
+        }
+    }
+}
+
+data class WeeklyFilterState(
+    val week1 : Boolean = false,
+    val week2 : Boolean = false,
+    val week3 : Boolean = false,
+    val week4 : Boolean = false
+)
+
+data class DayFilterState(
+    val day1 : Boolean = false,
+    val day2 : Boolean = false,
+    val day3 : Boolean = false,
+    val day4 : Boolean = false,
+    val day5 : Boolean = false,
+    val day6 : Boolean = false,
+    val day7 : Boolean = false
+)
+
+data class MonthlyFilterState(
+    val january : Boolean = false,
+    val february : Boolean = false,
+    val march : Boolean = false,
+    val april : Boolean = false,
+    val may : Boolean = false,
+    val june : Boolean = false,
+    val july : Boolean = false,
+    val august : Boolean = false,
+    val september : Boolean = false,
+    val october : Boolean = false,
+    val november : Boolean = false,
+    val december : Boolean = false,
+)
+
+data class YearlyFilterState(
+    val date : ZonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Hong_Kong"))
+)
+
+
